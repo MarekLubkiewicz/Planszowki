@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Witaj w aplikacji Board Games</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding"> 
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Zaloguj się aby korzystać z aplikacji</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="button-container">
+        <ion-button (click)="logowanie()">logowanie</ion-button>
+        <span class="divider"></span>
+        <ion-button (click)="rejestracja()">rejestracja</ion-button>
+      </div>
+    </ion-card-content>
+
+  </ion-card>
+</ion-content>

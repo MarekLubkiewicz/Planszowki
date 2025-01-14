@@ -1,0 +1,55 @@
+# NPM dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*.local
+
+# Compiled files
+www/
+platforms/
+plugins/
+dist/
+build/
+output/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs and debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE and editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Capacitor and Cordova
+android/
+ios/
+.cordova/
+*.xcuserstate
+*.xcworkspace
+*.xcproject
+
+# Ionic files
+.vscode/
+.sass-cache/
+.temporary/
+.harmony/
+.cache/
+coverage/
+src/variables.scss.local
+
+# Angular-specific
+.angular/
+.angular-cli.json
+/karma.conf.js
+/test.ts

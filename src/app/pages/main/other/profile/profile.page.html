@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      {{title}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <h3 style="display: flex; align-items: center; gap: 15px;">
+    Witaj {{ currentUser }}
+    <ion-avatar>
+      <img alt="Awatar użytkownika" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+    </ion-avatar>
+  </h3>
+
+  <ion-item>
+    Na tej stronie możesz edytować informcje o swoim koncie, dodawanie avatara, lista znajomych?
+  </ion-item>
+  
+  
+</ion-content>

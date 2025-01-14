@@ -1,0 +1,54 @@
+
+<ion-split-pane contentId="main-content">
+  <ion-menu contentId="main-content" type="overlay">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <!-- Sekcja Wydarzeń -->
+      <ion-list id="events-list">
+        <ion-list-header>Organizacja spotkań</ion-list-header>
+        <ion-menu-toggle auto-hide="false" *ngFor="let page of eventsPages">
+            <ion-item routerDirection="root" [routerLink]="[page.url]" [queryParams]="{ title: page.title }" lines="none"
+              detail="false" routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ page.title }}</ion-label>
+            </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+
+      <!-- Sekcja Gry -->
+      <ion-list>
+        <ion-list-header>Gry</ion-list-header>
+        <ion-menu-toggle auto-hide="false" *ngFor="let page of gamesPages">
+            <ion-item routerDirection="root" [routerLink]="[page.url]" [queryParams]="{ title: page.title }" lines="none"
+              detail="false" routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ page.title }}</ion-label>
+            </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+
+      <!-- Sekcja Ustawień -->
+      <ion-list>
+        <ion-menu-toggle auto-hide="false" *ngFor="let page of otherPages">
+            <ion-item routerDirection="root" [routerLink]="[page.url]" [queryParams]="{ title: page.title }" lines="none"
+              detail="false" routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ page.title }}</ion-label>
+            </ion-item>
+        </ion-menu-toggle>
+        <ion-item lines="none" button (click)="wyloguj()">
+          <ion-icon name="log-out" aria-hidden="true" slot="start" ios="log-out-outline" md="log-out-sharp"></ion-icon>
+          <ion-label>Wyloguj</ion-label>
+        </ion-item>
+      </ion-list>
+
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+</ion-split-pane>

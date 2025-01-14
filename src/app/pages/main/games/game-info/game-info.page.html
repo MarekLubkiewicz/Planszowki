@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      {{title}}
+    </ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+      <ion-searchbar 
+        [formControl]="searchForm" 
+        placeholder="Wpisz fragment tytułu gry" 
+        animated>
+      </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+<ion-item>
+  <p class = "info">W celu przeszukiwania bazy zacznij wpisaywać w polu wyszukiwania fragment tytułu gry</p>
+</ion-item>
+
+<ion-grid>
+  <ion-row *ngFor="let w of wyniki">
+    <ion-col class="ion-align-self-start">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{w.Name}}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-avatar item-left><img src="{{w.ImagePath}}"></ion-avatar>
+        <p>{{w.Description}}</p>
+        <p class = "nr_of_gamers">
+          Liczba graczy:
+          <span *ngIf="w.MinPlayers === w.MaxPlayers">{{w.MinPlayers}},</span>
+          <span *ngIf="w.MinPlayers !== w.MaxPlayers">{{w.MinPlayers}} - {{w.MaxPlayers}},</span>
+          zalecany wiek: {{ w.MfgAgeRec }} lat
+        </p>
+      </ion-card-content>
+    </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+<ion-spinner *ngIf="loading"></ion-spinner>
+
+
+</ion-content>
