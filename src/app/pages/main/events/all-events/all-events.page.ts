@@ -90,6 +90,11 @@ export class AllEventsPage implements OnInit {
     this.applyFilters();
   }
 
+  resetAllFilters() {
+    this.filter = {date: '', place: '', name:'',}; // Wyzerowanie wszystkich filtrów
+    this.applyFilters();
+  }
+
   // Obsługa filtra daty
   openDateFilterModal() {
     this.isDateFilterModalOpen = true;
@@ -111,11 +116,34 @@ export class AllEventsPage implements OnInit {
 
   //funkcja zapisywania się na wydarzenie
   async joinEvent(eventId: string | undefined, eventGames: any) {
-
+  
+    
     if (!eventId) {
       console.error('Brak ID wydarzenia');
       return;
     }
+
+
+    // Walidacja zapisu na spotkanie
+    // Znajdź zdarzenie na podstawie ID
+    const event = this.events.find(e => e.id === eventId);
+
+      // Jeśli wydarzenie nie zostało znalezione, przerwij wykonanie
+    if (!event) {
+      console.error('Nie znaleziono wydarzenia.');
+      return;
+    }
+
+    // Przerwanie wykonania i wyświetlenie komunikatu pzry spełnieniu warunku
+    if (event.players && event.players.includes(this.currentUser)) {
+      await this.alertService.showAlert(
+        'Informacja',
+        'Jesteś już zapisany na to wydarzenie.',
+        'alert-warning'
+      );
+      return;
+    }
+    //koniec walidacji
 
     const alert = await this.alertController.create({
       header: 'Wybierz preferowaną grę',
@@ -152,6 +180,8 @@ export class AllEventsPage implements OnInit {
     });
     await alert.present()
   }
+
+
 
   viewPlayers(players: string[]) {
     this.currentPlayers = players; // Przypisz listę graczy
