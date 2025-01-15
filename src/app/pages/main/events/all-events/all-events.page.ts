@@ -90,6 +90,11 @@ export class AllEventsPage implements OnInit {
     this.applyFilters();
   }
 
+  resetAllFilters() {
+    this.filter = {date: '', place: '', name:'',}; // Wyzerowanie wszystkich filtrów
+    this.applyFilters();
+  }
+
   // Obsługa filtra daty
   openDateFilterModal() {
     this.isDateFilterModalOpen = true;
@@ -119,7 +124,7 @@ export class AllEventsPage implements OnInit {
     }
 
 
-    //Walidacja zapisu na spotkanie
+    // Walidacja zapisu na spotkanie
     // Znajdź zdarzenie na podstawie ID
     const event = this.events.find(e => e.id === eventId);
 
@@ -129,6 +134,7 @@ export class AllEventsPage implements OnInit {
       return;
     }
 
+    // Przerwanie wykonania i wyświetlenie komunikatu pzry spełnieniu warunku
     if (event.players && event.players.includes(this.currentUser)) {
       await this.alertService.showAlert(
         'Informacja',
@@ -137,7 +143,7 @@ export class AllEventsPage implements OnInit {
       );
       return;
     }
-    //koniec waalidacji
+    //koniec walidacji
 
     const alert = await this.alertController.create({
       header: 'Wybierz preferowaną grę',

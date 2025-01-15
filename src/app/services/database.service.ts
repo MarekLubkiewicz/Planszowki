@@ -56,7 +56,6 @@ export class DatabaseService {
               this.http.put<void>(urlPlayers, updatedPlayers),
               this.http.put<void>(urlGameRate, updatedRate),
             ];
-
             return forkJoin(updateRequests).pipe(mapTo(void 0));
           })
         );
