@@ -8,25 +8,36 @@
     </ion-title>
   </ion-toolbar>
   <ion-toolbar>
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-input label="Filtowanie po miejscu" labelPlacement="stacked" placeholder="Wpisz miejsce"
-              [(ngModel)]="filter.place" (ionInput)="applyFilters()">
-            </ion-input>
-            <ion-input label="Filtowanie po nazwie" labelPlacement="stacked" placeholder="Wpisz nazwę"
-              [(ngModel)]="filter.name" (ionInput)="applyFilters()">
-            </ion-input>
-          </ion-col>
-          <ion-col>
-            <ion-button (click)="openDateFilterModal()">Filtruj po dacie</ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+    <ion-accordion-group>
+      <ion-accordion value="filters">
+        <ion-item slot="header" color="light">
+          <ion-label>Filtry</ion-label>
+          <ion-icon name="funnel-outline" slot="end"></ion-icon>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-input label="Filtrowanie po miejscu" labelPlacement="stacked" placeholder="Wpisz miejsce"
+                  [(ngModel)]="filter.place" (ionInput)="applyFilters()">
+                </ion-input>
+                <ion-input label="Filtrowanie po nazwie" labelPlacement="stacked" placeholder="Wpisz nazwę"
+                  [(ngModel)]="filter.name" (ionInput)="applyFilters()">
+                </ion-input>
+              </ion-col>
+              <ion-col>
+                <ion-button expand="block" (click)="openDateFilterModal()">Filtruj po dacie</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true">
 
   <ion-item>
     <ion-avatar slot="start">
@@ -42,7 +53,7 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-                        <ion-label>
+            <ion-label>
               <ion-title>
                 {{ event.name }}
               </ion-title>
