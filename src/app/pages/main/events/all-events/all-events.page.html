@@ -5,88 +5,118 @@
     </ion-buttons>
     <ion-title>
       {{title}}
-      <!--<span class="divider"></span>
-      <ion-icon name="person-circle-outline"></ion-icon>
-      <span class="user-name">{{ currentUser }}</span>-->
     </ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-input label="Filtowanie po miejscu" labelPlacement="stacked" placeholder="Wpisz miejsce"
+              [(ngModel)]="filter.place" (ionInput)="applyFilters()">
+            </ion-input>
+            <ion-input label="Filtowanie po nazwie" labelPlacement="stacked" placeholder="Wpisz nazwę"
+              [(ngModel)]="filter.name" (ionInput)="applyFilters()">
+            </ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-button (click)="openDateFilterModal()">Filtruj po dacie</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-input label="Filtowanie po miejscu" labelPlacement="stacked" placeholder="Wpisz miejsce"
-          [(ngModel)]="filter.place" (ionInput)="applyFilters()">
-        </ion-input>
-        <ion-input label="Filtowanie po nazwie" labelPlacement="stacked" placeholder="Wpisz nazwę"
-          [(ngModel)]="filter.name" (ionInput)="applyFilters()">
-        </ion-input>
-      </ion-col>
-      <ion-col>
-        <ion-button expand="block" (click)="openDateFilterModal()">Filtruj po dacie</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-item>
+    <ion-avatar slot="start">
+      <img alt="Awatar użytkownika" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+    </ion-avatar>
+     <ion-label>
+      Jesteś zalogowany jako {{ currentUser }}
+     </ion-label>
+  </ion-item>
   
   <ion-list *ngIf="filteredEvents && filteredEvents.length > 0; else noData">
     <ion-item *ngFor="let event of filteredEvents">
       <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-label>
-              <h2>{{ event.name }}</h2>
-              <p>
-                <ion-icon slot="start" name="location-outline"></ion-icon>
-                <span class="data">{{ event.place }}</span>
-              </p>
-              <p>
-                <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
-                <span class="data">{{ event.date }}</span>
-                <span class="divider"></span>
-                <ion-icon slot="start" name="time-outline"></ion-icon>
-                <span class="data">{{ event.time }}</span>
-              </p>
-              <!-- Lista gier z raitingiem -->
-              <p>
-                <ion-icon slot="start" name="dice-outline"></ion-icon>Gry:
-              </p>
-              <p class="listgames" *ngIf="event.games.game1">
-                <span class="data">{{ event.games.game1.game }}</span>
-                <span class="rate"> - {{ event.games.game1.rate || 0 }} pkt.</span>
-              </p>
-              <p class="listgames" *ngIf="event.games.game2">
-                <span class="data">{{ event.games.game2.game }}</span>
-                <span class="rate"> - {{ event.games.game2.rate || 0 }} pkt.</span>
-              </p>
-              <p class="listgames" *ngIf="event.games.game3">
-                <span class="data">{{ event.games.game3.game }}</span>
-                <span class="rate"> - {{ event.games.game3.rate || 0 }} pkt.</span>
-              </p>
-  
-              <p>Wolne miejsca: <span class="data">{{ event.slots }}</span></p>
-              <p>Organizator: <span class="data">{{ event.owner }}</span></p>
-              <p *ngIf="event.details">Szczegóły: <span class="data">{{ event.details }}</span></p>
+                        <ion-label>
+              <ion-title>
+                {{ event.name }}
+              </ion-title>
             </ion-label>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button *ngIf="event.id" color="primary" (click)="joinEvent(event.id, event.games)">
-              Zapisz się
-            </ion-button>
+            <ion-label>
+            <p>
+              <ion-icon slot="start" name="location-outline"></ion-icon>
+              <span class="data">{{ event.place }}</span>
+            </p>
+            <p>
+              <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
+              <span class="data">{{ event.date }}</span>
+              <span class="divider"></span>
+              <ion-icon slot="start" name="time-outline"></ion-icon>
+              <span class="data">{{ event.time }}</span>
+            </p>
+            <p>Organizator: <span class="data">{{ event.owner }}</span></p>
+            <p>Miejsca: <span class="data">{{ event.slots }}</span></p>
+            <p>
+              Gracze: <span class="data">{{ event.players?.length || 0 }}</span>
+              <ion-button 
+                fill="clear"
+                size="small"
+                *ngIf="event.players && event.players.length > 0" (click)="viewPlayers(event.players)">
+                Zobacz graczy
+              </ion-button>
+            </p>
+            </ion-label>
           </ion-col>
           <ion-col>
-            <ion-button *ngIf="event.players && event.players.length > 0" color="secondary"
-              (click)="viewPlayers(event.players)">
-              Zobacz graczy
-            </ion-button>
+            <ion-label>
+            <br>
+            <!-- Lista gier z raitingiem -->
+            <p>
+              <ion-icon slot="start" name="dice-outline"></ion-icon> Gry:
+            </p>
+            <p class="listgames" *ngIf="event.games.game1">
+              <span class="data">{{ event.games.game1.game }}</span>
+              <ion-badge color="secondary">{{ event.games.game1.rate || 0 }}</ion-badge>
+            </p>
+            <p class="listgames" *ngIf="event.games.game2">
+              <span class="data">{{ event.games.game2.game }}</span>
+              <ion-badge color="secondary">{{ event.games.game2.rate || 0 }}</ion-badge>
+            </p>
+            <p class="listgames" *ngIf="event.games.game3">
+              <span class="data">{{ event.games.game3.game }}</span>
+              <ion-badge color="secondary">{{ event.games.game3.rate || 0 }}</ion-badge>
+            </p>
+            </ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-label>
+              <p *ngIf="event.details">
+                Szczegóły: <span class="data">{{ event.details }}</span>
+              </p>
+            </ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button *ngIf="event.id" color="primary" (click)="joinEvent(event.id, event.games)">
+            Zapisz się
+          </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-item>
   </ion-list>
+
+
   <ng-template #noData>
     <ion-text color="medium">
       <h3 class="ion-text-center">Brak dostępnych wydarzeń</h3>
@@ -107,6 +137,9 @@
       <ion-content>
         <ion-list>
           <ion-item *ngFor="let player of currentPlayers">
+            <ion-avatar slot="start">
+              <img alt="Awatar użytkownika" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            </ion-avatar>
             {{ player }}
           </ion-item>
         </ion-list>
