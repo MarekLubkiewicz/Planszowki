@@ -43,6 +43,9 @@ export class RejestracjaPage implements OnInit, ViewWillEnter {
     } else if (!this.email) {
       alert("Podaj e-mail.");
       return;
+    } else if (!this.czyEmailPoprawny(this.email)) {
+      alert("Podaj poprawny e-mail");
+      return
     } else if (!this.haslo) {
       alert("Podaj poprawne hasło.");
       return;
@@ -63,6 +66,11 @@ export class RejestracjaPage implements OnInit, ViewWillEnter {
       alert('Nazwa zajęta.');
     },
   })
+  }
+
+  czyEmailPoprawny(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   walidujHaslo(haslo: string): boolean {
