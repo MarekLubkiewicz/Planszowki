@@ -68,7 +68,6 @@ export class RejestracjaPage implements OnInit, ViewWillEnter {
   })
   }
 
-
   czyEmailPoprawny(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
