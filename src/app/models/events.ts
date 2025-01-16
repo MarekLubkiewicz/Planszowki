@@ -1,6 +1,6 @@
 export interface Game {
   game: string;
-  rate: number;
+  votes?: string[];
 }
 
 export interface Event {
