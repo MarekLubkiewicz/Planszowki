@@ -62,13 +62,13 @@ export class PlanningPage implements OnInit {
         games: {
           game1: {
             game: this.eventForm.value.game1,
-            rate: 1, // Domyślna wartość
+            votes: [this.currentUser], // Domyślna wartość
           },
           game2: this.eventForm.value.game2
-            ? { game: this.eventForm.value.game2, rate: 0 }
+            ? { game: this.eventForm.value.game2, votes: [] }
             : undefined,
           game3: this.eventForm.value.game3
-            ? { game: this.eventForm.value.game3, rate: 0 }
+            ? { game: this.eventForm.value.game3, votes: [] }
             : undefined,
         },
       };

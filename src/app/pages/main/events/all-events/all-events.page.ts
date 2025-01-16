@@ -134,7 +134,17 @@ export class AllEventsPage implements OnInit {
       return;
     }
 
-    // Przerwanie wykonania i wyświetlenie komunikatu pzry spełnieniu warunku
+    // Sprawdzenie, czy użytkownik jest organizatorem wydarzenia
+    if (event.owner === this.currentUser) {
+      await this.alertService.showAlert(
+        'Informacja',
+        'Nie możesz zapisać się na własne wydarzenie, ponieważ jesteś jego organizatorem.',
+        'alert-warning'
+      );
+      return;
+    }
+
+    // Sprawdzenie czy użytkownik nie jest już zapisany
     if (event.players && event.players.includes(this.currentUser)) {
       await this.alertService.showAlert(
         'Informacja',
@@ -147,11 +157,15 @@ export class AllEventsPage implements OnInit {
 
     const alert = await this.alertController.create({
       header: 'Wybierz preferowaną grę',
-      inputs: Object.keys(eventGames).map((key) => ({
-        type: 'radio',
-        label: `${eventGames[key].game} (${eventGames[key].rate || 0} wybór/ów)`,
-        value: key,
-      })),
+      inputs: Object.keys(eventGames).map((key) => {
+        const game = eventGames[key];
+        const votesLength = game?.votes?.length || 0; // Bezpieczne pobranie liczby głosów
+        return{
+          type: 'radio',
+          label: `${eventGames[key].game} (${votesLength} wybór/ów)`,
+          value: key,
+        };
+      }),   
       buttons: [
         {
           text: 'Anuluj',
@@ -170,9 +184,13 @@ export class AllEventsPage implements OnInit {
                   this.loadEvents();
                 },
                 error: async (err) => {
-                  await this.alertService.showAlert('Bład',`Nie udało się zapisać do wydarzenia`, 'alert-error');
-                },
-              });
+                await this.alertService.showAlert(
+                  'Błąd',
+                  'Nie udało się zapisać do wydarzenia',
+                  'alert-error'
+                );
+              },
+            });
             }
           },
         },
@@ -180,7 +198,6 @@ export class AllEventsPage implements OnInit {
     });
     await alert.present()
   }
-
 
 
   viewPlayers(players: string[]) {

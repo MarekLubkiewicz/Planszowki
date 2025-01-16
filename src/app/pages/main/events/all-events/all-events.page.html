@@ -92,18 +92,12 @@
             <p>
               <ion-icon slot="start" name="dice-outline"></ion-icon> Gry:
             </p>
-            <p class="listgames" *ngIf="event.games.game1">
-              <span class="data">{{ event.games.game1.game }}</span>
-              <ion-badge color="secondary">{{ event.games.game1.rate || 0 }}</ion-badge>
-            </p>
-            <p class="listgames" *ngIf="event.games.game2">
-              <span class="data">{{ event.games.game2.game }}</span>
-              <ion-badge color="secondary">{{ event.games.game2.rate || 0 }}</ion-badge>
-            </p>
-            <p class="listgames" *ngIf="event.games.game3">
-              <span class="data">{{ event.games.game3.game }}</span>
-              <ion-badge color="secondary">{{ event.games.game3.rate || 0 }}</ion-badge>
-            </p>
+            <div *ngFor="let game of [event.games.game1, event.games.game2, event.games.game3]">
+              <p class="listgames" *ngIf="game">
+                <span class="data">{{ game.game }}</span>
+                <ion-badge color="secondary">{{ game.votes?.length || 0 }}</ion-badge>
+              </p>
+            </div>
             </ion-label>
           </ion-col>
         </ion-row>

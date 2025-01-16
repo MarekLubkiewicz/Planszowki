@@ -37,24 +37,54 @@ export class DatabaseService {
     );
   }
 
+
+
+  // Dodanie gracza do wydarzenia z głosowaniem na grę
   addPlayerToEventWithGame(eventId: string, player: string, gameKey: string): Observable<void> {
     const urlPlayers = `${this.baseUrl}/Events/${eventId}/players.json`;
-    const urlGameRate = `${this.baseUrl}/Events/${eventId}/games/${gameKey}/rate.json`;
+    const urlGameVotes = `${this.baseUrl}/Events/${eventId}/games/${gameKey}/votes.json`;
 
     // Pobierz aktualną listę graczy
     return this.http.get<string[]>(urlPlayers).pipe(
       switchMap((players) => {
         const updatedPlayers = players ? [...players, player] : [player];
 
-        // Zaktualizuj liczbę wybranej gry
-        return this.http.get<number>(urlGameRate).pipe(
-          switchMap((currentRate) => {
-            const updatedRate = (currentRate || 0) + 1;
+        // Pobierz aktualną listę głosów na grę
+        return this.http.get<string[]>(urlGameVotes).pipe(
+          switchMap((votes) => {
+            const updatedVotes = votes ? [...votes, player] : [player];
 
             // Wyślij obie aktualizacje równocześnie
             const updateRequests = [
-              this.http.put<void>(urlPlayers, updatedPlayers),
-              this.http.put<void>(urlGameRate, updatedRate),
+              this.http.put<void>(urlPlayers, updatedPlayers), // Aktualizacja listy graczy
+              this.http.put<void>(urlGameVotes, updatedVotes), // Aktualizacja głosów na grę
+            ];
+            return forkJoin(updateRequests).pipe(mapTo(void 0));
+          })
+        );
+      })
+    );
+  }
+
+  // Usunięcie gracza z wydarzenia oraz głosu na grę
+  removePlayerFromEvent(eventId: string, player: string, gameKey: string): Observable<void> {
+    const urlPlayers = `${this.baseUrl}/Events/${eventId}/players.json`;
+    const urlGameVotes = `${this.baseUrl}/Events/${eventId}/games/${gameKey}/votes.json`;
+
+    // Pobierz aktualną listę graczy
+    return this.http.get<string[]>(urlPlayers).pipe(
+      switchMap((players) => {
+        const updatedPlayers = players ? players.filter((p) => p !== player) : [];
+
+        // Pobierz aktualną listę głosów na grę
+        return this.http.get<string[]>(urlGameVotes).pipe(
+          switchMap((votes) => {
+            const updatedVotes = votes ? votes.filter((v) => v !== player) : [];
+
+            // Wyślij obie aktualizacje równocześnie
+            const updateRequests = [
+              this.http.put<void>(urlPlayers, updatedPlayers), // Aktualizacja listy graczy
+              this.http.put<void>(urlGameVotes, updatedVotes), // Aktualizacja głosów na grę
             ];
             return forkJoin(updateRequests).pipe(mapTo(void 0));
           })
