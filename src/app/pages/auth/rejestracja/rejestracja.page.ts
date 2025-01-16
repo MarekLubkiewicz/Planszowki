@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class RejestracjaPage implements OnInit, ViewWillEnter {
 
   nazwa: string = '';
+  email: string = '';
   haslo: string = '';
   potwierdzenie: string = '';
 
@@ -39,6 +40,9 @@ export class RejestracjaPage implements OnInit, ViewWillEnter {
     if (!this.nazwa) {
       alert('Podaj nazwę użytkownika, jakiej chcesz używać');
       return;
+    } else if (!this.email) {
+      alert("Podaj e-mail.");
+      return;
     } else if (!this.haslo) {
       alert("Podaj poprawne hasło.");
       return;
@@ -50,7 +54,7 @@ export class RejestracjaPage implements OnInit, ViewWillEnter {
       return;
     }
         
-  this.uzytkownikDane.rejestruj(this.nazwa, this.haslo).subscribe({
+  this.uzytkownikDane.rejestruj(this.nazwa, this.haslo, this.email).subscribe({
     next: () => {
       this.router.navigate(['/logowanie']);
     },
