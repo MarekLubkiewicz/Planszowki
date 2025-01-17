@@ -46,7 +46,7 @@ export class AllEventsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.title = this.activatedRoute.snapshot.queryParamMap.get('title') || 'Wszystkie wydarzenia';
+    this.title = this.activatedRoute.snapshot.queryParamMap.get('title') || 'Wszystkie spotkania';
     this.loadEvents();
     this.autentykacjaService.user$.subscribe(user => {
       this.currentUser = user.uzytkownik;
@@ -117,12 +117,10 @@ export class AllEventsPage implements OnInit {
   //funkcja zapisywania się na wydarzenie
   async joinEvent(eventId: string | undefined, eventGames: any) {
   
-    
     if (!eventId) {
       console.error('Brak ID wydarzenia');
       return;
     }
-
 
     // Walidacja zapisu na spotkanie
     // Znajdź zdarzenie na podstawie ID
@@ -197,9 +195,10 @@ export class AllEventsPage implements OnInit {
       ],
     });
     await alert.present()
-  }
+  } //Koniec funkcji dołączania do wydarzenia
 
 
+  // modal do wyświetlenia zapisanych graczy
   viewPlayers(players: string[]) {
     this.currentPlayers = players; // Przypisz listę graczy
     this.isModalOpen = true; // Otwórz modal
@@ -209,5 +208,79 @@ export class AllEventsPage implements OnInit {
     this.isModalOpen = false; // Zamknij modal
     this.currentPlayers = []; // Wyczyść listę graczy
   }
+
+  //Obsługa okienka do wprowadznia danych nowego spotkania
+  async openAddEventAlert() {
+    const alert = await this.alertController.create({
+      header: 'Dodaj spotkanie',
+      cssClass: 'wide-alert', 
+      inputs: [
+        { name: 'name', type: 'text', placeholder: 'Nazwa wydarzenia' },
+        { name: 'date', type: 'date', placeholder: 'Data wydarzenia' },
+        { name: 'time', type: 'time', placeholder: 'Godzina wydarzenia' },
+        { name: 'place', type: 'text', placeholder: 'Miejsce wydarzenia' },
+        { name: 'slots', type: 'number', placeholder: 'Liczba miejsc' },
+        { name: 'game1', type: 'text', placeholder: 'Gra 1 (preferowana)' },
+        { name: 'game2', type: 'text', placeholder: 'Gra 2' },
+        { name: 'game3', type: 'text', placeholder: 'Gra 3' },
+        { name: 'details', type: 'textarea', placeholder: 'Szczegóły' },
+      ],
+      buttons: [
+        {
+          text: 'Anuluj',
+          role: 'cancel',
+        },
+        {
+          text: 'Dodaj',
+          handler: (data) => {
+            this.addEvent(data);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  //Funkcja dodawania nowego wydarenia
+  addEvent(data: any) {
+    // Tworzenie obiektu nowego wydarzenia zgodnie z interfejsem Event
+    const newEvent: Event = {
+      name: data.name,
+      date: data.date,
+      time: data.time,
+      place: data.place,
+      slots: Number(data.slots),
+      owner: this.currentUser, // Ustawienie aktualnego użytkownika jako organizatora
+      details: data.details || '',
+      players: [], // Pusta lista zapisanych graczy
+      games: {
+        game1: { game: data.game1, votes: [] }, // Wartość `votes` inicjalizowana jako pusta tablica
+        game2: data.game2 ? { game: data.game2, votes: [] } : undefined, // Gra opcjonalna
+        game3: data.game3 ? { game: data.game3, votes: [] } : undefined, // Gra opcjonalna
+      },
+    };
+
+    // Dodanie wydarzenia do bazy danych
+    this.databaseService.addEvent(newEvent).subscribe({
+      next: () => {
+        this.alertService.showAlert(
+          'Sukces',
+          'Wydarzenie zostało dodane pomyślnie!',
+          'alert-success'
+        );
+        this.loadEvents(); // Odświeżenie listy wydarzeń
+      },
+      error: (err) => {
+        console.error('Błąd podczas dodawania wydarzenia:', err);
+        this.alertService.showAlert(
+          'Błąd',
+          'Nie udało się dodać wydarzenia. Spróbuj ponownie.',
+          'alert-error'
+        );
+      },
+    });
+  }
+
 
 }

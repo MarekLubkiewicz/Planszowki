@@ -35,7 +35,7 @@ export class PlanningPage implements OnInit {
       time: ['', Validators.required],
       place: ['', Validators.required],
       slots: [0, [Validators.required, Validators.min(1)]],
-      owner: ['', Validators.required],
+      owner: [''],
       game1: ['', Validators.required],
       game2: [''],
       game3: [''],
@@ -57,7 +57,7 @@ export class PlanningPage implements OnInit {
         time: this.eventForm.value.time,
         place: this.eventForm.value.place,
         slots: this.eventForm.value.slots,
-        owner: this.eventForm.value.owner,
+        owner: this.currentUser,
         details: this.eventForm.value.details || '',
         games: {
           game1: {
