@@ -92,8 +92,8 @@
             <p>
               <ion-icon slot="start" name="dice-outline"></ion-icon> Gry:
             </p>
-            <div *ngFor="let game of [event.games.game1, event.games.game2, event.games.game3]">
-              <p class="listgames" *ngIf="game">
+            <div *ngFor="let game of event.games">
+              <p class="listgames">
                 <span class="data">{{ game.game }}</span>
                 <ion-badge color="secondary">{{ game.votes?.length || 0 }}</ion-badge>
               </p>
@@ -171,5 +171,11 @@
       </ion-content>
     </ng-template>
   </ion-modal>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button class="custom-fab" (click)="openAddEventAlert()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

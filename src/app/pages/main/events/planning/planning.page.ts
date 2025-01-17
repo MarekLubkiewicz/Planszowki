@@ -29,61 +29,12 @@ export class PlanningPage implements OnInit {
 
   ngOnInit() {
     this.title = this.activatedRoute.snapshot.queryParamMap.get('title') || '';
-    this.eventForm = this.fb.group({
-      name: ['', Validators.required],
-      date: ['', Validators.required],
-      time: ['', Validators.required],
-      place: ['', Validators.required],
-      slots: [0, [Validators.required, Validators.min(1)]],
-      owner: ['', Validators.required],
-      game1: ['', Validators.required],
-      game2: [''],
-      game3: [''],
-      details: [''],
-    });
     this.autentykacjaService.user$.subscribe(user => {
       this.currentUser = user.uzytkownik;
       this.log_in = user.zalogowany;
     });
   }
 
-  submitEvent() {
-    if (this.eventForm.valid) {
-      const formattedData = format(new Date(this.eventForm.value.date), 'dd.MM.yyyy');
 
-      const eventData: Event = {
-        name: this.eventForm.value.name,
-        date: formattedData,
-        time: this.eventForm.value.time,
-        place: this.eventForm.value.place,
-        slots: this.eventForm.value.slots,
-        owner: this.eventForm.value.owner,
-        details: this.eventForm.value.details || '',
-        games: {
-          game1: {
-            game: this.eventForm.value.game1,
-            votes: [this.currentUser], // Domyślna wartość
-          },
-          game2: this.eventForm.value.game2
-            ? { game: this.eventForm.value.game2, votes: [] }
-            : undefined,
-          game3: this.eventForm.value.game3
-            ? { game: this.eventForm.value.game3, votes: [] }
-            : undefined,
-        },
-      };
-
-      this.databaseService.addEvent(eventData).subscribe({
-        next: () => {
-          this.alertService.showAlert('Sukces', 'Wydarzenie zostało dodane');
-          this.eventForm.reset();
-        },
-        error: (err) => {
-          this.alertService.showAlert('Błąd', 'Nie udało się dodać wydarzenia');
-          console.error('Błąd podczas dodawania wydarzenia', err);
-        },
-      });
-    }
-  }
 }
 
