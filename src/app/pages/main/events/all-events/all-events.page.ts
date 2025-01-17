@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database.service';
-import { Event } from 'src/app/models/events';
+import { Event, Game } from 'src/app/models/events';
 import { ModalController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert.service';
 import { format } from 'date-fns';
@@ -60,6 +60,7 @@ export class AllEventsPage implements OnInit {
       next: (data) => {
          this.events = data.map((event) => ({
           ...event,
+          games: event.games || [],
           registeredPlayers: event.players?.length || 0, // Dynamiczne obliczanie liczby graczy
         }));
         this.filteredEvents = [...this.events];
@@ -115,18 +116,14 @@ export class AllEventsPage implements OnInit {
 
 
   //funkcja zapisywania się na wydarzenie
-  async joinEvent(eventId: string | undefined, eventGames: any) {
-  
+  async joinEvent(eventId: string | undefined, eventGames: Game[]) {
     if (!eventId) {
       console.error('Brak ID wydarzenia');
       return;
     }
 
-    // Walidacja zapisu na spotkanie
     // Znajdź zdarzenie na podstawie ID
     const event = this.events.find(e => e.id === eventId);
-
-      // Jeśli wydarzenie nie zostało znalezione, przerwij wykonanie
     if (!event) {
       console.error('Nie znaleziono wydarzenia.');
       return;
@@ -142,7 +139,7 @@ export class AllEventsPage implements OnInit {
       return;
     }
 
-    // Sprawdzenie czy użytkownik nie jest już zapisany
+    // Sprawdzenie, czy użytkownik jest już zapisany na to wydarzenie
     if (event.players && event.players.includes(this.currentUser)) {
       await this.alertService.showAlert(
         'Informacja',
@@ -151,19 +148,15 @@ export class AllEventsPage implements OnInit {
       );
       return;
     }
-    //koniec walidacji
 
+    // Tworzenie alertu z opcjami gier
     const alert = await this.alertController.create({
       header: 'Wybierz preferowaną grę',
-      inputs: Object.keys(eventGames).map((key) => {
-        const game = eventGames[key];
-        const votesLength = game?.votes?.length || 0; // Bezpieczne pobranie liczby głosów
-        return{
-          type: 'radio',
-          label: `${eventGames[key].game} (${votesLength} wybór/ów)`,
-          value: key,
-        };
-      }),   
+      inputs: eventGames.map((game, index) => ({
+        type: 'radio',
+        label: `${game.game} (${game.votes?.length || 0} wybór/ów)`,
+        value: index, // Używamy indeksu jako wartości
+      })),
       buttons: [
         {
           text: 'Anuluj',
@@ -171,31 +164,34 @@ export class AllEventsPage implements OnInit {
         },
         {
           text: 'Zatwierdź',
-          handler: (selectedGame) => {
+          handler: (selectedIndex: number) => {
+            const selectedGame = eventGames[selectedIndex];
             if (selectedGame) {
-              this.databaseService.addPlayerToEventWithGame(eventId, this.currentUser, selectedGame).subscribe({
+              this.databaseService.addPlayerToEventWithGame(eventId, this.currentUser, selectedGame.game).subscribe({
                 next: async () => {
                   await this.alertService.showAlert(
-                  'Sukces',
-                  `Zapisano użytkownika ${this.currentUser} do wydarzenia`, 
-                  'alert-success');
+                    'Sukces',
+                    `Zapisano użytkownika ${this.currentUser} do wydarzenia`,
+                    'alert-success'
+                  );
                   this.loadEvents();
                 },
-                error: async (err) => {
-                await this.alertService.showAlert(
-                  'Błąd',
-                  'Nie udało się zapisać do wydarzenia',
-                  'alert-error'
-                );
-              },
-            });
+                error: async () => {
+                  await this.alertService.showAlert(
+                    'Błąd',
+                    'Nie udało się zapisać do wydarzenia',
+                    'alert-error'
+                  );
+                },
+              });
             }
           },
         },
       ],
     });
-    await alert.present()
-  } //Koniec funkcji dołączania do wydarzenia
+    await alert.present();
+  }
+  //Koniec funkcji dołączania do wydarzenia
 
 
   // modal do wyświetlenia zapisanych graczy
@@ -213,27 +209,46 @@ export class AllEventsPage implements OnInit {
   async openAddEventAlert() {
     const alert = await this.alertController.create({
       header: 'Dodaj spotkanie',
-      cssClass: 'wide-alert', 
+      cssClass: 'wide-alert',
       inputs: [
         { name: 'name', type: 'text', placeholder: 'Nazwa wydarzenia' },
         { name: 'date', type: 'date', placeholder: 'Data wydarzenia' },
         { name: 'time', type: 'time', placeholder: 'Godzina wydarzenia' },
         { name: 'place', type: 'text', placeholder: 'Miejsce wydarzenia' },
         { name: 'slots', type: 'number', placeholder: 'Liczba miejsc' },
-        { name: 'game1', type: 'text', placeholder: 'Gra 1 (preferowana)' },
-        { name: 'game2', type: 'text', placeholder: 'Gra 2' },
-        { name: 'game3', type: 'text', placeholder: 'Gra 3' },
-        { name: 'details', type: 'textarea', placeholder: 'Szczegóły' },
+        { name: 'details', type: 'textarea', placeholder: 'Szczegóły (opcjonalne)' },
+        { name: 'games', type: 'text', placeholder: 'Podaj gry (oddziel przecinkami)' },
       ],
       buttons: [
         {
           text: 'Anuluj',
           role: 'cancel',
+          handler: () => true, // Zawsze zamykamy alert na anulowanie
         },
         {
           text: 'Dodaj',
           handler: (data) => {
-            this.addEvent(data);
+            // Walidacja: sprawdzamy, czy wszystkie wymagane pola są wypełnione
+            if (!data.name || !data.date || !data.time || !data.place || !data.slots || !data.games) {
+              this.alertService.showAlert(
+                'Błąd',
+                'Wszystkie wymagane pola muszą być wypełnione!',
+                'alert-error'
+              );
+              return false;
+            }
+            // Jeśli wszystkie pola są wypełnione, przetwarzamy dane
+
+            // Tworzymy tablicę gier
+            const gamesArray: Game[] = data.games.split(',').map((gameName: string) => ({
+              game: gameName.trim(),
+              votes: [],
+            }));
+
+             // Przechodzimy do wyboru preferowanej gry
+            this.openPreferredGameAlert(data, gamesArray, alert);
+            return false; // Nie zamykamy pierwszego alertu
+
           },
         },
       ],
@@ -242,23 +257,73 @@ export class AllEventsPage implements OnInit {
     await alert.present();
   }
 
+  async openPreferredGameAlert(data: any, gamesArray: Game[], parentAlert: HTMLIonAlertElement) {
+    const alert = await this.alertController.create({
+      header: 'Wybierz preferowaną grę',
+      inputs: gamesArray.map((game, index) => ({
+        type: 'radio',
+        label: game.game, // Wyświetlana nazwa gry
+        value: index, // Indeks gry w tablicy
+      })),
+      buttons: [
+        {
+          text: 'Anuluj',
+          role: 'cancel',
+          handler: () => true, // Zawsze zamykamy alert na anulowanie
+        },
+        {
+          text: 'Zatwierdź',
+          handler: (selectedIndex) => {
+          
+            // Sprawdzenie, czy wybrano indeks
+            if (selectedIndex === undefined || selectedIndex < 0 || selectedIndex >= gamesArray.length) {
+              this.alertService.showAlert(
+                'Błąd',
+                'Musisz wybrać preferowaną grę!',
+                'alert-error'
+              );
+              return false; // Zatrzymaj zamykanie alertu
+            }
+
+            // Sprawdzenie, czy `votes` istnieje i inicjalizacja, jeśli nie
+            if (!gamesArray[selectedIndex].votes) {
+              gamesArray[selectedIndex].votes = [];
+            }
+
+            // Dodanie preferowanej gry do listy głosów
+            gamesArray[selectedIndex].votes.push(this.currentUser);
+            
+            // Dodajemy wydarzenie z preferowaną grą
+            this.addEvent({
+              ...data,
+              games: gamesArray,
+            });
+
+            // Ręczne zamknięcie pierwszego alertu
+            parentAlert.dismiss();
+
+            return true; // Zamykamy alert po poprawnym wyborze
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+  
   //Funkcja dodawania nowego wydarenia
   addEvent(data: any) {
+    
     // Tworzenie obiektu nowego wydarzenia zgodnie z interfejsem Event
     const newEvent: Event = {
       name: data.name,
-      date: data.date,
+      date: format(new Date(data.date), 'dd.MM.yyyy'),
       time: data.time,
       place: data.place,
       slots: Number(data.slots),
-      owner: this.currentUser, // Ustawienie aktualnego użytkownika jako organizatora
+      owner: this.currentUser,
       details: data.details || '',
-      players: [], // Pusta lista zapisanych graczy
-      games: {
-        game1: { game: data.game1, votes: [] }, // Wartość `votes` inicjalizowana jako pusta tablica
-        game2: data.game2 ? { game: data.game2, votes: [] } : undefined, // Gra opcjonalna
-        game3: data.game3 ? { game: data.game3, votes: [] } : undefined, // Gra opcjonalna
-      },
+      players: [],
+      games: data.games,
     };
 
     // Dodanie wydarzenia do bazy danych

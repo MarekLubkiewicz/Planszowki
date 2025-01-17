@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, mapTo, Observable, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Event } from '../models/events';
+import { Event, Game } from '../models/events';
 
 @Injectable({
   providedIn: 'root',
@@ -37,29 +37,28 @@ export class DatabaseService {
     );
   }
 
-
-
   // Dodanie gracza do wydarzenia z głosowaniem na grę
-  addPlayerToEventWithGame(eventId: string, player: string, gameKey: string): Observable<void> {
+  addPlayerToEventWithGame(eventId: string, player: string, selectedGameName: string): Observable<void> {
     const urlPlayers = `${this.baseUrl}/Events/${eventId}/players.json`;
-    const urlGameVotes = `${this.baseUrl}/Events/${eventId}/games/${gameKey}/votes.json`;
-
-    // Pobierz aktualną listę graczy
+    const urlGames = `${this.baseUrl}/Events/${eventId}/games.json`;
+    // Pobierz aktualną listę graczy  
     return this.http.get<string[]>(urlPlayers).pipe(
       switchMap((players) => {
         const updatedPlayers = players ? [...players, player] : [player];
-
         // Pobierz aktualną listę głosów na grę
-        return this.http.get<string[]>(urlGameVotes).pipe(
-          switchMap((votes) => {
-            const updatedVotes = votes ? [...votes, player] : [player];
-
+        return this.http.get<Game[]>(urlGames).pipe(
+          switchMap((games) => {
+            const updatedGames = games.map((game) => {
+              if (game.game === selectedGameName) {
+                return { ...game, votes: [...(game.votes || []), player] };
+              }
+              return game;
+            });
             // Wyślij obie aktualizacje równocześnie
-            const updateRequests = [
+            return forkJoin([
               this.http.put<void>(urlPlayers, updatedPlayers), // Aktualizacja listy graczy
-              this.http.put<void>(urlGameVotes, updatedVotes), // Aktualizacja głosów na grę
-            ];
-            return forkJoin(updateRequests).pipe(mapTo(void 0));
+              this.http.put<void>(urlGames, updatedGames), // Aktualizacja głosów na grę
+            ]).pipe(mapTo(void 0));
           })
         );
       })

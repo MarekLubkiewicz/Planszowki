@@ -12,53 +12,7 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-  <form [formGroup]="eventForm" (ngSubmit)="submitEvent()">
-
-    <ion-item>
-      <ion-label position="floating">Nazwa</ion-label>
-      <ion-input formControlName="name"></ion-input>
-    </ion-item>
-
-    <ion-label position="floating">Data</ion-label>
-
-    <ion-item>
-
-      <ion-datetime presentation="date" [firstDayOfWeek]="1" formControlName="date"
-        displayFormat="DD.MM.YYYY"></ion-datetime>
-    </ion-item>
-
-    <ion-item>
-      <ion-input label="Godzina" type="time" formControlName="time"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-input label="Miejsce" formControlName="place"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-input label="Wolne miejsca" type="number" formControlName="slots"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Gra 1 - preferowana</ion-label>
-      <ion-input formControlName="game1"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Gra 2</ion-label>
-      <ion-input formControlName="game2"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Gra 3</ion-label>
-      <ion-input formControlName="game3"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Szczegóły</ion-label>
-      <ion-textarea formControlName="details"></ion-textarea>
-    </ion-item>
-
-    <ion-button expand="full" type="submit" [disabled]="eventForm.invalid">Zapisz</ion-button>
-  </form>
+  
 
   
 </ion-content>

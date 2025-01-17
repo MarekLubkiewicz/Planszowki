@@ -10,11 +10,7 @@ export interface Event {
   details?: string;
   slots: number;
   players?: string[]; // Lista zapisanych graczy
-  games: {
-    game1: Game;
-    game2?: Game;
-    game3?: Game;
-  };
+  games: Game[];
   owner: string;
   place: string;
   time: string;
