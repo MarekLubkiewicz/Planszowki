@@ -1,0 +1,24 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AvatarService {
+
+  private apiUrl = 'http://localhost:5000';
+  //private apiUrl = 'http://www.vanilladice.pl/bg-test';
+
+  constructor(private http: HttpClient) { }
+
+  uploadAvatar(file: File): Observable<any> {
+
+    const formData = new FormData(); //FormData to wbudowany interfejs w TypeScript, który pozwala na łatwe tworzenie zestawu par klucz-wartość reprezentujących pola formularza. Automatycznie ustawia odpowiednie nagłówki w żądaniu HTTP.
+    formData.append('avatar', file);
+    
+    return this.http.post(`${this.apiUrl}/dodaj-avatar`, formData, { withCredentials: true });
+
+  }
+
+}
