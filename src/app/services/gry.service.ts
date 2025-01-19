@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 
 export class GryService {
 
-  //private apiUrl = 'https://www.vanilladice.pl/bg-test';
-  private apiUrl = 'http://127.0.0.1:5000';
+  private apiUrl = 'https://www.vanilladice.pl/bg-test';
+  //private apiUrl = 'http://127.0.0.1:5000';
   
   constructor(private http: HttpClient) { }
 

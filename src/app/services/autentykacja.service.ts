@@ -8,8 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AutentykacjaService {
 
-  private apiUrl = 'http://127.0.0.1:5000';
-  //private apiUrl = 'https://www.vanilladice.pl/bg-test';
+  //private apiUrl = 'http://127.0.0.1:5000';
+  private apiUrl = 'https://www.vanilladice.pl/bg-test';
   private _user = new BehaviorSubject<any>(null); //
   public user$ = this._user.asObservable(); //reaktywna zmienna pozwala innym komponentom i serwisom w aplikacji na subskrybowanie aktualnego stanu użytkownika
 
@@ -20,7 +20,7 @@ export class AutentykacjaService {
     return this.http.post(`${this.apiUrl}/logowanie`, { nazwa, haslo }, { withCredentials: true });//Ustawienie 'withCredentials: true' w opcjach zapytania HTTP mówi przeglądarce, aby dołączała ciasteczka do zapytań.
   }
 
-  sprawdzSesje(): Observable<any> {   
+  sprawdzSesje(): Observable<any> {
     return this.http.get(`${this.apiUrl}/sesja-status`, { withCredentials: true })
       .pipe(
         tap(response => {

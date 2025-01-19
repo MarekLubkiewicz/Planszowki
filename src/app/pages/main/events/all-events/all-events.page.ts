@@ -33,6 +33,7 @@ export class AllEventsPage implements OnInit {
   isDateFilterModalOpen = false; // Kontroluje stan modalu filtrowania po dacie
   log_in = false;
   currentUser: string = '';
+  avatar: string = '';
 
 
   constructor(
@@ -51,6 +52,7 @@ export class AllEventsPage implements OnInit {
     this.autentykacjaService.user$.subscribe(user => {
       this.currentUser = user.uzytkownik;
       this.log_in = user.zalogowany;
+      this.avatar = user.avatar;
     });
   }
 
