@@ -15,7 +15,6 @@ const routes: Routes = [
         children: [
           { path: 'tabs', loadChildren: () => import('./events/tabs/tabs.module').then(m => m.TabsPageModule) },
           { path: 'all-events', loadChildren: () => import('./events/all-events/all-events.module').then(m => m.AllEventsPageModule), canActivate: [AuthGuard] },
-          { path: 'planning', loadChildren: () => import('./events/planning/planning.module').then(m => m.PlanningPageModule), canActivate: [AuthGuard] },
           { path: 'joined-events', loadChildren: () => import('./events/joined-events/joined-events.module').then(m => m.JoinedEventsPageModule), canActivate: [AuthGuard] },
         ],
       },

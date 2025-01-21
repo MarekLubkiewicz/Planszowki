@@ -23,6 +23,15 @@ p {
     margin-top: 5px;
 }
 
-.custom-fab {
-    --border-radius: 5px;
+ion-fab-button {
+    --background: #2c630f;
+    --background-activated: #7ec959;
+    --background-hover: #79ff37;
+    --border-radius: 15px;
+    --box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+ion-fab {
+    margin-bottom: 20px;
+    margin-right: 10%;
 }

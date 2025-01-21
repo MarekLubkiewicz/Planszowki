@@ -12,7 +12,6 @@ export class MainPage implements OnInit {
 
   public eventsPages = [
     { title: 'Wszystkie spotkania', url: '/main/events/all-events', icon: 'calendar'},
-    { title: 'Planowanie spotkań', url: '/main/events/planning', icon: 'create'},
     { title: 'Moje zapisy', url: '/main/events/joined-events', icon: 'push'},
   ];
 
