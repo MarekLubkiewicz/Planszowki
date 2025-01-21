@@ -24,6 +24,7 @@ export class DatabaseService {
     );
   }
 
+
   // Dodanie gracza do wydarzenia z głosowaniem na grę
   addPlayerToEventWithGame(eventId: string, player: string, selectedGameName: string): Observable<void> {
     const urlPlayers = `${this.baseUrl}/Events/${eventId}/players.json`;
