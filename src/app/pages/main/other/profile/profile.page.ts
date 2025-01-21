@@ -73,6 +73,10 @@ export class ProfilePage implements OnInit {
         next: (response) => {
           console.log('Plik przesłany pomyślnie', response);
           this.isUploading = false;
+          // Odśwież dane użytkownika po udanym przesłaniu avatara
+          this.autentykacjaService.sprawdzSesje().subscribe(user => {
+            this.avatar = user.avatar;
+          });
         },
         error: (error) => {
           console.error('Błąd podczas przesyłania', error);
@@ -81,6 +85,5 @@ export class ProfilePage implements OnInit {
         }
       });
   }
-
 
 }

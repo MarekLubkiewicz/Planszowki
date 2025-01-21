@@ -24,18 +24,6 @@ export class DatabaseService {
     );
   }
 
-  // Zapisywanie do wydarzenia
-  addPlayerToEvent(eventId: string, player: string): Observable<void> {
-    const url = `${this.baseUrl}/Events/${eventId}/players.json`;
-
-    // Pobierz aktualną listę graczy, dodaj nowego, a następnie zapisz
-    return this.http.get<string[]>(url).pipe(
-      switchMap((players) => {
-        const updatedPlayers = players ? [...players, player] : [player];
-        return this.http.put<void>(url, updatedPlayers); // Użyj PUT, aby nadpisać tablicę graczy
-      })
-    );
-  }
 
   // Dodanie gracza do wydarzenia z głosowaniem na grę
   addPlayerToEventWithGame(eventId: string, player: string, selectedGameName: string): Observable<void> {
@@ -101,7 +89,6 @@ export class DatabaseService {
   updateEvent(id: string, event: Event): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}/Events/${id}.json`, event);
   }
-
 
   // Usuwanie wydarzenia
   deleteEvent(id: string): Observable<void> {
