@@ -20,7 +20,7 @@ export class AutentykacjaService {
     return this.http.post(`${this.apiUrl}/logowanie`, { nazwa, haslo }, { withCredentials: true });//Ustawienie 'withCredentials: true' w opcjach zapytania HTTP mówi przeglądarce, aby dołączała ciasteczka do zapytań.
   }
 
-  sprawdzSesje(): Observable<any> {   
+  sprawdzSesje(): Observable<any> {
     return this.http.get(`${this.apiUrl}/sesja-status`, { withCredentials: true })
       .pipe(
         tap(response => {
