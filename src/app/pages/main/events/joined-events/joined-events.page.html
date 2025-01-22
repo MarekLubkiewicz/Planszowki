@@ -11,17 +11,177 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   
+ <ion-item>
+    <ion-avatar slot="start">
+      <img alt="Awatar użytkownika" src="{{ avatar }}" />
+    </ion-avatar>
+    <ion-label>
+      {{ currentUser }}, zarządzaj zaplanowanymi przez Ciebie spotkaniami:
+    </ion-label>
+  </ion-item>
 
-  <h3> Witaj {{ currentUser }} 
-    <span class="divider"></span>
-    <ion-icon name="person-circle-outline"></ion-icon>
-  </h3>
-  <P>
-    poniżej znajdziesz spotkania zaplanowane przez Ciebie
-  </P>
-  <P>
-    oraz te do kórych się zapisałeś
-  </P>
+  <ion-grid *ngIf="myEvents && myEvents.length > 0; else noData">
+    <ion-row *ngFor="let event of myEvents">
+      <ion-col class="ion-align-self-start">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              {{ event.name }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" size-md="6">
+                  <ion-label>
+                    <p>
+                      <ion-icon slot="start" name="location-outline"></ion-icon>
+                      <span class="data">{{ event.place }}</span>
+                    </p>
+                    <p>
+                      <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
+                      <span class="data">{{ event.date }}</span>
+                      <span class="divider"></span>
+                      <ion-icon slot="start" name="time-outline"></ion-icon>
+                      <span class="data">{{ event.time }}</span>
+                    </p>
+                    <p>Miejsca: <span class="data">{{ event.slots }}</span></p>
+                    <p>Gracze: <span class="data">{{ event.players?.length || 0 }}</span>
+                      <ion-button fill="clear" size="small" *ngIf="event.players && event.players.length > 0"
+                        (click)="viewPlayers(event.players)">
+                        Zobacz graczy
+                      </ion-button>
+                    </p>
+                  </ion-label>
+                </ion-col>
+                <ion-col size="12" size-md="6">
+                  <ion-label>
+                    <p>
+                      <ion-icon slot="start" name="dice-outline"></ion-icon> Gry:
+                    </p>
+                    <div *ngFor="let game of event.games">
+                      <p class="listgames">
+                        <span class="data">{{ game.game }}</span>
+                        <ion-badge color="secondary">{{ game.votes?.length || 0 }}</ion-badge>
+                      </p>
+                    </div>
+                  </ion-label>  
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-label>
+                  <p *ngIf="event.details">
+                    Szczegóły: <span class="data">{{ event.details }}</span>
+                  </p>                  
+                </ion-label>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-item>
+    <ion-label>
+      Spotkania na które się zapisałeś:
+    </ion-label>
+  </ion-item>
+
+
+  <ion-grid *ngIf="eventsJoin && eventsJoin.length > 0; else noData">
+    <ion-row *ngFor="let event of eventsJoin">
+      <ion-col class="ion-align-self-start">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              {{ event.name }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" size-md="6">
+                  <ion-label>
+                    <p>
+                      <ion-icon slot="start" name="location-outline"></ion-icon>
+                      <span class="data">{{ event.place }}</span>
+                    </p>
+                    <p>
+                      <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
+                      <span class="data">{{ event.date }}</span>
+                      <span class="divider"></span>
+                      <ion-icon slot="start" name="time-outline"></ion-icon>
+                      <span class="data">{{ event.time }}</span>
+                    </p>
+                    <p>Organizator: <span class="data">{{ event.owner }}</span></p>
+                    <p>Miejsca: <span class="data">{{ event.slots }}</span></p>
+                    <p>Gracze: <span class="data">{{ event.players?.length || 0 }}</span>
+                      <ion-button fill="clear" size="small" *ngIf="event.players && event.players.length > 0"
+                        (click)="viewPlayers(event.players)">
+                        Zobacz graczy
+                      </ion-button>
+                    </p>
+                  </ion-label>
+                </ion-col>
+                <ion-col size="12" size-md="6">
+                  <ion-label>
+                    <p>
+                      <ion-icon slot="start" name="dice-outline"></ion-icon> Gry:
+                    </p>
+                    <div *ngFor="let game of event.games">
+                      <p class="listgames">
+                        <span class="data">{{ game.game }}</span>
+                        <ion-badge color="secondary">{{ game.votes?.length || 0 }}</ion-badge>
+                      </p>
+                    </div>
+                  </ion-label>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-label>
+                  <p *ngIf="event.details">
+                    Szczegóły: <span class="data">{{ event.details }}</span>
+                  </p>
+                </ion-label>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  <ng-template #noData>
+    <ion-text color="medium">
+      <h3 class="ion-text-center">Brak dostępnych spotkań</h3>
+    </ion-text>
+  </ng-template>
+  
+  <!-- Modal wyświettlający listę zapisanych graczy -->
+  <ion-modal [isOpen]="isModalOpen" (willDismiss)="closeModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Zapisani gracze</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">Zamknij</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <ion-item *ngFor="let player of currentPlayers">
+            <ion-avatar slot="start">
+              <img alt="Awatar użytkownika" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            </ion-avatar>
+            {{ player }}
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
 
 

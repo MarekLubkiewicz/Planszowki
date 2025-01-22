@@ -17,11 +17,35 @@ export class DatabaseService {
     return this.http.get<{ [key: string]: Event }>(`${this.baseUrl}/Events.json`).pipe(
       map((data) => {
         return Object.keys(data || {}).map((key) => ({
-          id: key, // Klucz staje się ID wydarzenia
+          id: key, // Klucz staje się ID wydarzenia 
           ...data[key], // Rozwijamy pozostałe właściwości
         }));
       })
     );
+  }
+
+  getMyEvents(currentUser: string): Observable<Event[]> {
+    return this.http.get<{ [key: string]: Event }>(`${this.baseUrl}/Events.json`).pipe(
+        map((data) => {
+          const events = Object.keys(data || {}).map((key) => ({
+              id: key,
+              ...data[key],
+            }))
+          return events.filter((event) => event.owner === currentUser);
+        })
+      );
+  }
+
+  getMyJoinEvents(currentUser: string): Observable<Event[]> {
+    return this.http.get<{ [key: string]: Event }>(`${this.baseUrl}/Events.json`).pipe(
+        map((data) => {
+          const events = Object.keys(data || {}).map((key) => ({
+              id: key,
+              ...data[key],
+            }))
+          return events.filter((event) => event.players?.includes(currentUser));
+        })
+      );
   }
 
 
