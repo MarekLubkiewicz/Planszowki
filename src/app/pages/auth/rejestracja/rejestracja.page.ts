@@ -58,12 +58,19 @@ export class RejestracjaPage implements OnInit, ViewWillEnter {
     }
         
   this.uzytkownikDane.rejestruj(this.nazwa, this.haslo, this.email).subscribe({
-    next: () => {
+    next: (response) => {
+      alert(response.komunikat);
       this.router.navigate(['/logowanie']);
     },
     error: (err) => {
-      console.error('Rejestracja nieudana', err);
-      alert('Nazwa zajęta.');
+      console.error(`Logowanie nieudane ${err.status}`);
+      if (err.error && err.error.blad) {
+        alert(err.error.blad);
+      } else if (err.message) {
+        alert(`Błąd: ${err.message}`);
+      } else {
+        alert(`Wystąpił błąd podczas rejestracji. Kod błędu: ${err.status} ${err.statusText}`);
+      }
     },
   })
   }
