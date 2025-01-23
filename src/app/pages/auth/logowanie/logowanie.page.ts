@@ -38,7 +38,9 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
         }
       },
       error: () => {
-        this.router.navigate(['/logowanie']); // Przekierowanie do logowania
+        alert("Brak połączenia z serwerem.");
+        return;
+        //this.router.navigate(['/logowanie']); // Przekierowanie do logowania
       },
     });
   }
@@ -48,21 +50,32 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
       alert("Podaj nazwę użytkownika")
       return;
     } else if (!this.haslo) {
-        alert("Podaj nazwę użytkownika")
+        alert("Podaj hasło")
         return;
     } 
     this.autentykacja.logowanie(this.nazwa, this.haslo).subscribe({
-        next: () => {
+        next: (response) => {
+          alert(response.komunikat);
           this.router.navigate(['/main']); // Po zalogowaniu przejście na stronę główną
       },
       error: (err) => {
         console.error(`Logowanie nieudane ${err.status}`);
-        alert('Niepoprawne dane logowania.');
+        if (err.error && err.error.blad) {
+          alert(err.error.blad);
+        } else if (err.message) {
+          alert(`Błąd: ${err.message}`);
+        } else {
+          alert(`Wystąpił błąd podczas logowania. Kod błędu: ${err.status} ${err.statusText}`);
+        }
       },
     });
   }
 
   rejestracja() {
     this.router.navigate(['/rejestracja']);
+  }
+
+  zapomnialem() {
+    this.router.navigate(['/resetowanie-hasla']);
   }
 }

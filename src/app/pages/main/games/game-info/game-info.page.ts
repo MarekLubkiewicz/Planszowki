@@ -50,13 +50,20 @@ export class GameInfoPage implements OnInit, OnDestroy {
             this.loading = true;
             return this.gryDane.szukajGry(fraza);
         })
-    ).subscribe({ //zapisuje nadesłane dane do zmiennej wyiniki, albo zwraca błąd
+    ).subscribe({ //zapisuje nadesłane dane do zmiennej wyniki, albo zwraca błąd
         next: (daneZAPI: Gra[]) => {
             this.wyniki = daneZAPI;
             this.loading = false;
         },
-        error: (error) => {
-            console.error('Błąd wyszukiwania:', error);
+        error: (err) => {
+            console.error('Błąd wyszukiwania:', err);
+            if (err.error && err.error.blad) {
+              alert(err.error.blad);
+            } else if (err.message) {
+              alert(`Błąd: ${err.message}`);
+            } else {
+              alert(`Wystąpił błąd podczas wyszukiwania. Kod błędu: ${err.status} ${err.statusText}`);
+            }
             this.loading = false;
         }
     });

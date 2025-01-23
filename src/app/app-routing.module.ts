@@ -17,7 +17,11 @@ const routes: Routes = [
   },
   { 
     path: '', redirectTo: 'home', pathMatch: 'full' 
-  }
+  },  {
+    path: 'resetowanie-hasla',
+    loadChildren: () => import('./pages/auth/resetowanie-hasla/resetowanie-hasla.module').then( m => m.ResetowanieHaslaPageModule)
+  },
+
 ];
 
 

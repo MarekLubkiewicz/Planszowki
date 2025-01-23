@@ -37,4 +37,12 @@ export class AutentykacjaService {
     return this.http.post(`${this.apiUrl}/rejestracja`, { nazwa, haslo, email },  { withCredentials: true });
   }
 
+  wyslijKod(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/wyslij-kod`, { email },  { withCredentials: true });
+  }
+
+  resetujMojehaslo(noweHaslo: string, kodRes: String, email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/zmiana-hasla`, { noweHaslo, kodRes, email },  { withCredentials: true });
+  }
+
 }

@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>resetowanie-hasla</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ng-container *ngIf="!kodWyslany">
+    <h2>Wprowadź swój email</h2>
+    <form (ngSubmit)="wyslijDoMnieKod()" #registerForm="ngForm">
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+
+        <ion-input type="email" name="email" [(ngModel)]="email" required></ion-input>
+
+      </ion-item>
+
+      <ion-button type="submit" [disabled]="!registerForm.valid">Wyślij kod</ion-button>
+    </form>
+  </ng-container>
+
+  <ng-container *ngIf="kodWyslany">
+    <h2>Wprowadź kod z emaila</h2>
+    <form (ngSubmit)="resetujHaslo()" #registerForm="ngForm">
+      <ion-item>
+        <ion-label position="floating">Kod resetowania</ion-label>
+        <ion-input type="text" name="kodRes" [(ngModel)]="kodRes" maxlength="6"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Nowe hasło</ion-label>
+        <ion-input type="password" name="noweHaslo" [(ngModel)]="noweHaslo"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Potwierdź hasło</ion-label>
+        <ion-input type="password" name="potwierdzenieHaslo" [(ngModel)]="potwierdzenieHaslo"></ion-input>
+      </ion-item>
+
+      <ion-button type="submit" [disabled]="!registerForm.valid">Zmień hasło</ion-button>
+    </form>
+  </ng-container>
+  <ion-button (click)="logowanie()">Strona logowania</ion-button>
+</ion-content>
