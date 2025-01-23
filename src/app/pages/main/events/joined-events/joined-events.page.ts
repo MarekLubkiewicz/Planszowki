@@ -34,30 +34,9 @@ export class JoinedEventsPage implements OnInit {
       this.log_in = user.zalogowany;
       this.avatar = user.avatar;
     });
-    this.loadMyEvents();
     this.loadMyJoinEvents();
   }
 
-
-  loadMyEvents() {
-    this.isLoading = true;
-    this.databaseService.getMyEvents(this.currentUser).subscribe({
-      next: (data) => {
-         this.myEvents = data.map((event) => ({
-          ...event,
-          games: event.games || [],
-          registeredPlayers: event.players?.length || 0, // Dynamiczne obliczanie liczby graczy
-        }));
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Błąd podczas pobierania wydarzeń:', err);
-        this.isLoading = false;
-        this.myEvents = []; // Wyczyść listę w przypadku błędu
-      },
-    });
-
-  }
 
   loadMyJoinEvents() {
     this.isLoading = true;

@@ -12,11 +12,16 @@
       <ion-list id="events-list">
         <ion-list-header>Organizacja spotkań</ion-list-header>
         <ion-menu-toggle auto-hide="false" *ngFor="let page of eventsPages">
-            <ion-item routerDirection="root" [routerLink]="[page.url]" [queryParams]="{ title: page.title }" lines="none"
-              detail="false" routerLinkActive="selected">
-              <ion-icon aria-hidden="true" slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ page.title }}</ion-label>
-            </ion-item>
+          <ion-item 
+            routerDirection="root" 
+            [routerLink]="[page.url]"
+            [class.selected]="isActive(page.url)" 
+            [queryParams]="{ title: page.title }" 
+            lines="none" detail="false" 
+            routerLinkActive="selected">
+            <ion-icon aria-hidden="true" slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'"></ion-icon>
+            <ion-label>{{ page.title }}</ion-label>
+          </ion-item>
         </ion-menu-toggle>
       </ion-list>
 
@@ -24,8 +29,14 @@
       <ion-list>
         <ion-list-header>Gry</ion-list-header>
         <ion-menu-toggle auto-hide="false" *ngFor="let page of gamesPages">
-            <ion-item routerDirection="root" [routerLink]="[page.url]" [queryParams]="{ title: page.title }" lines="none"
-              detail="false" routerLinkActive="selected">
+            <ion-item 
+              routerDirection="root" 
+              [routerLink]="[page.url]"
+              [class.selected]="isActive(page.url)" 
+              [queryParams]="{ title: page.title }" 
+              lines="none"
+              detail="false" 
+              routerLinkActive="selected">
               <ion-icon aria-hidden="true" slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'"></ion-icon>
               <ion-label>{{ page.title }}</ion-label>
             </ion-item>
@@ -35,7 +46,7 @@
       <!-- Sekcja Ustawień -->
       <ion-list>
         <ion-menu-toggle auto-hide="false" *ngFor="let page of otherPages">
-            <ion-item routerDirection="root" [routerLink]="[page.url]" [queryParams]="{ title: page.title }" lines="none"
+            <ion-item routerDirection="root" [routerLink]="[page.url]" [class.selected]="isActive(page.url)" [queryParams]="{ title: page.title }" lines="none"
               detail="false" routerLinkActive="selected">
               <ion-icon aria-hidden="true" slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'"></ion-icon>
               <ion-label>{{ page.title }}</ion-label>
