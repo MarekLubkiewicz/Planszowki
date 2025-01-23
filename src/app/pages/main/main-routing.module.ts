@@ -13,9 +13,10 @@ const routes: Routes = [
       {
         path: 'events',
         children: [
-          { path: 'tabs', loadChildren: () => import('./events/tabs/tabs.module').then(m => m.TabsPageModule) },
+          { path: 'tabs', loadChildren: () => import('./events/tabs/tabs.module').then(m => m.TabsPageModule), canActivate: [AuthGuard] },
           { path: 'all-events', loadChildren: () => import('./events/all-events/all-events.module').then(m => m.AllEventsPageModule), canActivate: [AuthGuard] },
           { path: 'joined-events', loadChildren: () => import('./events/joined-events/joined-events.module').then(m => m.JoinedEventsPageModule), canActivate: [AuthGuard] },
+          { path: 'planned-events', loadChildren: () => import('./events/planned-events/planned-events.module').then(m => m.PlannedEventsPageModule), canActivate: [AuthGuard] },
         ],
       },
       {

@@ -12,7 +12,7 @@ export class MainPage implements OnInit {
 
   public eventsPages = [
     { title: 'Wszystkie spotkania', url: '/main/events/all-events', icon: 'calendar'},
-    { title: 'Moje zapisy', url: '/main/events/joined-events', icon: 'push'},
+    { title: 'Moje zapisy', url: '/main/events/tabs', icon: 'push'},
   ];
 
   public gamesPages = [
