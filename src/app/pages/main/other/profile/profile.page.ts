@@ -72,14 +72,22 @@ export class ProfilePage implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Plik przesłany pomyślnie', response);
+          alert(response.komunikat)
           this.isUploading = false;
           // Odśwież dane użytkownika po udanym przesłaniu avatara
           this.autentykacjaService.sprawdzSesje().subscribe(user => {
             this.avatar = user.avatar;
           });
         },
-        error: (error) => {
-          console.error('Błąd podczas przesyłania', error);
+        error: (err) => {
+          console.error('Błąd podczas przesyłania', err);
+          if (err.error && err.error.blad) {
+            alert(err.error.blad);
+          } else if (err.message) {
+            alert(`Błąd: ${err.message}`);
+          } else {
+            alert(`Wystąpił błąd podczas przesyłania pliku. Kod błędu: ${err.status} ${err.statusText}`);
+          }
           this.error = 'Wystąpił błąd podczas przesyłania pliku';
           this.isUploading = false;
         }

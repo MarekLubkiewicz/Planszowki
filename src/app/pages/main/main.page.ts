@@ -40,12 +40,13 @@ export class MainPage implements OnInit {
 
   wyloguj() {
     this.autentykacja.wylogowanie().subscribe({
-      next: () => {
+      next: (response) => {
         console.log('Wylogowano pomyślnie');
         this.zalogowany = false;
         this.uzytkownik_id = null;
         this.uzytkownik = null;
         this.router.navigate(['/home']);
+        alert(response.komunikat)
       },
       error: (error) => {
         console.error('Błąd podczas wylogowywania:', error);
