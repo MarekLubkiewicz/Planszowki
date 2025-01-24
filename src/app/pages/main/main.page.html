@@ -30,13 +30,8 @@
         <ion-list-header>Gry</ion-list-header>
         <ion-menu-toggle auto-hide="false" *ngFor="let page of gamesPages">
             <ion-item 
-              routerDirection="root" 
-              [routerLink]="[page.url]"
-              [class.selected]="isActive(page.url)" 
-              [queryParams]="{ title: page.title }" 
-              lines="none"
-              detail="false" 
-              routerLinkActive="selected">
+              routerDirection="root" [routerLink]="[page.url]" [queryParams]="{ title: page.title }" 
+              lines="none" detail="false" routerLinkActive="selected">
               <ion-icon aria-hidden="true" slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'"></ion-icon>
               <ion-label>{{ page.title }}</ion-label>
             </ion-item>

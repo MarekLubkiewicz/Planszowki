@@ -20,6 +20,7 @@ export class JoinedEventsPage implements OnInit {
   eventsJoin: Event[] = [];
   isModalOpen = false; // Kontroluje stan modalu wyświetlającego zapisanych graczy
   currentPlayers: string[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
+  
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -36,7 +37,6 @@ export class JoinedEventsPage implements OnInit {
     });
     this.loadMyJoinEvents();
   }
-
 
   loadMyJoinEvents() {
     this.isLoading = true;
@@ -55,8 +55,30 @@ export class JoinedEventsPage implements OnInit {
         this.eventsJoin = []; // Wyczyść listę w przypadku błędu
       },
     });
-
   }
+
+  removeFromEvent(event: Event) {
+    const currentPlayer = this.currentUser; // Nazwa zalogowanego gracza
+    const gameIndex = event.games.findIndex((game) => game.votes?.includes(currentPlayer));
+    const gameKey = gameIndex.toString();
+
+    if (!event.id || !gameKey || !currentPlayer) {
+      console.error('Brak wymaganych danych do rezygnacji z wydarzenia.');
+      return;
+    }
+
+    this.databaseService.removePlayerFromEvent(event.id, currentPlayer, gameKey).subscribe({
+      next: () => {
+        // Aktualizacja lokalnej listy wydarzeń
+        this.eventsJoin = this.eventsJoin.filter((e) => e.id !== event.id);
+        console.log('Gracz został wypisany z wydarzenia.');
+      },
+      error: (error) => {
+        console.error('Błąd podczas rezygnacji z wydarzenia:', error);
+      },
+    });
+  }
+
 
   // modal do wyświetlenia zapisanych graczy
   viewPlayers(players: string[]) {

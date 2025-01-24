@@ -4,6 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
+      Twoje spotkania
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -75,6 +76,13 @@
                 </ion-label>
               </ion-row>
             </ion-grid>
+              <ion-button 
+                color="danger"
+                *ngIf="event.id"
+                (click)="deleteEvent(event.id!)">
+                <ion-icon slot="start" name="trash"></ion-icon>
+                Usuń spotkanie
+              </ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

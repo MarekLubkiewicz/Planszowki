@@ -56,7 +56,7 @@ export class MainPage implements OnInit {
 
   isActive(url: string): boolean {
     const isActive = this.router.url.startsWith(url);
-    console.log(`URL: ${this.router.url}, Checking: ${url}, Active: ${isActive}`);
+    //console.log(`URL: ${this.router.url}, Checking: ${url}, Active: ${isActive}`);
     return isActive;
   }
 

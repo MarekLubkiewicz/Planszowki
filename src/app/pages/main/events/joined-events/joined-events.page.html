@@ -4,14 +4,14 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-
+      Twoje spotkania
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   
- <ion-item>
+  <ion-item>
     <ion-avatar slot="start">
       <img alt="Awatar użytkownika" src="{{ avatar }}" />
     </ion-avatar>
@@ -19,8 +19,6 @@
       {{ currentUser }}, spotkania na które się zapisałeś
     </ion-label>
   </ion-item>
-
-
 
   <ion-grid *ngIf="eventsJoin && eventsJoin.length > 0; else noData">
     <ion-row *ngFor="let event of eventsJoin">
@@ -79,7 +77,12 @@
                 </ion-label>
               </ion-row>
             </ion-grid>
+            <ion-button color="warning" *ngIf="event.id" (click)="removeFromEvent(event)">
+              <ion-icon slot="start" name="person-remove"></ion-icon>
+              Zrezygnuj z udziału
+            </ion-button>
           </ion-card-content>
+
         </ion-card>
       </ion-col>
     </ion-row>

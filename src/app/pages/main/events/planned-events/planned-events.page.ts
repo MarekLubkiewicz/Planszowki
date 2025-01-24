@@ -56,6 +56,24 @@ export class PlannedEventsPage implements OnInit {
     });
   }
 
+  deleteEvent(eventId: string) {
+    this.databaseService.deleteEvent(eventId).subscribe({
+      next: () => {
+        // Usuń wydarzenie z lokalnej listy
+        this.myEvents = this.myEvents.filter(event => event.id !== eventId);
+        console.log('Wydarzenie zostało usunięte.');
+      },
+      error: (error) => {
+        console.error('Błąd podczas usuwania wydarzenia:', error);
+      }
+    });
+  }
+
+
+  modifyEvent(){
+    
+  }
+
   // modal do wyświetlenia zapisanych graczy
   viewPlayers(players: string[]) {
     this.currentPlayers = players; // Przypisz listę graczy
