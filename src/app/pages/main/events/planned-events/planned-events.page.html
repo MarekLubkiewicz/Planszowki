@@ -10,18 +10,18 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  
+
   <ion-item>
     <ion-avatar slot="start">
       <img alt="Awatar użytkownika" src="{{ avatar }}" />
     </ion-avatar>
     <ion-label>
-      {{ currentUser }}, spotkania na które się zapisałeś
+      {{ currentUser }}, zarządzaj zaplanowanymi przez Ciebie spotkaniami
     </ion-label>
   </ion-item>
 
-  <ion-grid *ngIf="eventsJoin && eventsJoin.length > 0; else noData">
-    <ion-row *ngFor="let event of eventsJoin">
+  <ion-grid *ngIf="myEvents && myEvents.length > 0; else noData">
+    <ion-row *ngFor="let event of myEvents">
       <ion-col class="ion-align-self-start">
         <ion-card>
           <ion-card-header>
@@ -45,7 +45,6 @@
                       <ion-icon slot="start" name="time-outline"></ion-icon>
                       <span class="data">{{ event.time }}</span>
                     </p>
-                    <p>Organizator: <span class="data">{{ event.owner }}</span></p>
                     <p>Miejsca: <span class="data">{{ event.slots }}</span></p>
                     <p>Gracze: <span class="data">{{ event.players?.length || 0 }}</span>
                       <ion-button fill="clear" size="small" *ngIf="event.players && event.players.length > 0"
@@ -77,23 +76,25 @@
                 </ion-label>
               </ion-row>
             </ion-grid>
-            <ion-button color="warning" *ngIf="event.id" (click)="removeFromEvent(event)">
-              <ion-icon slot="start" name="person-remove"></ion-icon>
-              Zrezygnuj z udziału
-            </ion-button>
+              <ion-button 
+                color="danger"
+                *ngIf="event.id"
+                (click)="deleteEvent(event.id!)">
+                <ion-icon slot="start" name="trash"></ion-icon>
+                Usuń spotkanie
+              </ion-button>
           </ion-card-content>
-
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
-  
+
   <ng-template #noData>
     <ion-text color="medium">
       <h3 class="ion-text-center">Brak dostępnych spotkań</h3>
     </ion-text>
   </ng-template>
-  
+
   <!-- Modal wyświettlający listę zapisanych graczy -->
   <ion-modal [isOpen]="isModalOpen" (willDismiss)="closeModal()">
     <ng-template>
@@ -118,6 +119,5 @@
     </ng-template>
   </ion-modal>
 
-
-
 </ion-content>
+

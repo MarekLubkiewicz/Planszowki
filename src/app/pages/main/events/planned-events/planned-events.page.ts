@@ -5,12 +5,12 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { Event } from 'src/app/models/events';
 
 @Component({
-  selector: 'app-joined-events',
-  templateUrl: './joined-events.page.html',
-  styleUrls: ['./joined-events.page.scss'],
+  selector: 'app-planned-events',
+  templateUrl: './planned-events.page.html',
+  styleUrls: ['./planned-events.page.scss'],
   standalone: false,
 })
-export class JoinedEventsPage implements OnInit {
+export class PlannedEventsPage implements OnInit {
   public title!: string;
   currentUser: string = '';
   log_in: boolean = false;
@@ -20,7 +20,6 @@ export class JoinedEventsPage implements OnInit {
   eventsJoin: Event[] = [];
   isModalOpen = false; // Kontroluje stan modalu wyświetlającego zapisanych graczy
   currentPlayers: string[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
-  
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -29,20 +28,20 @@ export class JoinedEventsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.title = this.activatedRoute.snapshot.queryParamMap.get('title') || '';
+    this.title = this.activatedRoute.snapshot.queryParamMap.get('title') || ''; //
     this.autentykacjaService.user$.subscribe(user => {
       this.currentUser = user.uzytkownik;
       this.log_in = user.zalogowany;
       this.avatar = user.avatar;
     });
-    this.loadMyJoinEvents();
+    this.loadMyEvents();
   }
 
-  loadMyJoinEvents() {
+  loadMyEvents() {
     this.isLoading = true;
-    this.databaseService.getMyJoinEvents(this.currentUser).subscribe({
+    this.databaseService.getMyEvents(this.currentUser).subscribe({
       next: (data) => {
-         this.eventsJoin = data.map((event) => ({
+         this.myEvents = data.map((event) => ({
           ...event,
           games: event.games || [],
           registeredPlayers: event.players?.length || 0, // Dynamiczne obliczanie liczby graczy
@@ -52,33 +51,28 @@ export class JoinedEventsPage implements OnInit {
       error: (err) => {
         console.error('Błąd podczas pobierania wydarzeń:', err);
         this.isLoading = false;
-        this.eventsJoin = []; // Wyczyść listę w przypadku błędu
+        this.myEvents = []; // Wyczyść listę w przypadku błędu
       },
     });
   }
 
-  removeFromEvent(event: Event) {
-    const currentPlayer = this.currentUser; // Nazwa zalogowanego gracza
-    const gameIndex = event.games.findIndex((game) => game.votes?.includes(currentPlayer));
-    const gameKey = gameIndex.toString();
-
-    if (!event.id || !gameKey || !currentPlayer) {
-      console.error('Brak wymaganych danych do rezygnacji z wydarzenia.');
-      return;
-    }
-
-    this.databaseService.removePlayerFromEvent(event.id, currentPlayer, gameKey).subscribe({
+  deleteEvent(eventId: string) {
+    this.databaseService.deleteEvent(eventId).subscribe({
       next: () => {
-        // Aktualizacja lokalnej listy wydarzeń
-        this.eventsJoin = this.eventsJoin.filter((e) => e.id !== event.id);
-        console.log('Gracz został wypisany z wydarzenia.');
+        // Usuń wydarzenie z lokalnej listy
+        this.myEvents = this.myEvents.filter(event => event.id !== eventId);
+        console.log('Wydarzenie zostało usunięte.');
       },
       error: (error) => {
-        console.error('Błąd podczas rezygnacji z wydarzenia:', error);
-      },
+        console.error('Błąd podczas usuwania wydarzenia:', error);
+      }
     });
   }
 
+
+  modifyEvent(){
+    
+  }
 
   // modal do wyświetlenia zapisanych graczy
   viewPlayers(players: string[]) {
@@ -91,5 +85,4 @@ export class JoinedEventsPage implements OnInit {
     this.currentPlayers = []; // Wyczyść listę graczy
   }
   
-
 }

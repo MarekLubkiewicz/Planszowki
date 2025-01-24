@@ -12,7 +12,7 @@ export class MainPage implements OnInit {
 
   public eventsPages = [
     { title: 'Wszystkie spotkania', url: '/main/events/all-events', icon: 'calendar'},
-    { title: 'Moje zapisy', url: '/main/events/joined-events', icon: 'push'},
+    { title: 'Twoje spotkania', url: '/main/events/tabs', icon: 'push'},
   ];
 
   public gamesPages = [
@@ -52,6 +52,12 @@ export class MainPage implements OnInit {
         console.error('Błąd podczas wylogowywania:', error);
       }
     });
+  }
+
+  isActive(url: string): boolean {
+    const isActive = this.router.url.startsWith(url);
+    //console.log(`URL: ${this.router.url}, Checking: ${url}, Active: ${isActive}`);
+    return isActive;
   }
 
 }

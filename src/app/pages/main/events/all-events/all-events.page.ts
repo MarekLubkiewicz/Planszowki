@@ -8,7 +8,6 @@ import { format } from 'date-fns';
 import { ActionSheetController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
-import { Router } from '@angular/router'
 
 
 @Component({
@@ -42,9 +41,8 @@ export class AllEventsPage implements OnInit {
     private alertService: AlertService,
     private actionSheetController: ActionSheetController,
     private alertController: AlertController,
-    private autentykacjaService: AutentykacjaService,
-    private router: Router
-  ) { }
+    private autentykacjaService: AutentykacjaService
+    ) { }
 
   ngOnInit() {
     this.title = this.activatedRoute.snapshot.queryParamMap.get('title') || 'Wszystkie spotkania';
@@ -88,6 +86,11 @@ export class AllEventsPage implements OnInit {
     });
   }
 
+  maxVotes(games: Game[]): number {
+    if (!games || games.length === 0) return 0;
+    return Math.max(...games.map(game => game.votes?.length || 0));
+  }
+  
   resetDateFilter() {
     this.filter.date = ''; // Wyzerowanie filtra daty
     this.applyFilters();
