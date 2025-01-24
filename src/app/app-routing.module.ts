@@ -12,12 +12,6 @@ const routes: Routes = [
   { 
     path: 'rejestracja', loadChildren: () => import('./pages/auth/rejestracja/rejestracja.module').then(m => m.RejestracjaPageModule) 
   },
-  { 
-    path: 'main', loadChildren: () => import('./pages/main/main.module').then(m => m.MainPageModule)
-  },
-  { 
-    path: '', redirectTo: 'home', pathMatch: 'full' 
-  },
   {
     path: 'resetowanie-hasla',
     loadChildren: () => import('./pages/auth/resetowanie-hasla/resetowanie-hasla.module').then( m => m.ResetowanieHaslaPageModule)
@@ -28,9 +22,7 @@ const routes: Routes = [
   { 
     path: '', redirectTo: 'home', pathMatch: 'full' 
   },
-
 ];
-
 
 
 @NgModule({
