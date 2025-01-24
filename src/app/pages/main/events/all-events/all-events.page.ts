@@ -86,6 +86,11 @@ export class AllEventsPage implements OnInit {
     });
   }
 
+  maxVotes(games: Game[]): number {
+    if (!games || games.length === 0) return 0;
+    return Math.max(...games.map(game => game.votes?.length || 0));
+  }
+  
   resetDateFilter() {
     this.filter.date = ''; // Wyzerowanie filtra daty
     this.applyFilters();
