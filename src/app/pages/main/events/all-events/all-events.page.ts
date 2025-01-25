@@ -34,7 +34,6 @@ export class AllEventsPage implements OnInit {
   currentUser: string = '';
   avatar: string = '';
 
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private databaseService: DatabaseService, 
@@ -88,7 +87,7 @@ export class AllEventsPage implements OnInit {
 
   maxVotes(games: Game[]): number {
     if (!games || games.length === 0) return 0;
-    return Math.max(...games.map(game => game.votes?.length || 0));
+    return Math.max(...games.map(game => game.votes || 0));
   }
   
   resetDateFilter() {
@@ -121,6 +120,7 @@ export class AllEventsPage implements OnInit {
 
 
   //funkcja zapisywania się na wydarzenie
+  /*
   async joinEvent(eventId: string | undefined, eventGames: Game[]) {
     if (!eventId) {
       console.error('Brak ID wydarzenia');
@@ -197,6 +197,7 @@ export class AllEventsPage implements OnInit {
     await alert.present();
   }
   //Koniec funkcji dołączania do wydarzenia
+  */
 
 
   // modal do wyświetlenia zapisanych graczy
@@ -247,7 +248,7 @@ export class AllEventsPage implements OnInit {
             // Tworzymy tablicę gier
             const gamesArray: Game[] = data.games.split(',').map((gameName: string) => ({
               game: gameName.trim(),
-              votes: [],
+              votes: 0,
             }));
 
              // Przechodzimy do wyboru preferowanej gry
@@ -290,13 +291,9 @@ export class AllEventsPage implements OnInit {
               return false; // Zatrzymaj zamykanie alertu
             }
 
-            // Sprawdzenie, czy `votes` istnieje i inicjalizacja, jeśli nie
-            if (!gamesArray[selectedIndex].votes) {
-              gamesArray[selectedIndex].votes = [];
-            }
+            // Zwiększamy liczbę głosów dla wybranej gry
+            gamesArray[selectedIndex].votes = (gamesArray[selectedIndex].votes || 0) + 1;
 
-            // Dodanie preferowanej gry do listy głosów
-            gamesArray[selectedIndex].votes.push(this.currentUser);
             
             // Dodajemy wydarzenie z preferowaną grą
             this.addEvent({

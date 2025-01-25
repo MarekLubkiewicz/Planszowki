@@ -10,7 +10,19 @@ import { Event, Game } from '../models/events';
 export class DatabaseService {
   private baseUrl = environment.firebaseDatabaseURL;
 
+  //private apiUrl = 'http://127.0.0.1:5000';
+  private apiUrl = 'https://www.vanilladice.pl/bg-test';
+
   constructor(private http: HttpClient) {}
+
+
+  // PODŁĄCZENIE DO BAZY SQL
+
+  // Dodawanie nowego wydarzenia
+  addEvent(event: Event): Observable<{ name: string }> {
+    return this.http.post<{ name: string }>(`${this.baseUrl}/Events.json`, event);
+  }
+
 
   // Pobieranie wszystkich wydarzeń
   getAllEvents(): Observable<Event[]> {
@@ -23,6 +35,25 @@ export class DatabaseService {
       })
     );
   }
+
+
+
+
+  // ---------------------------------------------------------------------------------
+
+  /*
+
+  // Pobieranie wszystkich wydarzeń
+  getAllEvents(): Observable<Event[]> {
+    return this.http.get<{ [key: string]: Event }>(`${this.baseUrl}/Events.json`).pipe(
+      map((data) => {
+        return Object.keys(data || {}).map((key) => ({
+          id: key, // Klucz staje się ID wydarzenia 
+          ...data[key], // Rozwijamy pozostałe właściwości
+        }));
+      })
+    );
+  }*/
 
   getMyEvents(currentUser: string): Observable<Event[]> {
     return this.http.get<{ [key: string]: Event }>(`${this.baseUrl}/Events.json`).pipe(
@@ -49,6 +80,8 @@ export class DatabaseService {
   }
 
   // Dodanie gracza do wydarzenia z głosowaniem na grę
+
+  /*
   addPlayerToEventWithGame(eventId: string, player: string, selectedGameName: string): Observable<void> {
     const urlPlayers = `${this.baseUrl}/Events/${eventId}/players.json`;
     const urlGames = `${this.baseUrl}/Events/${eventId}/games.json`;
@@ -74,8 +107,7 @@ export class DatabaseService {
         );
       })
     );
-  }
-
+  } */
 
   // Usunięcie gracza z wydarzenia oraz głosu na grę
 
@@ -104,58 +136,14 @@ export class DatabaseService {
         );
       })
     );
-
-
-
-    // Pobierz aktualną listę graczy
-    return this.http.get<string[]>(urlPlayers).pipe(
-      switchMap((players) => {
-        const updatedPlayers = players ? players.filter((p) => p !== player) : [];
-
-        // Pobierz aktualną listę głosów na grę
-        return this.http.get<string[]>(urlGameVotes).pipe(
-          switchMap((votes) => {
-            const updatedVotes = votes ? votes.filter((v) => v !== player) : [];
-
-            // Wyślij obie aktualizacje równocześnie
-            const updateRequests = [
-              this.http.put<void>(urlPlayers, updatedPlayers), // Aktualizacja listy graczy
-              this.http.put<void>(urlGameVotes, updatedVotes), // Aktualizacja głosów na grę
-            ];
-            return forkJoin(updateRequests).pipe(mapTo(void 0));
-          })
-        );
-      })
-    );
   }
 
-/*
-  removePlayerFromEvent(eventId: string, player: string, gameKey: string): Observable<void> {
-    const urlPlayers = `${this.baseUrl}/Events/${eventId}/players.json`;
-    const urlGameVotes = `${this.baseUrl}/Events/${eventId}/games/${gameKey}/votes.json`;
-
-    // Usuń gracza z listy graczy i jego głos z listy głosów
-    return forkJoin([
-      this.http.get<string[]>(urlPlayers).pipe(
-        switchMap((players) => {
-          const updatedPlayers = players.filter((p) => p !== player);
-          return this.http.put<void>(urlPlayers, updatedPlayers);
-        })
-      ),
-      this.http.get<string[]>(urlGameVotes).pipe(
-        switchMap((votes) => {
-          const updatedVotes = votes.filter((v) => v !== player);
-          return this.http.put<void>(urlGameVotes, updatedVotes);
-        })
-      ),
-    ]).pipe(mapTo(void 0)); // Zwróć pustą wartość po wykonaniu operacji
-  }*/
-
-
   // Dodawanie nowego wydarzenia
+  /*
   addEvent(event: Event): Observable<{ name: string }> {
     return this.http.post<{ name: string }>(`${this.baseUrl}/Events.json`, event);
   }
+  */
 
   // Aktualizacja istniejącego wydarzenia
   updateEvent(id: string, event: Event): Observable<void> {

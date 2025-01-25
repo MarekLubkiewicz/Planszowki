@@ -63,7 +63,7 @@
                     <div *ngFor="let game of event.games">
                       <p class="listgames">
                         <span class="data">{{ game.game }}</span>
-                        <ion-badge color="secondary">{{ game.votes?.length || 0 }}</ion-badge>
+                        <ion-badge color="secondary">{{ game.votes || 0 }}</ion-badge>
                       </p>
                     </div>
                   </ion-label>
@@ -77,7 +77,8 @@
                 </ion-label>
               </ion-row>
             </ion-grid>
-            <ion-button color="warning" *ngIf="event.id" (click)="removeFromEvent(event)">
+            <ion-button color="warning" *ngIf="event.id">
+              <!-- (click)="removeFromEvent(event)"> -->
               <ion-icon slot="start" name="person-remove"></ion-icon>
               Zrezygnuj z udziału
             </ion-button>

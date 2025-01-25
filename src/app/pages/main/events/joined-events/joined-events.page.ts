@@ -57,6 +57,7 @@ export class JoinedEventsPage implements OnInit {
     });
   }
 
+  /*
   removeFromEvent(event: Event) {
     const currentPlayer = this.currentUser; // Nazwa zalogowanego gracza
     const gameIndex = event.games.findIndex((game) => game.votes?.includes(currentPlayer));
@@ -78,6 +79,7 @@ export class JoinedEventsPage implements OnInit {
       },
     });
   }
+    */
 
 
   // modal do wyświetlenia zapisanych graczy
