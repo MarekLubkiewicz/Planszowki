@@ -113,8 +113,8 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button *ngIf="event.id" color="primary">
-            <!-- (click)="joinEvent(event.id, event.games)" -->
+            <ion-button *ngIf="event.id" color="primary" 
+            (click)="joinEvent(event.id, event.games)">
             Zapisz się
           </ion-button>
           </ion-col>

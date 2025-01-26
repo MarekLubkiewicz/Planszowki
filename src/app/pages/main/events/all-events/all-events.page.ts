@@ -123,7 +123,7 @@ export class AllEventsPage implements OnInit {
 
 
   //funkcja zapisywania się na wydarzenie
-  /*
+  
   async joinEvent(eventId: string | undefined, eventGames: Game[]) {
     if (!eventId) {
       console.error('Brak ID wydarzenia');
@@ -137,32 +137,12 @@ export class AllEventsPage implements OnInit {
       return;
     }
 
-    // Sprawdzenie, czy użytkownik jest organizatorem wydarzenia
-    if (event.owner === this.currentUser) {
-      await this.alertService.showAlert(
-        'Informacja',
-        'Nie możesz zapisać się na własne wydarzenie, ponieważ jesteś jego organizatorem.',
-        'alert-warning'
-      );
-      return;
-    }
-
-    // Sprawdzenie, czy użytkownik jest już zapisany na to wydarzenie
-    if (event.players && event.players.includes(this.currentUser)) {
-      await this.alertService.showAlert(
-        'Informacja',
-        'Jesteś już zapisany na to wydarzenie.',
-        'alert-warning'
-      );
-      return;
-    }
-
     // Tworzenie alertu z opcjami gier
     const alert = await this.alertController.create({
       header: 'Wybierz preferowaną grę',
       inputs: eventGames.map((game, index) => ({
         type: 'radio',
-        label: `${game.game} (${game.votes?.length || 0} wybór/ów)`,
+        label: `${game.game} (${game.votes || 0} wybór/ów)`,
         value: index, // Używamy indeksu jako wartości
       })),
       buttons: [
@@ -200,7 +180,7 @@ export class AllEventsPage implements OnInit {
     await alert.present();
   }
   //Koniec funkcji dołączania do wydarzenia
-  */
+
 
 
   // modal do wyświetlenia zapisanych graczy
