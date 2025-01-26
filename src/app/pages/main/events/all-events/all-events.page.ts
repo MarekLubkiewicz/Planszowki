@@ -85,10 +85,13 @@ export class AllEventsPage implements OnInit {
     });
   }
 
+
+/*
   maxVotes(games: Game[]): number {
     if (!games || games.length === 0) return 0;
     return Math.max(...games.map(game => game.votes || 0));
   }
+    */
   
   resetDateFilter() {
     this.filter.date = ''; // Wyzerowanie filtra daty
@@ -246,10 +249,9 @@ export class AllEventsPage implements OnInit {
             // Jeśli wszystkie pola są wypełnione, przetwarzamy dane
 
             // Tworzymy tablicę gier
-            const gamesArray: Game[] = data.games.split(',').map((gameName: string) => ({
-              game: gameName.trim(),
-              votes: 0,
-            }));
+            const gamesArray: string[] = data.games.split(',').
+              map((gameName: string) => gameName.trim());
+
 
              // Przechodzimy do wyboru preferowanej gry
             this.openPreferredGameAlert(data, gamesArray, alert);
@@ -263,13 +265,13 @@ export class AllEventsPage implements OnInit {
     await alert.present();
   }
 
-  async openPreferredGameAlert(data: any, gamesArray: Game[], parentAlert: HTMLIonAlertElement) {
+  async openPreferredGameAlert(data: any, gamesArray: string[], parentAlert: HTMLIonAlertElement) {
     const alert = await this.alertController.create({
       header: 'Wybierz preferowaną grę',
       inputs: gamesArray.map((game, index) => ({
         type: 'radio',
-        label: game.game, // Wyświetlana nazwa gry
-        value: index, // Indeks gry w tablicy
+        label: game, // Wyświetlana nazwa gry
+        value: game, // Indeks gry w tablicy
       })),
       buttons: [
         {
@@ -279,26 +281,21 @@ export class AllEventsPage implements OnInit {
         },
         {
           text: 'Zatwierdź',
-          handler: (selectedIndex) => {
-          
-            // Sprawdzenie, czy wybrano indeks
-            if (selectedIndex === undefined || selectedIndex < 0 || selectedIndex >= gamesArray.length) {
-              this.alertService.showAlert(
-                'Błąd',
-                'Musisz wybrać preferowaną grę!',
-                'alert-error'
-              );
-              return false; // Zatrzymaj zamykanie alertu
-            }
+          handler: (selectedGame) => {
+          if (!selectedGame) {
+            this.alertService.showAlert(
+              'Błąd',
+              'Musisz wybrać preferowaną grę!',
+              'alert-error'
+            );
+            return false;
+          }
 
-            // Zwiększamy liczbę głosów dla wybranej gry
-            gamesArray[selectedIndex].votes = (gamesArray[selectedIndex].votes || 0) + 1;
-
-            
             // Dodajemy wydarzenie z preferowaną grą
             this.addEvent({
               ...data,
               games: gamesArray,
+              chosen_game: selectedGame,
             });
 
             // Ręczne zamknięcie pierwszego alertu
@@ -324,8 +321,8 @@ export class AllEventsPage implements OnInit {
       slots: Number(data.slots),
       owner: this.currentUser,
       details: data.details || '',
-      players: [],
       games: data.games,
+      chosen_game: data.chosen_game, 
     };
 
     // Dodanie wydarzenia do bazy danych

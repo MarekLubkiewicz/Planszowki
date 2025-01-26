@@ -95,7 +95,8 @@
             <div *ngFor="let game of event.games">
               <p class="listgames">
                 <span class="data">{{ game.game }}</span>
-                <ion-badge [color]="game.votes === maxVotes(event.games) ? 'success' : 'secondary'">
+                <ion-badge>
+                <!--[color]="game.votes === maxVotes(event.games) ? 'success' : 'secondary'" -->
                   {{ game.votes || 0 }}
                 </ion-badge>
               </p>

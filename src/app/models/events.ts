@@ -11,6 +11,7 @@ export interface Event {
   slots: number;
   players?: string[]; // Lista zapisanych graczy
   games: Game[];
+  chosen_game?: string;
   owner: string;
   place: string;
   time: string;
