@@ -70,7 +70,7 @@ export class DatabaseService {
           }),
           catchError((error) => {
             console.error(
-              'Błąd podczas zapisywania gracza na wydarzenie:',
+              `Błąd podczas zapisywania gracza ${player} na wydarzenie ${eventId}:`,
               error
             );
             return throwError(() => error);

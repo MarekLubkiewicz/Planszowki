@@ -114,7 +114,8 @@
         <ion-row>
           <ion-col>
             <ion-button *ngIf="event.id" color="primary" 
-            (click)="joinEvent(event.id, event.games)">
+            (click)="joinEvent(event.id, event.games)"
+            [disabled]="isEventOrganizer(event.owner) || isAlreadyJoined(event.players)">
             Zapisz się
           </ion-button>
           </ion-col>
