@@ -20,13 +20,13 @@ export class DatabaseService {
 
   // Dodawanie nowego wydarzenia
   addEvent(event: Event): Observable<{ name: string }> {
-    return this.http.post<{ name: string }>(`${this.apiUrl}/zapisz-wydarzenie`, event);
+    return this.http.post<{ name: string }>(`${this.apiUrl}/zapisz-wydarzenie`, event, { withCredentials: true });
   }
 
 
   // Pobieranie wszystkich wydarzeń
   getAllEvents(): Observable<Event[]> {
-    return this.http.get<{ [key: string]: Event }>(`${this.apiUrl}/wydarzenia.json`).pipe(
+    return this.http.get<{ [key: string]: Event }>(`${this.apiUrl}/wydarzenia`).pipe(
       map((data) => {
         return Object.keys(data || {}).map((key) => ({
           id: key, // Klucz staje się ID wydarzenia 
