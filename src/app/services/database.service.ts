@@ -58,16 +58,11 @@ export class DatabaseService {
         }
 
         // Przygotowanie danych do wysłania
-        const requestBody = {
-          eventId,
-          player,
-          selectedGame,
-        };
-
+        const requestBody = { eventId, player, selectedGame };
         return requestBody;
       }),
       switchMap((requestBody) =>
-        this.http.post<void>(`${this.apiUrl}/zapisz-do-gry`, requestBody).pipe(
+        this.http.post<void>(`${this.apiUrl}/zapisz-do-gry`, requestBody, { withCredentials: true }).pipe(
           tap(() => {
             console.log(
               `Gracz ${player} zapisany na wydarzenie ${eventId} z wybraną grą ${selectedGame}`
@@ -87,19 +82,7 @@ export class DatabaseService {
 
   // ---------------------------------------------------------------------------------
 
-  /*
 
-  // Pobieranie wszystkich wydarzeń
-  getAllEvents(): Observable<Event[]> {
-    return this.http.get<{ [key: string]: Event }>(`${this.baseUrl}/Events.json`).pipe(
-      map((data) => {
-        return Object.keys(data || {}).map((key) => ({
-          id: key, // Klucz staje się ID wydarzenia 
-          ...data[key], // Rozwijamy pozostałe właściwości
-        }));
-      })
-    );
-  }*/
 
   getMyEvents(currentUser: string): Observable<Event[]> {
     return this.http.get<{ [key: string]: Event }>(`${this.baseUrl}/Events.json`).pipe(
