@@ -85,7 +85,15 @@ export class AllEventsPage implements OnInit {
     });
   }
 
+  // Metoda pomocnicza, sprawdzająca czy obecny użytkownik jest organizatorem wydarzenia
+  isEventOrganizer(owner: string): boolean {
+    return this.currentUser === owner;
+  }
 
+  // Metoda,pomocnicza, sprawdzająca czy obecny użytkownik jest zapisany na wydarzenie
+  isAlreadyJoined(players: string[] = []): boolean {
+    return players.includes(this.currentUser); 
+  }
 /*
   maxVotes(games: Game[]): number {
     if (!games || games.length === 0) return 0;
@@ -123,7 +131,7 @@ export class AllEventsPage implements OnInit {
 
 
   //funkcja zapisywania się na wydarzenie
-  /*
+  
   async joinEvent(eventId: string | undefined, eventGames: Game[]) {
     if (!eventId) {
       console.error('Brak ID wydarzenia');
@@ -157,12 +165,13 @@ export class AllEventsPage implements OnInit {
       return;
     }
 
+
     // Tworzenie alertu z opcjami gier
     const alert = await this.alertController.create({
       header: 'Wybierz preferowaną grę',
       inputs: eventGames.map((game, index) => ({
         type: 'radio',
-        label: `${game.game} (${game.votes?.length || 0} wybór/ów)`,
+        label: `${game.game} (${game.votes || 0} wybór/ów)`,
         value: index, // Używamy indeksu jako wartości
       })),
       buttons: [
@@ -200,7 +209,7 @@ export class AllEventsPage implements OnInit {
     await alert.present();
   }
   //Koniec funkcji dołączania do wydarzenia
-  */
+
 
 
   // modal do wyświetlenia zapisanych graczy
