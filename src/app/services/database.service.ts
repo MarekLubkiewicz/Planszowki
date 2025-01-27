@@ -11,8 +11,7 @@ import { Event, Game } from '../models/events';
 })
 export class DatabaseService {
   private baseUrl = environment.firebaseDatabaseURL;
-  private events = new BehaviorSubject<Event[]>([]);
-  events$ = this.events.asObservable(); // Eksponujemy dane jako Observable
+
 
   //private apiUrl = 'http://127.0.0.1:5000';
   private apiUrl = 'https://www.vanilladice.pl/bg-test';
@@ -35,49 +34,15 @@ export class DatabaseService {
           id: key, // Klucz staje się ID wydarzenia
           ...data[key],
         }));
-        this.events.next(events); // Ustawiamy załadowane wydarzenia
         return events;
       })
     );
   }
 
-
   //Zapisywanie się na wydarzenie
-  addPlayerToEventWithGame(
-    eventId: string,
-    player: string,
-    selectedGame: string
-  ): Observable<void> {
-    // Znajdź wydarzenie na podstawie eventId w załadowanych danych
-    return this.events$.pipe(
-      map((events: Event[]) => {
-        const event = events.find((e: Event) => e.id === eventId);
-
-        if (!event) {
-          throw new Error(`Wydarzenie o ID ${eventId} nie zostało znalezione.`);
-        }
-
-        // Przygotowanie danych do wysłania
-        const requestBody = { eventId, player, selectedGame };
-        return requestBody;
-      }),
-      switchMap((requestBody) =>
-        this.http.post<void>(`${this.apiUrl}/zapisz-do-gry`, requestBody, { withCredentials: true }).pipe(
-          tap(() => {
-            console.log(
-              `Gracz ${player} zapisany na wydarzenie ${eventId} z wybraną grą ${selectedGame}`
-            );
-          }),
-          catchError((error) => {
-            console.error(
-              `Błąd podczas zapisywania gracza ${player} na wydarzenie ${eventId}:`,
-              error
-            );
-            return throwError(() => error);
-          })
-        )
-      )
-    );
+  addPlayerToEvent(eventId: string, player: string, selectedGame: string ): Observable<void> {
+    const userData = { eventId, player, selectedGame };
+    return this.http.post<void>(`${this.apiUrl}/zapisz-do-gry`, userData, { withCredentials: true });
   }
 
   // ---------------------------------------------------------------------------------
@@ -108,37 +73,6 @@ export class DatabaseService {
       );
   }
 
-  // Dodanie gracza do wydarzenia z głosowaniem na grę
-/*
-  addPlayerToEventWithGame(eventId: string, player: string, selectedGameName: string): Observable<void> {
-    // Znajdź wydarzenie na podstawie eventId w załadowanych danych
-    const event = this.events.find((e) => e.id === eventId);
-
-    if (!event) {
-      return throwError(() => new Error(`Wydarzenie o ID ${eventId} nie zostało znalezione.`));
-    }
-
-    // Aktualizuj listę graczy
-    const updatedPlayers = event.players ? [...event.players, player] : [player];
-
-    // Aktualizuj listę gier z głosami
-    const updatedGames = event.games.map((game) => {
-      if (game.game === selectedGameName) {
-        return { ...game, votes: (game.votes || 0) + 1 }; // Zwiększamy liczbę głosów o 1
-      }
-      return game;
-    });
-
-    // Zaktualizuj dane na serwerze (tylko zmienione pola)
-    const urlPlayers = `${this.baseUrl}/Events/${eventId}/players.json`;
-    const urlGames = `${this.baseUrl}/Events/${eventId}/games.json`;
-
-    return forkJoin([
-      this.http.put<void>(urlPlayers, updatedPlayers), // Aktualizacja listy graczy
-      this.http.put<void>(urlGames, updatedGames), // Aktualizacja listy gier
-    ]).pipe(mapTo(void 0));
-  }
-*/
 
   // Usunięcie gracza z wydarzenia oraz głosu na grę
 
@@ -168,13 +102,6 @@ export class DatabaseService {
       })
     );
   }
-
-  // Dodawanie nowego wydarzenia
-  /*
-  addEvent(event: Event): Observable<{ name: string }> {
-    return this.http.post<{ name: string }>(`${this.baseUrl}/Events.json`, event);
-  }
-  */
 
   // Aktualizacja istniejącego wydarzenia
   updateEvent(id: string, event: Event): Observable<void> {

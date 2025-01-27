@@ -85,6 +85,7 @@ export class AllEventsPage implements OnInit {
     });
   }
 
+  
   // Metoda pomocnicza, sprawdzająca czy obecny użytkownik jest organizatorem wydarzenia
   isEventOrganizer(owner: string): boolean {
     return this.currentUser === owner;
@@ -94,12 +95,12 @@ export class AllEventsPage implements OnInit {
   isAlreadyJoined(players: string[] = []): boolean {
     return players.includes(this.currentUser); 
   }
-/*
+
   maxVotes(games: Game[]): number {
     if (!games || games.length === 0) return 0;
     return Math.max(...games.map(game => game.votes || 0));
   }
-    */
+    
   
   resetDateFilter() {
     this.filter.date = ''; // Wyzerowanie filtra daty
@@ -133,6 +134,7 @@ export class AllEventsPage implements OnInit {
   //funkcja zapisywania się na wydarzenie
   
   async joinEvent(eventId: string | undefined, eventGames: Game[]) {
+    
     if (!eventId) {
       console.error('Brak ID wydarzenia');
       return;
@@ -184,7 +186,7 @@ export class AllEventsPage implements OnInit {
           handler: (selectedIndex: number) => {
             const selectedGame = eventGames[selectedIndex];
             if (selectedGame) {
-              this.databaseService.addPlayerToEventWithGame(eventId, this.currentUser, selectedGame.game).subscribe({
+              this.databaseService.addPlayerToEvent(eventId, this.currentUser, selectedGame.game).subscribe({
                 next: async () => {
                   await this.alertService.showAlert(
                     'Sukces',
@@ -217,7 +219,6 @@ export class AllEventsPage implements OnInit {
     this.currentPlayers = players; // Przypisz listę graczy
     this.isModalOpen = true; // Otwórz modal
   }
-
   closeModal() {
     this.isModalOpen = false; // Zamknij modal
     this.currentPlayers = []; // Wyczyść listę graczy
