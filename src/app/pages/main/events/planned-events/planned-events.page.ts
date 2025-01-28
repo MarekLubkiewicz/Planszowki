@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { DatabaseService } from 'src/app/services/database.service';
-import { Event } from 'src/app/models/events';
+import { Event, Players } from 'src/app/models/events';
 
 @Component({
   selector: 'app-planned-events',
@@ -19,7 +19,7 @@ export class PlannedEventsPage implements OnInit {
   myEvents: Event[] = [];
   eventsJoin: Event[] = [];
   isModalOpen = false; // Kontroluje stan modalu wyświetlającego zapisanych graczy
-  currentPlayers: string[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
+  currentPlayers: Players[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -75,7 +75,7 @@ export class PlannedEventsPage implements OnInit {
   }
 
   // modal do wyświetlenia zapisanych graczy
-  viewPlayers(players: string[]) {
+  viewPlayers(players: Players[]) {
     this.currentPlayers = players; // Przypisz listę graczy
     this.isModalOpen = true; // Otwórz modal
   }

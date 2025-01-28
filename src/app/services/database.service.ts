@@ -61,6 +61,7 @@ export class DatabaseService {
       );
   }
 
+  /*
   getMyJoinEvents(currentUser: string): Observable<Event[]> {
     return this.http.get<{ [key: string]: Event }>(`${this.baseUrl}/Events.json`).pipe(
         map((data) => {
@@ -71,7 +72,7 @@ export class DatabaseService {
           return events.filter((event) => event.players?.includes(currentUser));
         })
       );
-  }
+  }*/
 
 
   // Usunięcie gracza z wydarzenia oraz głosu na grę

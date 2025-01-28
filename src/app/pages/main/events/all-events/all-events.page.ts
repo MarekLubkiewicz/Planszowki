@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database.service';
-import { Event, Game } from 'src/app/models/events';
-import { ModalController } from '@ionic/angular';
+import { Event, Game, Players } from 'src/app/models/events';
 import { AlertService } from 'src/app/services/alert.service';
 import { format } from 'date-fns';
 import { ActionSheetController } from '@ionic/angular';
@@ -28,11 +27,12 @@ export class AllEventsPage implements OnInit {
   }
   isLoading = false;
   isModalOpen = false; // Kontroluje stan modalu wyświetlającego zapisanych graczy
-  currentPlayers: string[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
+  currentPlayers: Players[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
   isDateFilterModalOpen = false; // Kontroluje stan modalu filtrowania po dacie
   log_in = false;
   currentUser: string = '';
   avatar: string = '';
+  defaultAvatar = 'https://ionicframework.com/docs/img/demos/avatar.svg';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -59,8 +59,8 @@ export class AllEventsPage implements OnInit {
       next: (data) => {
          this.events = data.map((event) => ({
           ...event,
-          games: event.games || [],
-          registeredPlayers: event.players?.length || 0, // Dynamiczne obliczanie liczby graczy
+          games: event.games || [], // do ewentualnego usunięcia - 
+          registeredPlayers: event.players?.length ?? 0, // Dynamiczne obliczanie liczby graczy
         }));
         this.filteredEvents = [...this.events];
         this.isLoading = false;
@@ -92,8 +92,8 @@ export class AllEventsPage implements OnInit {
   }
 
   // Metoda,pomocnicza, sprawdzająca czy obecny użytkownik jest zapisany na wydarzenie
-  isAlreadyJoined(players: string[] = []): boolean {
-    return players.includes(this.currentUser); 
+  isAlreadyJoined(players: Players[] | undefined) : boolean {
+    return players ? players.some(playerObj => playerObj.player === this.currentUser) : false;
   }
 
   maxVotes(games: Game[]): number {
@@ -157,15 +157,15 @@ export class AllEventsPage implements OnInit {
       return;
     }
 
-    // Sprawdzenie, czy użytkownik jest już zapisany na to wydarzenie
-    if (event.players && event.players.includes(this.currentUser)) {
-      await this.alertService.showAlert(
-        'Informacja',
-        'Jesteś już zapisany na to wydarzenie.',
-        'alert-warning'
-      );
-      return;
-    }
+  // Sprawdzenie, czy użytkownik jest już zapisany na to wydarzenie
+  if (event.players && event.players.some(playerObj => playerObj.player === this.currentUser)) {
+    await this.alertService.showAlert(
+      'Informacja',
+      'Jesteś już zapisany na to wydarzenie.',
+      'alert-warning'
+    );
+    return;
+  }
 
 
     // Tworzenie alertu z opcjami gier
@@ -215,10 +215,11 @@ export class AllEventsPage implements OnInit {
 
 
   // modal do wyświetlenia zapisanych graczy
-  viewPlayers(players: string[]) {
+  viewPlayers(players: Players[]): void { //sprawdzić czy void jest potrzebne~!!!!!!
     this.currentPlayers = players; // Przypisz listę graczy
     this.isModalOpen = true; // Otwórz modal
   }
+
   closeModal() {
     this.isModalOpen = false; // Zamknij modal
     this.currentPlayers = []; // Wyczyść listę graczy
