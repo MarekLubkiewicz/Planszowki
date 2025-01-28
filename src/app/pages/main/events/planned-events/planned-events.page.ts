@@ -17,9 +17,9 @@ export class PlannedEventsPage implements OnInit {
   avatar: string = '';
   isLoading = false;
   myEvents: Event[] = [];
-  eventsJoin: Event[] = [];
   isModalOpen = false; // Kontroluje stan modalu wyświetlającego zapisanych graczy
   currentPlayers: Players[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
+  defaultAvatar = 'https://ionicframework.com/docs/img/demos/avatar.svg';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -37,15 +37,18 @@ export class PlannedEventsPage implements OnInit {
     this.loadMyEvents();
   }
 
-  loadMyEvents() {
+  loadMyEvents() { 
     this.isLoading = true;
-    this.databaseService.getMyEvents(this.currentUser).subscribe({
+    this.databaseService.getAllEvents().subscribe({
       next: (data) => {
-         this.myEvents = data.map((event) => ({
-          ...event,
-          games: event.games || [],
-          registeredPlayers: event.players?.length || 0, // Dynamiczne obliczanie liczby graczy
-        }));
+        // Filtrujemy wydarzenia, aby zostawić tylko te, gdzie użytkownik jest zapisany
+        this.myEvents = data
+          .filter(event => event.owner === this.currentUser)
+          .map((event) => ({
+            ...event,
+            games: event.games || [],
+            registeredPlayers: event.players?.length ?? 0, // Dynamiczne obliczanie liczby graczy
+          }));
         this.isLoading = false;
       },
       error: (err) => {
@@ -74,8 +77,10 @@ export class PlannedEventsPage implements OnInit {
     
   }
 
+
+
   // modal do wyświetlenia zapisanych graczy
-  viewPlayers(players: Players[]) {
+  viewPlayers(players: Players[]): void { //sprawdzić czy void jest potrzebne~!!!!!!
     this.currentPlayers = players; // Przypisz listę graczy
     this.isModalOpen = true; // Otwórz modal
   }

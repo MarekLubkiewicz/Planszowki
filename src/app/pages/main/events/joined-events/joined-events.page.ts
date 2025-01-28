@@ -16,7 +16,7 @@ export class JoinedEventsPage implements OnInit {
   log_in: boolean = false;
   avatar: string = '';
   isLoading = false;
-  myEvents: Event[] = [];
+  events: Event[] = [];
   eventsJoin: Event[] = [];
   isModalOpen = false; // Kontroluje stan modalu wyświetlającego zapisanych graczy
   currentPlayers: Players[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
@@ -35,20 +35,21 @@ export class JoinedEventsPage implements OnInit {
       this.log_in = user.zalogowany;
       this.avatar = user.avatar;
     });
-    //this.loadMyJoinEvents();
+    this.loadMyJoinEvents();
   }
 
-
-  /*
-  loadMyJoinEvents() {
+  loadMyJoinEvents() { 
     this.isLoading = true;
-    this.databaseService.getMyJoinEvents(this.currentUser).subscribe({
+    this.databaseService.getAllEvents().subscribe({
       next: (data) => {
-         this.eventsJoin = data.map((event) => ({
-          ...event,
-          games: event.games || [],
-          registeredPlayers: event.players?.length || 0, // Dynamiczne obliczanie liczby graczy
-        }));
+        // Filtrujemy wydarzenia, aby zostawić tylko te, gdzie użytkownik jest zapisany
+        this.eventsJoin = data
+          .filter(event => event.players?.some(playerObj => playerObj.player === this.currentUser))
+          .map((event) => ({
+            ...event,
+            games: event.games || [],
+            registeredPlayers: event.players?.length ?? 0, // Dynamiczne obliczanie liczby graczy
+          }));
         this.isLoading = false;
       },
       error: (err) => {
@@ -57,7 +58,9 @@ export class JoinedEventsPage implements OnInit {
         this.eventsJoin = []; // Wyczyść listę w przypadku błędu
       },
     });
-  }*/
+  }
+
+
 
   /*
   removeFromEvent(event: Event) {
