@@ -44,7 +44,9 @@ export class JoinedEventsPage implements OnInit {
       next: (data) => {
         // Filtrujemy wydarzenia, aby zostawić tylko te, gdzie użytkownik jest zapisany
         this.eventsJoin = data
-          .filter(event => event.players?.some(playerObj => playerObj.player === this.currentUser))
+          .filter(event => 
+            event.owner !== this.currentUser && 
+            event.players?.some(playerObj => playerObj.player === this.currentUser))
           .map((event) => ({
             ...event,
             games: event.games || [],
@@ -57,6 +59,18 @@ export class JoinedEventsPage implements OnInit {
         this.isLoading = false;
         this.eventsJoin = []; // Wyczyść listę w przypadku błędu
       },
+    });
+  }
+
+
+  removeFromEvent(eventId: string) {
+    this.databaseService.removePlayerFromEvent(eventId).subscribe({
+      next: () => {
+        console.log('Gracz został wypisany z wydarzenia.');
+      },
+      error: (error) => {
+        console.error('Błąd podczas rezygnacji z wydarzenia:', error);
+      }
     });
   }
 

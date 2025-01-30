@@ -77,8 +77,8 @@
                 </ion-label>
               </ion-row>
             </ion-grid>
-            <ion-button color="warning" *ngIf="event.id">
-              <!-- (click)="removeFromEvent(event)"> -->
+            <ion-button color="warning" *ngIf="event.id"
+              (click)="removeFromEvent(event.id!)">
               <ion-icon slot="start" name="person-remove"></ion-icon>
               Zrezygnuj z udziału
             </ion-button>

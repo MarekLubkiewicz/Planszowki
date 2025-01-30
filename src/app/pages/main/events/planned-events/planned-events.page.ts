@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { DatabaseService } from 'src/app/services/database.service';
-import { Event, Players } from 'src/app/models/events';
+import { Event, Players, Game } from 'src/app/models/events';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-planned-events',
@@ -24,7 +25,9 @@ export class PlannedEventsPage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private autentykacjaService: AutentykacjaService,
-    private databaseService: DatabaseService, 
+    private databaseService: DatabaseService,
+    private alertController: AlertController,
+     
   ) { }
 
   ngOnInit() {
@@ -41,7 +44,7 @@ export class PlannedEventsPage implements OnInit {
     this.isLoading = true;
     this.databaseService.getAllEvents().subscribe({
       next: (data) => {
-        // Filtrujemy wydarzenia, aby zostawić tylko te, gdzie użytkownik jest zapisany
+        // Filtrujemy wydarzenia, aby zostawić tylko te, gdzie użytkownik jest organizatorem
         this.myEvents = data
           .filter(event => event.owner === this.currentUser)
           .map((event) => ({
@@ -59,23 +62,155 @@ export class PlannedEventsPage implements OnInit {
     });
   }
 
+
   deleteEvent(eventId: string) {
-    this.databaseService.deleteEvent(eventId).subscribe({
-      next: () => {
-        // Usuń wydarzenie z lokalnej listy
-        this.myEvents = this.myEvents.filter(event => event.id !== eventId);
-        console.log('Wydarzenie zostało usunięte.');
+    if (confirm('Czy na pewno chcesz usunąć to wydarzenie?')) {
+      this.databaseService.deleteEvent(eventId).subscribe({
+        next: () => {
+          this.myEvents = this.myEvents.filter(event => event.id !== eventId);
+          console.log('Wydarzenie zostało usunięte.');
+        },
+        error: (error) => {
+          console.error('Błąd podczas usuwania wydarzenia:', error);
+        }
+      });
+    }
+  }
+
+async editEvent(event: Event) {
+  let gamesList = [...event.games]; // Tworzymy kopię listy gier, aby nie modyfikować oryginału od razu
+
+  const alert = await this.alertController.create({
+    header: 'Edytuj wydarzenie',
+    cssClass: 'wide-alert',
+    inputs: [
+      {
+        name: 'name',
+        type: 'text',
+        value: event.name,
+        placeholder: 'Nazwa wydarzenia'
       },
-      error: (error) => {
-        console.error('Błąd podczas usuwania wydarzenia:', error);
+      {
+        name: 'date',
+        type: 'date',
+        value: event.date,
+        placeholder: 'Data wydarzenia'
+      },
+      {
+        name: 'time',
+        type: 'time',
+        value: event.time,
+        placeholder: 'Godzina wydarzenia'
+      },
+      {
+        name: 'place',
+        type: 'text',
+        value: event.place,
+        placeholder: 'Miejsce wydarzenia'
+      },
+      {
+        name: 'slots',
+        type: 'number',
+        value: event.slots,
+        placeholder: 'Liczba miejsc'
+      },
+      {
+        name: 'details',
+        type: 'textarea',
+        value: event.details || '',
+        placeholder: 'Dodatkowe informacje'
       }
+    ],
+    buttons: [
+      {
+        text: 'Edytuj gry',
+        handler: async () => {
+          await this.editGames(gamesList);
+          return false; // Zapobiega zamknięciu alertu
+        }
+      },
+      {
+        text: 'Anuluj',
+        role: 'cancel'
+      },
+      {
+        text: 'Zapisz',
+        handler: (data) => {
+          const updatedEvent: Event = {
+            ...event, // Zachowujemy resztę właściwości
+            name: data.name,
+            date: data.date,
+            time: data.time,
+            place: data.place,
+            slots: Number(data.slots),
+            details: data.details,
+            games: gamesList // Aktualizujemy listę gier
+          };
+
+          this.databaseService.updateEvent(updatedEvent).subscribe({
+            next: () => {
+              // Aktualizacja listy wydarzeń w UI
+              this.myEvents = this.myEvents.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev);
+              console.log('Wydarzenie zostało zaktualizowane.');
+            },
+            error: (err) => {
+              console.error('Błąd podczas aktualizacji wydarzenia:', err);
+            }
+          });
+        }
+      }
+    ]
+  });
+
+  await alert.present();
+}
+
+  async editGames(gamesList: Game[]) {
+    const alert = await this.alertController.create({
+      header: 'Edytuj gry',
+      inputs: gamesList.map((game, index) => ({
+        name: `game_${index}`,
+        type: 'text',
+        value: game.game,
+        placeholder: `Gra ${index + 1}`
+      })),
+      buttons: [
+        {
+          text: 'Dodaj grę',
+          handler: async () => {
+            gamesList.push({ game: '' }); // Dodajemy pustą grę do listy
+            await this.editGames(gamesList); // Otwieramy alert ponownie
+            return false; // Zapobiega zamknięciu alertu
+          }
+        },
+        {
+          text: 'Usuń ostatnią',
+          handler: async () => {
+            if (gamesList.length > 0) {
+              gamesList.pop(); // Usuwamy ostatnią grę
+              await this.editGames(gamesList); // Otwieramy alert ponownie
+            }
+            return false; // Zapobiega zamknięciu alertu
+          }
+        },
+        {
+          text: 'Anuluj',
+          role: 'cancel'
+        },
+        {
+          text: 'Zapisz',
+          handler: (data) => {
+            gamesList.forEach((game, index) => {
+              game.game = data[`game_${index}`]; // Aktualizujemy nazwy gier
+            });
+          }
+        }
+      ]
     });
+
+    await alert.present();
   }
 
-
-  modifyEvent(){
-    
-  }
 
 
 

@@ -46,7 +46,9 @@
       Jesteś zalogowany jako {{ currentUser }}
      </ion-label>
   </ion-item>
-  
+
+ 
+
   <ion-list *ngIf="filteredEvents && filteredEvents.length > 0; else noData">
     <ion-item *ngFor="let event of filteredEvents">
       <ion-grid>

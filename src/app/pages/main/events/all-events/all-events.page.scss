@@ -36,3 +36,8 @@ ion-fab {
     margin-bottom: 20px;
     margin-right: 10%;
 }
+
+ion-button[slot='fixed'] {
+    top: 15%;
+    right: 20px;
+}
