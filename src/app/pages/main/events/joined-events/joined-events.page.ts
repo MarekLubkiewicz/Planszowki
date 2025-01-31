@@ -64,7 +64,10 @@ export class JoinedEventsPage implements OnInit {
 
 
   removeFromEvent(eventId: string) {
-    this.databaseService.removePlayerFromEvent(eventId).subscribe({
+
+    const eventIdDoWyslania = { 'eventId': eventId };
+
+    this.databaseService.removePlayerFromEvent(eventIdDoWyslania).subscribe({
       next: () => {
         console.log('Gracz został wypisany z wydarzenia.');
       },

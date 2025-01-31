@@ -65,7 +65,10 @@ export class PlannedEventsPage implements OnInit {
 
   deleteEvent(eventId: string) {
     if (confirm('Czy na pewno chcesz usunąć to wydarzenie?')) {
-      this.databaseService.deleteEvent(eventId).subscribe({
+
+      const eventIdDoWyslania = { 'eventId': eventId };
+
+      this.databaseService.deleteEvent(eventIdDoWyslania).subscribe({
         next: () => {
           this.myEvents = this.myEvents.filter(event => event.id !== eventId);
           console.log('Wydarzenie zostało usunięte.');
