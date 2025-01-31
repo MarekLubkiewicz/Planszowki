@@ -77,93 +77,92 @@ export class PlannedEventsPage implements OnInit {
     }
   }
 
-async editEvent(event: Event) {
-  let gamesList = [...event.games]; // Tworzymy kopię listy gier, aby nie modyfikować oryginału od razu
+  async editEvent(event: Event) {
+    let gamesList = [...event.games]; // Tworzymy kopię listy gier, aby nie modyfikować oryginału od razu
 
-  const alert = await this.alertController.create({
-    header: 'Edytuj wydarzenie',
-    cssClass: 'wide-alert',
-    inputs: [
-      {
-        name: 'name',
-        type: 'text',
-        value: event.name,
-        placeholder: 'Nazwa wydarzenia'
-      },
-      {
-        name: 'date',
-        type: 'date',
-        value: event.date,
-        placeholder: 'Data wydarzenia'
-      },
-      {
-        name: 'time',
-        type: 'time',
-        value: event.time,
-        placeholder: 'Godzina wydarzenia'
-      },
-      {
-        name: 'place',
-        type: 'text',
-        value: event.place,
-        placeholder: 'Miejsce wydarzenia'
-      },
-      {
-        name: 'slots',
-        type: 'number',
-        value: event.slots,
-        placeholder: 'Liczba miejsc'
-      },
-      {
-        name: 'details',
-        type: 'textarea',
-        value: event.details || '',
-        placeholder: 'Dodatkowe informacje'
-      }
-    ],
-    buttons: [
-      {
-        text: 'Edytuj gry',
-        handler: async () => {
-          await this.editGames(gamesList);
-          return false; // Zapobiega zamknięciu alertu
+    const alert = await this.alertController.create({
+      header: 'Edytuj wydarzenie',
+      cssClass: 'wide-alert',
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          value: event.name,
+          placeholder: 'Nazwa wydarzenia'
+        },
+        {
+          name: 'date',
+          type: 'date',
+          value: event.date,
+          placeholder: 'Data wydarzenia'
+        },
+        {
+          name: 'time',
+          type: 'time',
+          value: event.time,
+          placeholder: 'Godzina wydarzenia'
+        },
+        {
+          name: 'place',
+          type: 'text',
+          value: event.place,
+          placeholder: 'Miejsce wydarzenia'
+        },
+        {
+          name: 'slots',
+          type: 'number',
+          value: event.slots,
+          placeholder: 'Liczba miejsc'
+        },
+        {
+          name: 'details',
+          type: 'textarea',
+          value: event.details || '',
+          placeholder: 'Dodatkowe informacje'
         }
-      },
-      {
-        text: 'Anuluj',
-        role: 'cancel'
-      },
-      {
-        text: 'Zapisz',
-        handler: (data) => {
-          const updatedEvent: Event = {
-            ...event, // Zachowujemy resztę właściwości
-            name: data.name,
-            date: data.date,
-            time: data.time,
-            place: data.place,
-            slots: Number(data.slots),
-            details: data.details,
-            games: gamesList // Aktualizujemy listę gier
-          };
+      ],
+      buttons: [
+        {
+          text: 'Edytuj gry',
+          handler: async () => {
+            await this.editGames(gamesList);
+            return false; // Zapobiega zamknięciu alertu
+          }
+        },
+        {
+          text: 'Anuluj',
+          role: 'cancel'
+        },
+        {
+          text: 'Zapisz',
+          handler: (data) => {
+            const updatedEvent: Event = {
+              ...event, // Zachowujemy resztę właściwości
+              name: data.name,
+              date: data.date,
+              time: data.time,
+              place: data.place,
+              slots: Number(data.slots),
+              details: data.details,
+              games: gamesList // Aktualizujemy listę gier
+            };
 
-          this.databaseService.updateEvent(updatedEvent).subscribe({
-            next: () => {
-              // Aktualizacja listy wydarzeń w UI
-              this.myEvents = this.myEvents.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev);
-              console.log('Wydarzenie zostało zaktualizowane.');
-            },
-            error: (err) => {
-              console.error('Błąd podczas aktualizacji wydarzenia:', err);
-            }
-          });
+            this.databaseService.updateEvent(updatedEvent).subscribe({
+              next: () => {
+                // Aktualizacja listy wydarzeń
+                this.myEvents = this.myEvents.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev);
+                console.log('Wydarzenie zostało zaktualizowane.');
+              },
+              error: (err) => {
+                console.error('Błąd podczas aktualizacji wydarzenia:', err);
+              }
+            });
+          }
         }
-      }
-    ]
-  });
-
-  await alert.present();
-}
+      ]
+    });
+    await alert.present();
+  }
 
   async editGames(gamesList: Game[]) {
     const alert = await this.alertController.create({

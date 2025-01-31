@@ -1,9 +1,14 @@
 .info_image {
-    width: 300px;
+    max-width: 300px;
+    
 }
 
 .info_image_small {
-    width: 200px;
+    max-width: 150px;
+}
+
+.info_image_big {
+    max-width: 800px;
 }
 
 .tytul {
