@@ -46,13 +46,13 @@ export class DatabaseService {
   }
 
   // Usunięcie gracza z wydarzenia 
-  removePlayerFromEvent(eventId: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/usun-mnie-z-gry`, eventId, { withCredentials: true });
+  removePlayerFromEvent(eventIdDoWyslania: { 'eventId': string }): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/usun-mnie-z-gry`, eventIdDoWyslania, { withCredentials: true });
   }
 
   // Usuwanie wydarzenia
-  deleteEvent(eventId: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/usun-wydarzenie`, eventId, { withCredentials: true });
+  deleteEvent(eventIdDoWyslania: { 'eventId': string }): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/usun-wydarzenie`, eventIdDoWyslania, { withCredentials: true });
   }
 
   
