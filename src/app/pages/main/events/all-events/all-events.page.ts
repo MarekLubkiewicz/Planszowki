@@ -263,11 +263,9 @@ export class AllEventsPage implements OnInit {
             const gamesArray: string[] = data.games.split(',').
               map((gameName: string) => gameName.trim());
 
-
-             // Przechodzimy do wyboru preferowanej gry
+            // Przechodzimy do wyboru preferowanej gry
             this.openPreferredGameAlert(data, gamesArray, alert);
             return false; // Nie zamykamy pierwszego alertu
-
           },
         },
       ],

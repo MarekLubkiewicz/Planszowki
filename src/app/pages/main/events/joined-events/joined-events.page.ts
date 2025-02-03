@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import { Event, Players } from 'src/app/models/events';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-joined-events',
@@ -26,7 +27,8 @@ export class JoinedEventsPage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private autentykacjaService: AutentykacjaService,
-    private databaseService: DatabaseService, 
+    private databaseService: DatabaseService,
+    private alertService: AlertService,
   ) { }
 
   ngOnInit() {
@@ -55,8 +57,12 @@ export class JoinedEventsPage implements OnInit {
           }));
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Błąd podczas pobierania wydarzeń:', err);
+      error: (error) => {
+        this.alertService.showAlert(
+          'Błąd',
+          `Błąd podczas pobierania wydarzeń: ${error}`,
+          'alert-error'
+        );
         this.isLoading = false;
         this.eventsJoin = []; // Wyczyść listę w przypadku błędu
       },
@@ -64,16 +70,27 @@ export class JoinedEventsPage implements OnInit {
   }
 
   removeFromEvent(eventId: string) {
-    const eventIdDoWyslania = { 'eventId': eventId };
-    this.databaseService.removePlayerFromEvent(eventIdDoWyslania).subscribe({
-      next: () => {
-         this.eventsJoin = this.eventsJoin.filter(event => event.id !== eventId);
-        console.log('Gracz został wypisany z wydarzenia.');
-      },
-      error: (error) => {
-        console.error('Błąd podczas rezygnacji z wydarzenia:', error);
-      }
-    });
+    if (confirm('Czy na pewno chcesz wypisa się ze spotkania?')){
+      const eventIdDoWyslania = { 'eventId': eventId };
+      const eventToRemove = this.eventsJoin.find(event => event.id === eventId);
+      this.databaseService.removePlayerFromEvent(eventIdDoWyslania).subscribe({
+        next: () => {
+          this.eventsJoin = this.eventsJoin.filter(event => event.id !== eventId);
+          this.alertService.showAlert(
+            'Sukces',
+            `${this.currentUser} wypisałeś/aś się ze spotkania ${eventToRemove?.name}`,
+            'alert-success'
+          );
+        },
+        error: (error) => {
+          this.alertService.showAlert(
+            'Błąd',
+            `Nie udało się wypisać ze spotkania, błąd: ${error}`,
+            'alert-error'
+          );
+        }
+      });
+    }
   }
 
   // modal do wyświetlenia zapisanych graczy
