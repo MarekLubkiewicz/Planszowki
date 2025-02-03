@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  firebaseDatabaseURL: "https://boardgames-7af28-default-rtdb.europe-west1.firebasedatabase.app",
 };
 
 /*

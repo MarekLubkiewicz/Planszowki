@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { Event, Game } from '../models/events';
 
 
@@ -10,7 +9,6 @@ import { Event, Game } from '../models/events';
   providedIn: 'root',
 })
 export class DatabaseService {
-  private baseUrl = environment.firebaseDatabaseURL;
 
 
   //private apiUrl = 'http://127.0.0.1:5000';
