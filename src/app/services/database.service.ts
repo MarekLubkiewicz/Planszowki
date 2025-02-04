@@ -10,7 +10,7 @@ import { Event, Game } from '../models/events';
   providedIn: 'root',
 })
 export class DatabaseService {
-  private baseUrl = environment.firebaseDatabaseURL;
+
 
 
   //private apiUrl = 'http://127.0.0.1:5000';
@@ -61,7 +61,7 @@ export class DatabaseService {
 
   // Aktualizacja istniejącego wydarzenia
   updateEvent(event: Event): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/zapisz-wydarzenie`, event, { withCredentials: true });
+    return this.http.put<void>(`${this.apiUrl}/modyfikuj-wydarzenie`, event, { withCredentials: true });
   }
 
   // Usuwanie wydarzenia
