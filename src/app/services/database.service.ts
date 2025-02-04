@@ -53,8 +53,6 @@ export class DatabaseService {
     return this.http.post<void>(`${this.apiUrl}/usun-wydarzenie`, eventIdDoWyslania, { withCredentials: true });
   }
 
-  // ---------------------------------------------------------------------------------
-
   // Aktualizacja istniejącego wydarzenia
   updateEvent(event: Event): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/modyfikuj-wydarzenie`, event, { withCredentials: true });

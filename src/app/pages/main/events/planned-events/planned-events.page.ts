@@ -4,6 +4,7 @@ import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import { Event, Players, Game } from 'src/app/models/events';
 import { AlertController } from '@ionic/angular';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-planned-events',
@@ -27,7 +28,7 @@ export class PlannedEventsPage implements OnInit {
     private autentykacjaService: AutentykacjaService,
     private databaseService: DatabaseService,
     private alertController: AlertController,
-     
+    private alertService: AlertService,     
   ) { }
 
   ngOnInit() {
@@ -81,8 +82,6 @@ export class PlannedEventsPage implements OnInit {
   }
 
   async editEvent(event: Event) {
-    let gamesList = [...event.games]; // Tworzymy kopię listy gier, aby nie modyfikować oryginału od razu
-
     const alert = await this.alertController.create({
       header: 'Edytuj wydarzenie',
       cssClass: 'wide-alert',
@@ -126,13 +125,6 @@ export class PlannedEventsPage implements OnInit {
       ],
       buttons: [
         {
-          text: 'Edytuj gry',
-          handler: async () => {
-            await this.editGames(gamesList);
-            return false; // Zapobiega zamknięciu alertu
-          }
-        },
-        {
           text: 'Anuluj',
           role: 'cancel'
         },
@@ -146,15 +138,18 @@ export class PlannedEventsPage implements OnInit {
               time: data.time,
               place: data.place,
               slots: Number(data.slots),
-              details: data.details,
-              games: gamesList // Aktualizujemy listę gier
+              details: data.details
             };
 
             this.databaseService.updateEvent(updatedEvent).subscribe({
               next: () => {
                 // Aktualizacja listy wydarzeń
                 this.myEvents = this.myEvents.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev);
-                console.log('Wydarzenie zostało zaktualizowane.');
+                this.alertService.showAlert(
+                  'Sukces',
+                  'Wydarzenie zostało zaktualizowane',
+                  'alert-success'
+                );
               },
               error: (err) => {
                 console.error('Błąd podczas aktualizacji wydarzenia:', err);
@@ -164,57 +159,9 @@ export class PlannedEventsPage implements OnInit {
         }
       ]
     });
-    await alert.present();
-  }
-
-  async editGames(gamesList: Game[]) {
-    const alert = await this.alertController.create({
-      header: 'Edytuj gry',
-      inputs: gamesList.map((game, index) => ({
-        name: `game_${index}`,
-        type: 'text',
-        value: game.game,
-        placeholder: `Gra ${index + 1}`
-      })),
-      buttons: [
-        {
-          text: 'Dodaj grę',
-          handler: async () => {
-            gamesList.push({ game: '' }); // Dodajemy pustą grę do listy
-            await this.editGames(gamesList); // Otwieramy alert ponownie
-            return false; // Zapobiega zamknięciu alertu
-          }
-        },
-        {
-          text: 'Usuń ostatnią',
-          handler: async () => {
-            if (gamesList.length > 0) {
-              gamesList.pop(); // Usuwamy ostatnią grę
-              await this.editGames(gamesList); // Otwieramy alert ponownie
-            }
-            return false; // Zapobiega zamknięciu alertu
-          }
-        },
-        {
-          text: 'Anuluj',
-          role: 'cancel'
-        },
-        {
-          text: 'Zapisz',
-          handler: (data) => {
-            gamesList.forEach((game, index) => {
-              game.game = data[`game_${index}`]; // Aktualizujemy nazwy gier
-            });
-          }
-        }
-      ]
-    });
 
     await alert.present();
   }
-
-
-
 
   // modal do wyświetlenia zapisanych graczy
   viewPlayers(players: Players[]): void { //sprawdzić czy void jest potrzebne~!!!!!!

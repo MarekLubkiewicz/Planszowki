@@ -82,7 +82,8 @@
               <ion-button 
                 fill="clear"
                 size="small"
-                *ngIf="event.players && event.players.length > 0" (click)="viewPlayers(event.players)">
+                *ngIf="event.players && event.players.length > 0"
+                (click)="viewPlayers(event.players)">
                 Zobacz graczy
               </ion-button>
             </p>
@@ -114,11 +115,17 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button *ngIf="event.id" color="primary" 
-            (click)="joinEvent(event.id, event.games)"
-            [disabled]="isEventOrganizer(event.owner) || isAlreadyJoined(event.players)">
-            Zapisz się
-          </ion-button>
+            
+            <div style="position: relative; display: inline-block;">
+              <ion-button *ngIf="event.id" color="primary" (click)="joinEvent(event.id, event.games)"
+                [disabled]="isEventOrganizer(event.owner) || isAlreadyJoined(event.players)">
+                Zapisz się
+              </ion-button>
+              <div *ngIf="isEventOrganizer(event.owner) || isAlreadyJoined(event.players)" class="tooltip">
+                {{ getDisabledReason(event.owner, event.players || []) }}
+              </div>
+            </div>
+
           </ion-col>
         </ion-row>
       </ion-grid>

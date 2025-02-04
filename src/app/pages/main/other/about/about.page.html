@@ -11,17 +11,29 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-<h3>Witamy w aplikacji Board Games</h3><br>
+<h3>Witamy w aplikacji Board Games / Planszówki</h3><br>
 
 <ion-card color="light">
   <ion-card-content>
     <ion-grid>
       <ion-row>
-        <ion-col>
+        <ion-col size="12" size-md="6">
 
-          <h2>
-            Aplikacja powstała w ramach zaliczenia studiów podyplomowych na Uniwersytecie MERITO
-          </h2>
+          <p>
+            Aplikacja powstała w ramach zaliczenia studiów podyplomowych o kierunku tworzenie aplikacji internetowych i mobilnych 
+            na <strong>Uniwersytecie WSB MERITO</strong>
+          <p>
+         
+          <ul style="list-style-type:none;">
+            <li><strong>Twórcy aplikacji:</strong></li>
+            <ul style="list-style-type:none;">
+              <li>Przemysław WACH</li>
+              <li>Marek LUBKIEWICZ</li>
+              <li>Piotr ŚPIEWAK</li>
+            </ul>
+          </ul>
+        </ion-col>
+        <ion-col size="12" size-md="6">
           <p>
             Zasadniczym przeznaczeniem aplikacji jest ułatwienie miłośnikom gier planszowych organizacji spotkań.
             Zarówno organizator jak również osoby zaisujące się wskazują preferowaną grę, co stanowić będzie ułatwienie przy wyborze gry.
@@ -29,15 +41,6 @@
           <p>
             W aplikacji zaimplementowano ponadto dostęp do bazy gier oraz moduł ułatwiajacy rozgrywkę.
           </p>
-        
-        </ion-col>
-        <ion-col>
-          <h2>Twórcy aplikacji:</h2>
-            <ul style="list-style-type:none;">
-              <li>Przemysław WACH</li>
-              <li>Marek LUBKIEWICZ</li>
-              <li>Piotr ŚPIEWAK</li>
-            </ul>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -137,26 +140,28 @@
           </p>
           <ion-img src="assets/images/Tabs.png" alt="Zakładki dolne" style="max-width: 700px;">
             </ion-img>
-        </ion-col>   
+        </ion-col>
       </ion-row>
-
       <ion-row>
-        <ion-col> 
+        <ion-col size="12" size-lg="6"> 
           <p></p>  
           <p>
             W zakładce zaplanowane spotkania pokazane są spotkania organizowane przez użytkownika.
           </p>
-          <ion-img src="assets/images/ZaplanowaneSpotkania.png" alt="Zakładka zaplanowane spotkania" style="max-width: 700px;">
-          </ion-img>
           <p>
-            Pod każdym spotkaniem umieszczone są przyciski umożliwiające jego modyfikację lub całkowite usunięcie.
-          </p>
+            Organizator ma możliwość modyfikacji lub całkowitego usunięcia spotkania.
+          </p>          
+          <ion-img src="assets/images/ZaplanowaneSpotkania.png" alt="Zakładka zaplanowane spotkania" style="max-width: 600px;">
+          </ion-img>
         </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <p>Po jego kliknięciu wywoływany jest formularz umożliwiająy dodanie nowego spotkania:</p>
-          <ion-img src="assets/images/TwojeZapisy.png" alt="Zakładka Twoje zapisy" style="max-width: 700px;">
+        <ion-col size="12" size-lg="6">
+          <p>
+            W zakładce Twoje zapisy znajdują się spotkania, w stosunku do których użytkownik zadeklarował swój udział.
+          </p>
+          <p>
+            Możliwa jest oczywiście rezygnacja z udziału w spotkaniu.
+          </p>
+          <ion-img src="assets/images/TwojeZapisy.png" alt="Zakładka Twoje zapisy" style="max-width: 600px;">
           </ion-img>
         </ion-col>
       </ion-row>
@@ -164,22 +169,43 @@
   </ion-card-content>
 </ion-card>
 
-<ion-card>
+<ion-card color="light">
   <ion-card-header>
-
+    <ion-card-title>
+      Moduł gier 
+    </ion-card-title>
+    <ion-card-subtitle>
+      Ta część aplikacji stanowi rodzaj przybornika dla graczy.
+    </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <p>Pierwsza część umożliwia użytkonikom dostęp do bazy gier i zapoznianie z ich charakterystyką.</p>
+          <p>Baza umożliwia przeszukiwanie gier po tytule.</p>
+          <ion-img src="assets/images/BazaGier1.png" alt="Baza gier wyszukiwanie" style="max-width: 600px;">
+          </ion-img>
+          <ion-img src="assets/images/BazaGier3.png" alt="BAza gier przykład" style="max-width: 600px;">
+          </ion-img>
+        </ion-col>
+      </ion-row>
 
+      <ion-row>
+        <ion-col>
+          <p>Druga strona zawiera elementy ułatwiające rozgywkę.</p>
+          <p>Rzuty kostką</p>
+          <p>Timer</p>
+
+        </ion-col>
+      </ion-row>
+
+
+    </ion-grid>
   </ion-card-content>
 
 </ion-card>
-<ion-grid>
-  <ion-row>
-    <ion-col>
 
-    </ion-col>
-  </ion-row>
-</ion-grid>
 
 
 

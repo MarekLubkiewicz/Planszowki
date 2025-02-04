@@ -96,6 +96,18 @@ export class AllEventsPage implements OnInit {
     return players ? players.some(playerObj => playerObj.player === this.currentUser) : false;
   }
 
+  getDisabledReason(owner: string, players: Players[]): string {
+    if (this.isEventOrganizer(owner)) {
+      return 'Jesteś organizatorem tego wydarzenia.';
+    }
+    if (this.isAlreadyJoined(players)) {
+      return 'Już zapisałeś się na to wydarzenie.';
+    }
+    return '';
+  }
+
+
+
   maxVotes(games: Game[]): number {
     if (!games || games.length === 0) return 0;
     return Math.max(...games.map(game => game.votes || 0));
@@ -130,7 +142,6 @@ export class AllEventsPage implements OnInit {
     this.applyFilters();
   }
 
-
   //funkcja zapisywania się na wydarzenie
   
   async joinEvent(eventId: string | undefined, eventGames: Game[]) {
@@ -146,27 +157,6 @@ export class AllEventsPage implements OnInit {
       console.error('Nie znaleziono wydarzenia.');
       return;
     }
-
-    // Sprawdzenie, czy użytkownik jest organizatorem wydarzenia
-    if (event.owner === this.currentUser) {
-      await this.alertService.showAlert(
-        'Informacja',
-        'Nie możesz zapisać się na własne wydarzenie, ponieważ jesteś jego organizatorem.',
-        'alert-warning'
-      );
-      return;
-    }
-
-  // Sprawdzenie, czy użytkownik jest już zapisany na to wydarzenie
-  if (event.players && event.players.some(playerObj => playerObj.player === this.currentUser)) {
-    await this.alertService.showAlert(
-      'Informacja',
-      'Jesteś już zapisany na to wydarzenie.',
-      'alert-warning'
-    );
-    return;
-  }
-
 
     // Tworzenie alertu z opcjami gier
     const alert = await this.alertController.create({
