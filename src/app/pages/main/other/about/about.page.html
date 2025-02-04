@@ -13,7 +13,7 @@
 
 <h3>Witamy w aplikacji Board Games</h3><br>
 
-<ion-card>
+<ion-card color="light">
   <ion-card-content>
     <ion-grid>
       <ion-row>
@@ -32,24 +32,12 @@
         
         </ion-col>
         <ion-col>
-          <ion-list lines="none">
-            <ion-list-header>
-              <ion-label>
-                <h2><strong>Autorzy</strong></h2>
-              </ion-label>
-            </ion-list-header>
-            <ion-item>
-                Przemysław WACH
-            </ion-item>
-            <ion-item>
-                Marek LUBKIEWICZ
-            </ion-item>
-            <ion-item>
-              <ion-label>
-                Piotr ŚWIERCZYŃSKI
-              </ion-label>
-            </ion-item>
-          </ion-list>
+          <h2>Twórcy aplikacji:</h2>
+            <ul style="list-style-type:none;">
+              <li>Przemysław WACH</li>
+              <li>Marek LUBKIEWICZ</li>
+              <li>Piotr ŚPIEWAK</li>
+            </ul>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -81,7 +69,7 @@
       Wyświetlenie wszystkich spotkań
     </ion-card-title>
     <ion-card-subtitle>
-      Pzegląd wszystkich wydarzeń umożliwia pierwsza zakładka.
+      Na pierwszej stronie wyświetlome są wszystkie organizowane spotkania.
     </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>
@@ -129,7 +117,52 @@
     </ion-grid>
   </ion-card-content>
 </ion-card>
-<ion-item-divider></ion-item-divider>
+
+<ion-card color="light">
+  <ion-card-header>
+    <ion-card-title>
+      Zarządzanie spotkaniami
+    </ion-card-title>
+    <ion-card-subtitle>
+      Strona Twoje spotkania umożliwia zarządzanie spotkaniami zaplanowanymi przez użytkownika oraz tymi na które się zapisał.
+    </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <p>
+            Za pomocą dolnego palnelu można przełączać się pomiędzy zakładkami z zadaniami organizowanymi przez użytkownika 
+            oraz tymi na które się zapisał jako uczestnik.
+          </p>
+          <ion-img src="assets/images/Tabs.png" alt="Zakładki dolne" style="max-width: 700px;">
+            </ion-img>
+        </ion-col>   
+      </ion-row>
+
+      <ion-row>
+        <ion-col> 
+          <p></p>  
+          <p>
+            W zakładce zaplanowane spotkania pokazane są spotkania organizowane przez użytkownika.
+          </p>
+          <ion-img src="assets/images/ZaplanowaneSpotkania.png" alt="Zakładka zaplanowane spotkania" style="max-width: 700px;">
+          </ion-img>
+          <p>
+            Pod każdym spotkaniem umieszczone są przyciski umożliwiające jego modyfikację lub całkowite usunięcie.
+          </p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <p>Po jego kliknięciu wywoływany jest formularz umożliwiająy dodanie nowego spotkania:</p>
+          <ion-img src="assets/images/TwojeZapisy.png" alt="Zakładka Twoje zapisy" style="max-width: 700px;">
+          </ion-img>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ion-card>
 
 <ion-card>
   <ion-card-header>
