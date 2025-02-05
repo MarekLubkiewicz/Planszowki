@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database.service';
-import { Event, Game } from 'src/app/models/events';
-import { ModalController } from '@ionic/angular';
+import { Event, Game, Players } from 'src/app/models/events';
 import { AlertService } from 'src/app/services/alert.service';
 import { format } from 'date-fns';
 import { ActionSheetController } from '@ionic/angular';
@@ -28,12 +27,12 @@ export class AllEventsPage implements OnInit {
   }
   isLoading = false;
   isModalOpen = false; // Kontroluje stan modalu wyświetlającego zapisanych graczy
-  currentPlayers: string[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
+  currentPlayers: Players[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
   isDateFilterModalOpen = false; // Kontroluje stan modalu filtrowania po dacie
   log_in = false;
   currentUser: string = '';
   avatar: string = '';
-
+  defaultAvatar = 'https://ionicframework.com/docs/img/demos/avatar.svg';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -60,8 +59,8 @@ export class AllEventsPage implements OnInit {
       next: (data) => {
          this.events = data.map((event) => ({
           ...event,
-          games: event.games || [],
-          registeredPlayers: event.players?.length || 0, // Dynamiczne obliczanie liczby graczy
+          games: event.games || [], // do ewentualnego usunięcia - 
+          registeredPlayers: event.players?.length ?? 0, // Dynamiczne obliczanie liczby graczy
         }));
         this.filteredEvents = [...this.events];
         this.isLoading = false;
@@ -86,10 +85,34 @@ export class AllEventsPage implements OnInit {
     });
   }
 
+  
+  // Metoda pomocnicza, sprawdzająca czy obecny użytkownik jest organizatorem wydarzenia
+  isEventOrganizer(owner: string): boolean {
+    return this.currentUser === owner;
+  }
+
+  // Metoda,pomocnicza, sprawdzająca czy obecny użytkownik jest zapisany na wydarzenie
+  isAlreadyJoined(players: Players[] | undefined) : boolean {
+    return players ? players.some(playerObj => playerObj.player === this.currentUser) : false;
+  }
+
+  getDisabledReason(owner: string, players: Players[]): string {
+    if (this.isEventOrganizer(owner)) {
+      return 'Jesteś organizatorem tego wydarzenia.';
+    }
+    if (this.isAlreadyJoined(players)) {
+      return 'Już zapisałeś się na to wydarzenie.';
+    }
+    return '';
+  }
+
+
+
   maxVotes(games: Game[]): number {
     if (!games || games.length === 0) return 0;
-    return Math.max(...games.map(game => game.votes?.length || 0));
+    return Math.max(...games.map(game => game.votes || 0));
   }
+    
   
   resetDateFilter() {
     this.filter.date = ''; // Wyzerowanie filtra daty
@@ -119,9 +142,10 @@ export class AllEventsPage implements OnInit {
     this.applyFilters();
   }
 
-
   //funkcja zapisywania się na wydarzenie
+  
   async joinEvent(eventId: string | undefined, eventGames: Game[]) {
+    
     if (!eventId) {
       console.error('Brak ID wydarzenia');
       return;
@@ -134,32 +158,12 @@ export class AllEventsPage implements OnInit {
       return;
     }
 
-    // Sprawdzenie, czy użytkownik jest organizatorem wydarzenia
-    if (event.owner === this.currentUser) {
-      await this.alertService.showAlert(
-        'Informacja',
-        'Nie możesz zapisać się na własne wydarzenie, ponieważ jesteś jego organizatorem.',
-        'alert-warning'
-      );
-      return;
-    }
-
-    // Sprawdzenie, czy użytkownik jest już zapisany na to wydarzenie
-    if (event.players && event.players.includes(this.currentUser)) {
-      await this.alertService.showAlert(
-        'Informacja',
-        'Jesteś już zapisany na to wydarzenie.',
-        'alert-warning'
-      );
-      return;
-    }
-
     // Tworzenie alertu z opcjami gier
     const alert = await this.alertController.create({
       header: 'Wybierz preferowaną grę',
       inputs: eventGames.map((game, index) => ({
         type: 'radio',
-        label: `${game.game} (${game.votes?.length || 0} wybór/ów)`,
+        label: `${game.game} (${game.votes || 0} wybór/ów)`,
         value: index, // Używamy indeksu jako wartości
       })),
       buttons: [
@@ -172,7 +176,7 @@ export class AllEventsPage implements OnInit {
           handler: (selectedIndex: number) => {
             const selectedGame = eventGames[selectedIndex];
             if (selectedGame) {
-              this.databaseService.addPlayerToEventWithGame(eventId, this.currentUser, selectedGame.game).subscribe({
+              this.databaseService.addPlayerToEvent(eventId, this.currentUser, selectedGame.game).subscribe({
                 next: async () => {
                   await this.alertService.showAlert(
                     'Sukces',
@@ -199,8 +203,9 @@ export class AllEventsPage implements OnInit {
   //Koniec funkcji dołączania do wydarzenia
 
 
+
   // modal do wyświetlenia zapisanych graczy
-  viewPlayers(players: string[]) {
+  viewPlayers(players: Players[]): void { //sprawdzić czy void jest potrzebne~!!!!!!
     this.currentPlayers = players; // Przypisz listę graczy
     this.isModalOpen = true; // Otwórz modal
   }
@@ -245,15 +250,12 @@ export class AllEventsPage implements OnInit {
             // Jeśli wszystkie pola są wypełnione, przetwarzamy dane
 
             // Tworzymy tablicę gier
-            const gamesArray: Game[] = data.games.split(',').map((gameName: string) => ({
-              game: gameName.trim(),
-              votes: [],
-            }));
+            const gamesArray: string[] = data.games.split(',').
+              map((gameName: string) => gameName.trim());
 
-             // Przechodzimy do wyboru preferowanej gry
+            // Przechodzimy do wyboru preferowanej gry
             this.openPreferredGameAlert(data, gamesArray, alert);
             return false; // Nie zamykamy pierwszego alertu
-
           },
         },
       ],
@@ -262,13 +264,13 @@ export class AllEventsPage implements OnInit {
     await alert.present();
   }
 
-  async openPreferredGameAlert(data: any, gamesArray: Game[], parentAlert: HTMLIonAlertElement) {
+  async openPreferredGameAlert(data: any, gamesArray: string[], parentAlert: HTMLIonAlertElement) {
     const alert = await this.alertController.create({
       header: 'Wybierz preferowaną grę',
       inputs: gamesArray.map((game, index) => ({
         type: 'radio',
-        label: game.game, // Wyświetlana nazwa gry
-        value: index, // Indeks gry w tablicy
+        label: game, // Wyświetlana nazwa gry
+        value: game, // Indeks gry w tablicy
       })),
       buttons: [
         {
@@ -278,30 +280,21 @@ export class AllEventsPage implements OnInit {
         },
         {
           text: 'Zatwierdź',
-          handler: (selectedIndex) => {
-          
-            // Sprawdzenie, czy wybrano indeks
-            if (selectedIndex === undefined || selectedIndex < 0 || selectedIndex >= gamesArray.length) {
-              this.alertService.showAlert(
-                'Błąd',
-                'Musisz wybrać preferowaną grę!',
-                'alert-error'
-              );
-              return false; // Zatrzymaj zamykanie alertu
-            }
+          handler: (selectedGame) => {
+          if (!selectedGame) {
+            this.alertService.showAlert(
+              'Błąd',
+              'Musisz wybrać preferowaną grę!',
+              'alert-error'
+            );
+            return false;
+          }
 
-            // Sprawdzenie, czy `votes` istnieje i inicjalizacja, jeśli nie
-            if (!gamesArray[selectedIndex].votes) {
-              gamesArray[selectedIndex].votes = [];
-            }
-
-            // Dodanie preferowanej gry do listy głosów
-            gamesArray[selectedIndex].votes.push(this.currentUser);
-            
             // Dodajemy wydarzenie z preferowaną grą
             this.addEvent({
               ...data,
               games: gamesArray,
+              chosen_game: selectedGame,
             });
 
             // Ręczne zamknięcie pierwszego alertu
@@ -327,8 +320,8 @@ export class AllEventsPage implements OnInit {
       slots: Number(data.slots),
       owner: this.currentUser,
       details: data.details || '',
-      players: [],
       games: data.games,
+      chosen_game: data.chosen_game, 
     };
 
     // Dodanie wydarzenia do bazy danych

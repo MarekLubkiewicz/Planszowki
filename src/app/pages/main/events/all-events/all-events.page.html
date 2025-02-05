@@ -46,7 +46,9 @@
       Jesteś zalogowany jako {{ currentUser }}
      </ion-label>
   </ion-item>
-  
+
+ 
+
   <ion-list *ngIf="filteredEvents && filteredEvents.length > 0; else noData">
     <ion-item *ngFor="let event of filteredEvents">
       <ion-grid>
@@ -80,7 +82,8 @@
               <ion-button 
                 fill="clear"
                 size="small"
-                *ngIf="event.players && event.players.length > 0" (click)="viewPlayers(event.players)">
+                *ngIf="event.players && event.players.length > 0"
+                (click)="viewPlayers(event.players)">
                 Zobacz graczy
               </ion-button>
             </p>
@@ -95,8 +98,8 @@
             <div *ngFor="let game of event.games">
               <p class="listgames">
                 <span class="data">{{ game.game }}</span>
-                <ion-badge [color]="game.votes?.length === maxVotes(event.games) ? 'success' : 'secondary'">
-                  {{ game.votes?.length || 0 }}
+                <ion-badge [color]="game.votes === maxVotes(event.games) ? 'success' : 'secondary'">
+                  {{ game.votes || 0 }}
                 </ion-badge>
               </p>
             </div>
@@ -112,9 +115,17 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button *ngIf="event.id" color="primary" (click)="joinEvent(event.id, event.games)">
-            Zapisz się
-          </ion-button>
+            
+            <div style="position: relative; display: inline-block;">
+              <ion-button *ngIf="event.id" color="primary" (click)="joinEvent(event.id, event.games)"
+                [disabled]="isEventOrganizer(event.owner) || isAlreadyJoined(event.players)">
+                Zapisz się
+              </ion-button>
+              <div *ngIf="isEventOrganizer(event.owner) || isAlreadyJoined(event.players)" class="tooltip">
+                {{ getDisabledReason(event.owner, event.players || []) }}
+              </div>
+            </div>
+
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -143,9 +154,9 @@
         <ion-list>
           <ion-item *ngFor="let player of currentPlayers">
             <ion-avatar slot="start">
-              <img alt="Awatar użytkownika" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+              <img [alt]="'Awatar ' + player.player" [src]="player.avatar || defaultAvatar" />
             </ion-avatar>
-            {{ player }}
+            {{ player.player }}
           </ion-item>
         </ion-list>
       </ion-content>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { ViewWillEnter } from '@ionic/angular';
+import { AlertService } from 'src/app/services/alert.service';
+
 
 @Component({
   selector: 'app-logowanie',
@@ -18,7 +20,11 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
   uzytkownik: string | null = null;
 
 
-  constructor(private router: Router, private autentykacja: AutentykacjaService) { }
+  constructor(
+    private router: Router,
+    private autentykacja: AutentykacjaService,
+    private alertService: AlertService
+  ) { }
 
   ngOnInit() { 
     this.weryfikujSesje();
@@ -37,10 +43,9 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
           this.router.navigate(['/main']); // Przekierowanie do 'main' w przypadku aktywnej sesji
         }
       },
-      error: () => {
-        alert("Brak połączenia z serwerem.");
+      error: (error) => {
+        alert(`Brak połączenia z serwerem. ${error.statusText}`);
         return;
-        //this.router.navigate(['/logowanie']); // Przekierowanie do logowania
       },
     });
   }
@@ -55,7 +60,11 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
     } 
     this.autentykacja.logowanie(this.nazwa, this.haslo).subscribe({
         next: (response) => {
-          alert(response.komunikat);
+          this.alertService.showAlert(
+            'Sukces',
+            response.komunikat,
+            'alert-success'
+          );
           this.router.navigate(['/main']); // Po zalogowaniu przejście na stronę główną
       },
       error: (err) => {

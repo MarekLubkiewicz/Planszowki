@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { DatabaseService } from 'src/app/services/database.service';
-import { Event } from 'src/app/models/events';
+import { Event, Players } from 'src/app/models/events';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-joined-events',
@@ -16,16 +17,18 @@ export class JoinedEventsPage implements OnInit {
   log_in: boolean = false;
   avatar: string = '';
   isLoading = false;
-  myEvents: Event[] = [];
+  events: Event[] = [];
   eventsJoin: Event[] = [];
   isModalOpen = false; // Kontroluje stan modalu wyświetlającego zapisanych graczy
-  currentPlayers: string[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
+  currentPlayers: Players[] = []; // Przechowuje listę graczy dla wybranego wydarzenia
+  defaultAvatar = 'https://ionicframework.com/docs/img/demos/avatar.svg';
   
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private autentykacjaService: AutentykacjaService,
-    private databaseService: DatabaseService, 
+    private databaseService: DatabaseService,
+    private alertService: AlertService,
   ) { }
 
   ngOnInit() {
@@ -38,50 +41,60 @@ export class JoinedEventsPage implements OnInit {
     this.loadMyJoinEvents();
   }
 
-  loadMyJoinEvents() {
+  loadMyJoinEvents() { 
     this.isLoading = true;
-    this.databaseService.getMyJoinEvents(this.currentUser).subscribe({
+    this.databaseService.getAllEvents().subscribe({
       next: (data) => {
-         this.eventsJoin = data.map((event) => ({
-          ...event,
-          games: event.games || [],
-          registeredPlayers: event.players?.length || 0, // Dynamiczne obliczanie liczby graczy
-        }));
+        // Filtrujemy wydarzenia, aby zostawić tylko te, gdzie użytkownik jest zapisany
+        this.eventsJoin = data
+          .filter(event => 
+            event.owner !== this.currentUser && 
+            event.players?.some(playerObj => playerObj.player === this.currentUser))
+          .map((event) => ({
+            ...event,
+            games: event.games || [],
+            registeredPlayers: event.players?.length ?? 0, // Dynamiczne obliczanie liczby graczy
+          }));
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Błąd podczas pobierania wydarzeń:', err);
+      error: (error) => {
+        this.alertService.showAlert(
+          'Błąd',
+          `Błąd podczas pobierania wydarzeń: ${error}`,
+          'alert-error'
+        );
         this.isLoading = false;
         this.eventsJoin = []; // Wyczyść listę w przypadku błędu
       },
     });
   }
 
-  removeFromEvent(event: Event) {
-    const currentPlayer = this.currentUser; // Nazwa zalogowanego gracza
-    const gameIndex = event.games.findIndex((game) => game.votes?.includes(currentPlayer));
-    const gameKey = gameIndex.toString();
-
-    if (!event.id || !gameKey || !currentPlayer) {
-      console.error('Brak wymaganych danych do rezygnacji z wydarzenia.');
-      return;
+  removeFromEvent(eventId: string) {
+    if (confirm('Czy na pewno chcesz wypisa się ze spotkania?')){
+      const eventIdDoWyslania = { 'eventId': eventId };
+      const eventToRemove = this.eventsJoin.find(event => event.id === eventId);
+      this.databaseService.removePlayerFromEvent(eventIdDoWyslania).subscribe({
+        next: () => {
+          this.eventsJoin = this.eventsJoin.filter(event => event.id !== eventId);
+          this.alertService.showAlert(
+            'Sukces',
+            `${this.currentUser} wypisałeś/aś się ze spotkania ${eventToRemove?.name}`,
+            'alert-success'
+          );
+        },
+        error: (error) => {
+          this.alertService.showAlert(
+            'Błąd',
+            `Nie udało się wypisać ze spotkania, błąd: ${error}`,
+            'alert-error'
+          );
+        }
+      });
     }
-
-    this.databaseService.removePlayerFromEvent(event.id, currentPlayer, gameKey).subscribe({
-      next: () => {
-        // Aktualizacja lokalnej listy wydarzeń
-        this.eventsJoin = this.eventsJoin.filter((e) => e.id !== event.id);
-        console.log('Gracz został wypisany z wydarzenia.');
-      },
-      error: (error) => {
-        console.error('Błąd podczas rezygnacji z wydarzenia:', error);
-      },
-    });
   }
 
-
   // modal do wyświetlenia zapisanych graczy
-  viewPlayers(players: string[]) {
+  viewPlayers(players: Players[]) {
     this.currentPlayers = players; // Przypisz listę graczy
     this.isModalOpen = true; // Otwórz modal
   }

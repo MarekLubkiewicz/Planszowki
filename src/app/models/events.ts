@@ -1,6 +1,11 @@
 export interface Game {
   game: string;
-  votes?: string[];
+  votes?: number;
+}
+
+export interface Players {
+  avatar: string;
+  player: string;
 }
 
 export interface Event {
@@ -9,8 +14,9 @@ export interface Event {
   date: string;
   details?: string;
   slots: number;
-  players?: string[]; // Lista zapisanych graczy
+  players?: Players [];// Lista zapisanych graczy
   games: Game[];
+  chosen_game?: string;
   owner: string;
   place: string;
   time: string;

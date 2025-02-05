@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AvatarService {
 
   //private apiUrl = 'http://localhost:5000';
-  private apiUrl = 'http://www.vanilladice.pl/bg-test';
+  private apiUrl = 'https://www.vanilladice.pl/bg-test';
 
   constructor(private http: HttpClient) { }
 
