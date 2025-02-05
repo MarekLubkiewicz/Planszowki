@@ -96,13 +96,23 @@ export class AllEventsPage implements OnInit {
     return players ? players.some(playerObj => playerObj.player === this.currentUser) : false;
   }
 
-  getDisabledReason(owner: string, players: Players[]): string {
+  // Metoda pomocnicza, sprawdzająca czy nie jest przekroczony limit uczetników
+  isEventFull(event: Event): boolean {
+    return event.players ? event.players.length >= event.slots : false;
+  }
+
+
+  getDisabledReason(owner: string, players: Players[], slots: number): string {
     if (this.isEventOrganizer(owner)) {
       return 'Jesteś organizatorem tego wydarzenia.';
     }
     if (this.isAlreadyJoined(players)) {
       return 'Już zapisałeś się na to wydarzenie.';
     }
+    if (players.length >= slots) {
+      return 'Wszystkie miejsca są już zajęte.';
+    }
+
     return '';
   }
 
