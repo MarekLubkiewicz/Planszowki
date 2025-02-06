@@ -18,7 +18,7 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
   haslo: string = "";
   zalogowany = false;
   uzytkownik: string | null = null;
-
+  showPassword: boolean = false;
 
   constructor(
     private router: Router,
@@ -33,6 +33,10 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
     this.weryfikujSesje();
   }
 
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   weryfikujSesje() {
     this.autentykacja.sprawdzSesje().subscribe({
       next: (response) => {
@@ -43,7 +47,7 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
         }
       },
       error: (error) => {
-        alert(`Brak połączenia z serwerem. ${error.statusText}`);
+        Swal.fire('Błąd!',`Brak połączenia z serweremm. ${error.statusText}`, 'error');
         return;
       },
     });
