@@ -60,3 +60,7 @@
     --max-width: 600px;
     /* Maksymalna szerokość */
 }
+
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
+    height: 100% !important;
+}

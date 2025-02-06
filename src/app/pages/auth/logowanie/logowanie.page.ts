@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { ViewWillEnter } from '@ionic/angular';
-import { AlertService } from 'src/app/services/alert.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -23,7 +23,6 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
   constructor(
     private router: Router,
     private autentykacja: AutentykacjaService,
-    private alertService: AlertService
   ) { }
 
   ngOnInit() { 
@@ -59,23 +58,24 @@ export class LogowaniePage implements OnInit, ViewWillEnter {
         return;
     } 
     this.autentykacja.logowanie(this.nazwa, this.haslo).subscribe({
-        next: (response) => {
-          this.alertService.showAlert(
-            'Sukces',
-            response.komunikat,
-            'alert-success'
-          );
+        next: () => {
+          Swal.fire({
+            title: 'Sukces',
+            text: `Zalogowałeś się jako ${this.nazwa}`,
+            icon: 'success',
+            timer: 3000,
+            confirmButtonText: 'OK'
+          });
           this.router.navigate(['/main']); // Po zalogowaniu przejście na stronę główną
       },
       error: (err) => {
-        console.error(`Logowanie nieudane ${err.status}`);
-        if (err.error && err.error.blad) {
-          alert(err.error.blad);
-        } else if (err.message) {
-          alert(`Błąd: ${err.message}`);
-        } else {
-          alert(`Wystąpił błąd podczas logowania. Kod błędu: ${err.status} ${err.statusText}`);
-        }
+         console.error(`Logowanie nieudane ${err.status}`);
+         Swal.fire({
+            title: 'Logowanie nieudane',
+            text: `Wystąpił błąd podczas logowania: ${err.error.blad}`,
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
       },
     });
   }

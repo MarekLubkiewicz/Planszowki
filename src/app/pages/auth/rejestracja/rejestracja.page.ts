@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule, ViewWillEnter, } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { ViewWillEnter, } from '@ionic/angular';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -59,7 +59,7 @@ export class RejestracjaPage implements OnInit, ViewWillEnter {
         
   this.uzytkownikDane.rejestruj(this.nazwa, this.haslo, this.email).subscribe({
     next: (response) => {
-      alert(response.komunikat);
+      Swal.fire('Brawo', response.komunikat, 'success');
       this.router.navigate(['/logowanie']);
     },
     error: (err) => {

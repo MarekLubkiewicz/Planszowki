@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { ActionSheetController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -37,8 +38,6 @@ export class AllEventsPage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private databaseService: DatabaseService, 
-    private alertService: AlertService,
-    private actionSheetController: ActionSheetController,
     private alertController: AlertController,
     private autentykacjaService: AutentykacjaService
     ) { }
@@ -84,7 +83,6 @@ export class AllEventsPage implements OnInit {
       return matchesPlace&&matchesName&&matchesDate;
     });
   }
-
   
   // Metoda pomocnicza, sprawdzająca czy obecny użytkownik jest organizatorem wydarzenia
   isEventOrganizer(owner: string): boolean {
@@ -112,11 +110,8 @@ export class AllEventsPage implements OnInit {
     if (players.length >= slots) {
       return 'Wszystkie miejsca są już zajęte.';
     }
-
     return '';
   }
-
-
 
   maxVotes(games: Game[]): number {
     if (!games || games.length === 0) return 0;
@@ -188,19 +183,21 @@ export class AllEventsPage implements OnInit {
             if (selectedGame) {
               this.databaseService.addPlayerToEvent(eventId, this.currentUser, selectedGame.game).subscribe({
                 next: async () => {
-                  await this.alertService.showAlert(
-                    'Sukces',
-                    `Zapisano użytkownika ${this.currentUser} do wydarzenia`,
-                    'alert-success'
-                  );
+                  Swal.fire({
+                    title: 'Sukces',
+                    text: `${this.currentUser}, zapisałeś się na spotkanie: ${event.name}`,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                  });
                   this.loadEvents();
                 },
                 error: async () => {
-                  await this.alertService.showAlert(
-                    'Błąd',
-                    'Nie udało się zapisać do wydarzenia',
-                    'alert-error'
-                  );
+                  Swal.fire({
+                    title: 'Błąd',
+                    text: 'Nie udało się zapisać na spotkanie',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                  });
                 },
               });
             }
@@ -250,11 +247,12 @@ export class AllEventsPage implements OnInit {
           handler: (data) => {
             // Walidacja: sprawdzamy, czy wszystkie wymagane pola są wypełnione
             if (!data.name || !data.date || !data.time || !data.place || !data.slots || !data.games) {
-              this.alertService.showAlert(
-                'Błąd',
-                'Wszystkie wymagane pola muszą być wypełnione!',
-                'alert-error'
-              );
+              Swal.fire({
+                    title: 'Błąd',
+                    text: 'Wszystkie wymagane pola muszą być wypełnione!',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                  });
               return false;
             }
             // Jeśli wszystkie pola są wypełnione, przetwarzamy dane
@@ -292,11 +290,12 @@ export class AllEventsPage implements OnInit {
           text: 'Zatwierdź',
           handler: (selectedGame) => {
           if (!selectedGame) {
-            this.alertService.showAlert(
-              'Błąd',
-              'Musisz wybrać preferowaną grę!',
-              'alert-error'
-            );
+            Swal.fire({
+              title: 'Błąd',
+              text: 'Musisz wybrać preferowaną grę!',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
             return false;
           }
 
@@ -337,20 +336,23 @@ export class AllEventsPage implements OnInit {
     // Dodanie wydarzenia do bazy danych
     this.databaseService.addEvent(newEvent).subscribe({
       next: () => {
-        this.alertService.showAlert(
-          'Sukces',
-          'Wydarzenie zostało dodane pomyślnie!',
-          'alert-success'
-        );
+        Swal.fire({
+          title: 'Brawo',
+          text: `Zaplanowałeś nowe spotkanie: ${newEvent.name}`,
+          icon: 'success',
+          timer: 3000,
+          confirmButtonText: 'OK'
+        });
         this.loadEvents(); // Odświeżenie listy wydarzeń
       },
       error: (err) => {
         console.error('Błąd podczas dodawania wydarzenia:', err);
-        this.alertService.showAlert(
-          'Błąd',
-          'Nie udało się dodać wydarzenia. Spróbuj ponownie.',
-          'alert-error'
-        );
+        Swal.fire({
+          title: 'Ups ...',
+          text: 'Nie udało się dodać wydarzenia. Spróbuj ponownie.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
       },
     });
   }

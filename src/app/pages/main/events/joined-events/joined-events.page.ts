@@ -4,6 +4,7 @@ import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import { Event, Players } from 'src/app/models/events';
 import { AlertService } from 'src/app/services/alert.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-joined-events',
@@ -70,28 +71,30 @@ export class JoinedEventsPage implements OnInit {
   }
 
   removeFromEvent(eventId: string) {
-    if (confirm('Czy na pewno chcesz wypisa się ze spotkania?')){
-      const eventIdDoWyslania = { 'eventId': eventId };
-      const eventToRemove = this.eventsJoin.find(event => event.id === eventId);
-      this.databaseService.removePlayerFromEvent(eventIdDoWyslania).subscribe({
+    Swal.fire({
+      title: 'Uwaga',
+      text: 'Czy na pewno chcesz się wypisać?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Tak',
+      cancelButtonText: 'Nie'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const eventIdDoWyslania = { 'eventId': eventId };
+        const eventToRemove = this.eventsJoin.find(event => event.id === eventId);
+        this.databaseService.removePlayerFromEvent(eventIdDoWyslania).subscribe({
         next: () => {
           this.eventsJoin = this.eventsJoin.filter(event => event.id !== eventId);
-          this.alertService.showAlert(
-            'Sukces',
-            `${this.currentUser} wypisałeś/aś się ze spotkania ${eventToRemove?.name}`,
-            'alert-success'
-          );
-        },
-        error: (error) => {
-          this.alertService.showAlert(
-            'Błąd',
-            `Nie udało się wypisać ze spotkania, błąd: ${error}`,
-            'alert-error'
-          );
-        }
-      });
-    }
+          Swal.fire('OK!', `${this.currentUser} wypisałeś/aś się ze spotkania ${eventToRemove?.name}`, 'success');
+          },
+          error: (error) => {
+            Swal.fire('Ups ..!',`Nie udało się wypisać: ${error}`, 'error');
+          }
+        });
+      }
+    });
   }
+
 
   // modal do wyświetlenia zapisanych graczy
   viewPlayers(players: Players[]) {

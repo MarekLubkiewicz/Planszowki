@@ -5,6 +5,8 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { Event, Players, Game } from 'src/app/models/events';
 import { AlertController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert.service';
+import { format, parse } from 'date-fns';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-planned-events',
@@ -63,27 +65,47 @@ export class PlannedEventsPage implements OnInit {
     });
   }
 
-
   deleteEvent(eventId: string) {
-    if (confirm('Czy na pewno chcesz usunąć to wydarzenie?')) {
-
-      const eventIdDoWyslania = { 'eventId': eventId };
-
-      this.databaseService.deleteEvent(eventIdDoWyslania).subscribe({
-        next: () => {
-          this.myEvents = this.myEvents.filter(event => event.id !== eventId);
-          console.log('Wydarzenie zostało usunięte.');
-        },
-        error: (error) => {
-          console.error('Błąd podczas usuwania wydarzenia:', error);
-        }
-      });
-    }
+    Swal.fire({
+      title: 'Czy na pewno chcesz usunąć?',
+      text: 'Tej operacji nie można cofnąć!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Tak',
+      cancelButtonText: 'Nie'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Wyświetlenie ładowania
+        Swal.fire({
+          title: 'Usuwanie...',
+          text: 'Proszę czekać',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        const eventIdDoWyslania = { eventId };
+        this.databaseService.deleteEvent(eventIdDoWyslania).subscribe({
+          next: () => {
+            this.myEvents = this.myEvents.filter(event => event.id !== eventId);
+            Swal.fire('Usunięto!', `Spotkanie zostało usunięte.`, 'success');
+          },
+          error: (error) => {
+            Swal.fire('Błąd!',`Nie udało się usunąć spotkania: ${error}`, 'error');
+          }
+        });
+      }
+    });
   }
 
+
   async editEvent(event: Event) {
+
+    const formattedDate = event.date 
+    ? format(parse(event.date, 'dd.MM.yyyy', new Date()), 'yyyy-MM-dd') : '';
+
     const alert = await this.alertController.create({
-      header: 'Edytuj wydarzenie',
+      header: 'Edytuj spotkanie',
       cssClass: 'wide-alert',
       inputs: [
         {
@@ -95,7 +117,7 @@ export class PlannedEventsPage implements OnInit {
         {
           name: 'date',
           type: 'date',
-          value: event.date,
+          value: formattedDate,
           placeholder: 'Data wydarzenia'
         },
         {
@@ -134,7 +156,7 @@ export class PlannedEventsPage implements OnInit {
             const updatedEvent: Event = {
               ...event, // Zachowujemy resztę właściwości
               name: data.name,
-              date: data.date,
+              date: format(new Date(data.date), 'dd.MM.yyyy'),
               time: data.time,
               place: data.place,
               slots: Number(data.slots),
@@ -145,14 +167,10 @@ export class PlannedEventsPage implements OnInit {
               next: () => {
                 // Aktualizacja listy wydarzeń
                 this.myEvents = this.myEvents.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev);
-                this.alertService.showAlert(
-                  'Sukces',
-                  'Wydarzenie zostało zaktualizowane',
-                  'alert-success'
-                );
+                Swal.fire('Brawo', `Spotkanie "${event.name}" zostało zaktualizowane.`, 'success');
               },
-              error: (err) => {
-                console.error('Błąd podczas aktualizacji wydarzenia:', err);
+              error: (error) => {
+                Swal.fire('Błąd!',`Nie udało się zaktulizować spotkania: ${error}`, 'error');
               }
             });
           }
