@@ -2,13 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database.service';
 import { Event, Game, Players } from 'src/app/models/events';
-import { AlertService } from 'src/app/services/alert.service';
 import { format } from 'date-fns';
-import { ActionSheetController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { EventService } from 'src/app/services/event.service';
-import Swal from 'sweetalert2';
 
 
 @Component({
@@ -149,67 +146,14 @@ export class AllEventsPage implements OnInit {
     this.applyFilters();
   }
 
-  //funkcja zapisywania się na wydarzenie
-  
-  async joinEvent(eventId: string | undefined, eventGames: Game[]) {
-    
-    if (!eventId) {
-      console.error('Brak ID wydarzenia');
-      return;
-    }
 
-    // Znajdź zdarzenie na podstawie ID
+  joinEvent(eventId: string | undefined, eventGames: Game[]) {
+    if (!eventId) return;
     const event = this.events.find(e => e.id === eventId);
-    if (!event) {
-      console.error('Nie znaleziono wydarzenia.');
-      return;
-    }
-
-    // Tworzenie alertu z opcjami gier
-    const alert = await this.alertController.create({
-      header: 'Wybierz preferowaną grę',
-      inputs: eventGames.map((game, index) => ({
-        type: 'radio',
-        label: `${game.game} (${game.votes || 0} wybór/ów)`,
-        value: index, // Używamy indeksu jako wartości
-      })),
-      buttons: [
-        {
-          text: 'Anuluj',
-          role: 'cancel',
-        },
-        {
-          text: 'Zatwierdź',
-          handler: (selectedIndex: number) => {
-            const selectedGame = eventGames[selectedIndex];
-            if (selectedGame) {
-              this.databaseService.addPlayerToEvent(eventId, this.currentUser, selectedGame.game).subscribe({
-                next: async () => {
-                  Swal.fire({
-                    title: 'Sukces',
-                    text: `${this.currentUser}, zapisałeś się na spotkanie: ${event.name}`,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                  });
-                  this.loadEvents();
-                },
-                error: async () => {
-                  Swal.fire({
-                    title: 'Błąd',
-                    text: 'Nie udało się zapisać na spotkanie',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                  });
-                },
-              });
-            }
-          },
-        },
-      ],
-    });
-    await alert.present();
+    if (!event) return;
+    
+    this.eventService.joinEvent(eventId, event.name, eventGames, this.currentUser, this.loadEvents.bind(this));
   }
-  //Koniec funkcji dołączania do wydarzenia
 
   // modal do wyświetlenia zapisanych graczy
   viewPlayers(players: Players[]): void { 
