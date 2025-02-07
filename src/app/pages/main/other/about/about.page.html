@@ -11,7 +11,7 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-<h3>Witamy w aplikacji Board Games / Planszówki (v.1.0)</h3><br>
+<h3>Witamy w aplikacji Board Games / Planszówki (v.1.1)</h3><br>
 
 <ion-card color="light">
   <ion-card-content>
@@ -29,7 +29,7 @@
             <ul style="list-style-type:none;">
               <li>Przemysław WACH</li>
               <li>Marek LUBKIEWICZ</li>
-              <li>Piotr ŚPIEWAK</li>
+              <li>Piotr ŚPIEWAK ???</li>
             </ul>
           </ul>
         </ion-col>
@@ -47,165 +47,165 @@
   </ion-card-content>
 </ion-card>
 
-<ion-card color="light">
-  <ion-card-content>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="12" size-md="6">
-          <p>Dostęp do wszystkich opcji odywa sie za pomocą menu bocznego,</p>
-          <ion-img src="assets/images/Menu.png" class="info_image" alt="Menu boczne duży ekran"></ion-img>
-        </ion-col>
-        <ion-col size="12" size-md="6">
-          <p>które w przypadku wersji mobilnej lub niskiej rozdzielczości 
-          wywoływane jest przyciskiem znajdującym się w lewym górnym rogu</p>
-          <ion-img src="assets/images/MenuMButton.png" class="info_image_small" alt="Przycisk wywołania menu bocznego"></ion-img>
-          <ion-img src="assets/images/MenuMobile.png" class="info_image" alt="Menu boczne, wersja mobilna"></ion-img>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ion-card>
+<ion-accordion-group expand="inset">
+  <ion-accordion value="first">
+    <ion-item slot="header" color="light">
+      <ion-label>Dostęp do podstron</ion-label>
+    </ion-item>
+  <div class="ion-padding" slot="content">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <p>Dostęp do wszystkich opcji odywa sie za pomocą menu bocznego,</p>
+            <ion-img src="assets/images/Menu.png" class="info_image" alt="Menu boczne duży ekran"></ion-img>
+          </ion-col>
+          <ion-col size="12" size-md="6">
+            <p>które w przypadku wersji mobilnej lub niskiej rozdzielczości 
+            wywoływane jest przyciskiem znajdującym się w lewym górnym rogu</p>
+            <ion-img src="assets/images/MenuMButton.png" class="info_image_small" alt="Przycisk wywołania menu bocznego"></ion-img>
+            <ion-img src="assets/images/MenuMobile.png" class="info_image" alt="Menu boczne, wersja mobilna"></ion-img>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-accordion>
 
-<ion-card color="light">
-  <ion-card-header>
-    <ion-card-title>
-      Wyświetlenie wszystkich spotkań
-    </ion-card-title>
-    <ion-card-subtitle>
-      Na pierwszej stronie wyświetlome są wszystkie organizowane spotkania.
-    </ion-card-subtitle>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <p>Wydarzenia można filtrować po nazwie, miejscu i dacie spotkania.<br>
-            Menu do filtrowania wywołyane jest przyciskiem w prawym górnym rogu ekranu.</p><br>
-          <ion-img src="assets/images/AllEventsFiltry.png" class="info_image_big" alt="Filtry">
-          </ion-img>
-          <ion-img src="assets/images/AllEvents_.png" class="info_image_big" alt="Wszystkie wydarzenia">
-          </ion-img>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <p>Przy każdej pozycji na liście spotkań znajduje się przycisk umożliwiający zapisanie się do wydarzenia.</p>
-    <p>Jeżeli przycisk jest nieaktywny, to znaczy że albo jesteś organizatorem albo już się zapisałeś na wydarzenie.</p>
-          
-    </ion-card-content>
-</ion-card>
-
-<ion-card color="light">
-  <ion-card-header>
-    <ion-card-title>
-      Dodawanie nowego wydarzenia
-    </ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <p>W prawym dolnym rogu znajduje się przycisk umożliwiający dodanie własnego spotkania.</p>      
-          <ion-img src="assets/images/AddEvent.png" alt="Przycisk dodaj wydarzenie" style="max-width: 150px;">
-          </ion-img>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <p>Po jego kliknięciu wywoływany jest formularz umożliwiająy dodanie nowego spotkania:</p>
-          <ion-img src="assets/images/AddEvent2.png" alt="Formularz nowego wydarzenia" style="max-width:600px;">
-          </ion-img>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ion-card>
-
-<ion-card color="light">
-  <ion-card-header>
-    <ion-card-title>
-      Zarządzanie spotkaniami
-    </ion-card-title>
-    <ion-card-subtitle>
-      Strona Twoje spotkania umożliwia zarządzanie spotkaniami zaplanowanymi przez użytkownika oraz tymi na które się zapisał.
-    </ion-card-subtitle>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <p>
-            Za pomocą dolnego palnelu można przełączać się pomiędzy zakładkami z zadaniami organizowanymi przez użytkownika 
-            oraz tymi na które się zapisał jako uczestnik.
-          </p>
-          <ion-img src="assets/images/Tabs.png" alt="Zakładki dolne" style="max-width: 700px;">
+  <ion-accordion value="second">
+      <ion-item slot="header" color="light">
+        <ion-label>Wyświetlenie wszystkich spotkań</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+    
+      <ion-item>
+        Na pierwszej stronie wyświetlome są wszystkie organizowane spotkania.
+      </ion-item>
+        
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <p>Wydarzenia można filtrować po nazwie, miejscu i dacie spotkania.<br>
+              Menu do filtrowania wywołyane jest przyciskiem w prawym górnym rogu ekranu.</p><br>
+            <ion-img src="assets/images/AllEventsFiltry.png" class="info_image_big" alt="Filtry">
             </ion-img>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="12" size-lg="6"> 
-          <p></p>  
-          <p>
-            W zakładce zaplanowane spotkania pokazane są spotkania organizowane przez użytkownika.
-          </p>
-          <p>
-            Organizator ma możliwość modyfikacji lub całkowitego usunięcia spotkania.
-          </p>          
-          <ion-img src="assets/images/ZaplanowaneSpotkania.png" alt="Zakładka zaplanowane spotkania" style="max-width: 600px;">
-          </ion-img>
-        </ion-col>
-        <ion-col size="12" size-lg="6">
-          <p>
-            W zakładce Twoje zapisy znajdują się spotkania, w stosunku do których użytkownik zadeklarował swój udział.
-          </p>
-          <p>
-            Możliwa jest oczywiście rezygnacja z udziału w spotkaniu.
-          </p>
-          <ion-img src="assets/images/TwojeZapisy.png" alt="Zakładka Twoje zapisy" style="max-width: 600px;">
-          </ion-img>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ion-card>
+            <ion-img src="assets/images/AllEvents_.png" class="info_image_big" alt="Wszystkie wydarzenia">
+            </ion-img>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
-<ion-card color="light">
-  <ion-card-header>
-    <ion-card-title>
-      Moduł gier 
-    </ion-card-title>
-    <ion-card-subtitle>
-      Ta część aplikacji stanowi rodzaj przybornika dla graczy.
-    </ion-card-subtitle>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <p>Pierwsza część umożliwia użytkonikom dostęp do bazy gier i zapoznianie z ich charakterystyką.</p>
-          <p>Baza umożliwia przeszukiwanie gier po tytule.</p>
-          <ion-img src="assets/images/BazaGier1.png" alt="Baza gier wyszukiwanie" style="max-width: 600px;">
-          </ion-img>
-          <ion-img src="assets/images/BazaGier3.png" alt="BAza gier przykład" style="max-width: 600px;">
-          </ion-img>
-        </ion-col>
-      </ion-row>
+      <p>Przy każdej pozycji na liście spotkań znajduje się przycisk umożliwiający zapisanie się do wydarzenia.</p>
+      <p>Jeżeli przycisk jest nieaktywny, to znaczy że albo jesteś organizatorem albo już się zapisałeś na wydarzenie.</p>
+    </div>
+  </ion-accordion>
 
-      <ion-row>
-        <ion-col>
-          <p>Druga strona zawiera elementy ułatwiające rozgywkę.</p>
-          <p>Rzuty kostką</p>
-          <p>Timer</p>
+  <ion-accordion value="third">
+    <ion-item slot="header" color="light">
+      <ion-label>Dodawanie nowego wydarzenia</ion-label>
+    </ion-item>
+    <div class="ion-padding" slot="content">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <p>W prawym dolnym rogu znajduje się przycisk umożliwiający dodanie własnego spotkania.</p>      
+            <ion-img src="assets/images/AddEvent.png" alt="Przycisk dodaj wydarzenie" style="max-width: 150px;">
+            </ion-img>
+            <p>Spotkania można dodawać zarówn ze strony z wszystkimi spotkaniami jak i ze strony zawierającej spotkania zaplanowane przez użytkownika</p>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <p>Po jego kliknięciu wywoływany jest formularz umożliwiająy dodanie nowego spotkania:</p>
+            <ion-img src="assets/images/AddEvent2.png" alt="Formularz nowego wydarzenia" style="max-width:600px;">
+            </ion-img>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-accordion>
 
-        </ion-col>
-      </ion-row>
+  <ion-accordion value="fourth">
+    <ion-item slot="header" color="light">
+      <ion-label>Zarządzanie spotkaniami</ion-label>
+    </ion-item>
+    <div class="ion-padding" slot="content">
 
+    <ion-item>
+      Strona Twoje spotkania umożliwia zarządzanie spotkaniami zaplanowanymi przez użytkownika oraz tymi na które się zapisał.
+    </ion-item>
 
-    </ion-grid>
-  </ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <p>
+              Za pomocą dolnego palnelu można przełączać się pomiędzy zakładkami z zadaniami organizowanymi przez użytkownika 
+              oraz tymi na które się zapisał jako uczestnik.
+            </p>
+            <ion-img src="assets/images/Tabs.png" alt="Zakładki dolne" style="max-width: 700px;">
+              </ion-img>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-lg="6"> 
+            <p></p>  
+            <p>
+              W zakładce zaplanowane spotkania pokazane są spotkania organizowane przez użytkownika.
+            </p>
+            <p>
+              Organizator ma możliwość modyfikacji lub całkowitego usunięcia spotkania.
+            </p>          
+            <ion-img src="assets/images/ZaplanowaneSpotkania.png" alt="Zakładka zaplanowane spotkania" style="max-width: 600px;">
+            </ion-img>
+          </ion-col>
+          <ion-col size="12" size-lg="6">
+            <p>
+              W zakładce Twoje zapisy znajdują się spotkania, w stosunku do których użytkownik zadeklarował swój udział.
+            </p>
+            <p>
+              Możliwa jest oczywiście rezygnacja z udziału w spotkaniu.
+            </p>
+            <ion-img src="assets/images/TwojeZapisy.png" alt="Zakładka Twoje zapisy" style="max-width: 600px;">
+            </ion-img>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-accordion>
 
-</ion-card>
+  <ion-accordion value="fifth">
+    <ion-item slot="header" color="light">
+      <ion-label>Moduł gier</ion-label>
+    </ion-item>
+    <div class="ion-padding" slot="content">
 
+      <ion-item>
+        Ta część aplikacji stanowi rodzaj przybornika dla graczy.
+      </ion-item>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <p>Pierwsza część umożliwia użytkonikom dostęp do bazy gier i zapoznianie z ich charakterystyką.</p>
+            <p>Baza umożliwia przeszukiwanie gier po tytule.</p>
+            <ion-img src="assets/images/BazaGier1.png" alt="Baza gier wyszukiwanie" style="max-width: 600px;">
+            </ion-img>
+            <ion-img src="assets/images/BazaGier3.png" alt="BAza gier przykład" style="max-width: 600px;">
+            </ion-img>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <p>Druga strona zawiera elementy ułatwiające rozgywkę.</p>
+            <p>Rzuty kostką</p>
+            <p>Timer</p>
+
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
+    </div>
+  </ion-accordion>
+</ion-accordion-group>
 
 
 
