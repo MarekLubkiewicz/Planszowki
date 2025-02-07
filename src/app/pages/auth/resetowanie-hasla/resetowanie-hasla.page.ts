@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { ViewWillEnter } from '@ionic/angular';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-resetowanie-hasla',
@@ -9,7 +11,7 @@ import { ViewWillEnter } from '@ionic/angular';
   styleUrls: ['./resetowanie-hasla.page.scss'],
   standalone: false,
 })
-export class ResetowanieHaslaPage implements OnInit {
+export class ResetowanieHaslaPage implements OnInit, ViewWillEnter {
 
   email: string = "";
   kodWyslany: boolean = false;
@@ -59,7 +61,7 @@ export class ResetowanieHaslaPage implements OnInit {
     this.autentykacja.wyslijKod(this.email).subscribe({
       next: (response) => {
         this.kodWyslany = true;
-        alert(response.komunikat);
+        Swal.fire('Sukces', response.komunikat, 'success');
         return;
       },
       error: (err) => {
@@ -74,7 +76,6 @@ export class ResetowanieHaslaPage implements OnInit {
       },
     })
   }
-
 
   resetujHaslo() {
     if (!this.kodRes) {
@@ -93,7 +94,7 @@ export class ResetowanieHaslaPage implements OnInit {
 
     this.autentykacja.resetujMojehaslo(this.noweHaslo, this.kodRes, this.email).subscribe({
       next: (response) => {
-        alert(response.komunikat);
+        Swal.fire('Sukces', response.komunikat, 'success');
         this.router.navigate(['/logowanie']);
       },
       error: (err) => {
@@ -108,7 +109,6 @@ export class ResetowanieHaslaPage implements OnInit {
       },
     })
   }
-
 
   walidujHaslo(haslo: string): boolean {
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;

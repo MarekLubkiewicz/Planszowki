@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { Router } from '@angular/router'
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-main',
@@ -23,7 +24,6 @@ export class MainPage implements OnInit {
   public otherPages = [
     { title: 'Użytkownik', url: '/main/other/profile', icon: 'person'},
     { title: 'O aplikacji', url: '/main/other/about', icon: 'map'},
-    { title: 'Ustawienia', url: '/main/other/settings', icon: 'settings'},
   ];
 
   zalogowany = false;
@@ -46,7 +46,13 @@ export class MainPage implements OnInit {
         this.uzytkownik_id = null;
         this.uzytkownik = null;
         this.router.navigate(['/home']);
-        alert(response.komunikat)
+        Swal.fire({
+                    title: 'Sukces',
+                    text: ` ${response.komunikat}`,
+                    icon: 'success',
+                    timer: 3000,
+                    confirmButtonText: 'OK'
+                  });
       },
       error: (error) => {
         console.error('Błąd podczas wylogowywania:', error);
