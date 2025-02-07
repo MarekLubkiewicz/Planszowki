@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { AlertController } from '@ionic/angular';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { EventService } from 'src/app/services/event.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -116,42 +117,49 @@ export class AllEventsPage implements OnInit {
     if (!games || games.length === 0) return 0;
     return Math.max(...games.map(game => game.votes || 0));
   }
-    
-  
-  resetDateFilter() {
-    this.filter.date = ''; // Wyzerowanie filtra daty
-    this.applyFilters();
-  }
 
   resetAllFilters() {
     this.filter = {date: '', place: '', name:'',}; // Wyzerowanie wszystkich filtrów
     this.applyFilters();
   }
 
-  // Obsługa filtra daty
-  openDateFilterModal() {
-    this.isDateFilterModalOpen = true;
-  }
+  async openDateFilterModal() {
+    const { value: date } = await Swal.fire({
+      title: 'Wybierz datę',
+      html: `
+        <input type="date" id="swal-date" class="swal2-input" value="${this.filter.date || ''}">
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Zastosuj',
+      cancelButtonText: 'Anuluj',
+      didOpen: () => {
+        const dateInput = document.getElementById('swal-date') as HTMLInputElement;
+        dateInput?.focus(); // Ustawienie kursora na kalendarzu
+      },
+      preConfirm: () => {
+        const dateInput = document.getElementById('swal-date') as HTMLInputElement;
+        if (!dateInput.value) {
+          Swal.showValidationMessage('Musisz wybrać datę!');
+          return false;
+        }
+        return dateInput.value;
+      },
+    });
 
-  closeDateFilterModal() {
-    this.isDateFilterModalOpen = false;
+    if (date) {
+      this.setFilterDate(date);
+      this.applyFilters();
+    }
   }
 
   setFilterDate(value: string) {
     this.filter.date = value;
   }
 
-  applyDateFilter() {
-    this.closeDateFilterModal();
-    this.applyFilters();
-  }
-
-
   joinEvent(eventId: string | undefined, eventGames: Game[]) {
     if (!eventId) return;
     const event = this.events.find(e => e.id === eventId);
     if (!event) return;
-    
     this.eventService.joinEvent(eventId, event.name, eventGames, this.currentUser, this.loadEvents.bind(this));
   }
 
@@ -169,6 +177,5 @@ export class AllEventsPage implements OnInit {
   openAddEvent() {
     this.eventService.openAddEventAlert(() => this.loadEvents());
   }
-
 
 }

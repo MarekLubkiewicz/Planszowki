@@ -67,40 +67,6 @@ export class EventService {
     await alert.present();
   }
 
-  /*
-
-  async openPreferredGameAlert(data: any, gamesArray: string[], parentAlert: HTMLIonAlertElement, loadEvents: () => void) {
-    const alert = await this.alertController.create({
-      header: 'Wybierz preferowaną grę',
-      inputs: gamesArray.map(game => ({
-        type: 'radio',
-        label: game,
-        value: game,
-      })),
-      buttons: [
-        {
-          text: 'Anuluj',
-          role: 'cancel',
-          handler: () => true,
-        },
-        {
-          text: 'Zatwierdź',
-          handler: (selectedGame) => {
-            if (!selectedGame) {
-              Swal.fire({ title: 'Błąd', text: 'Musisz wybrać preferowaną grę!', icon: 'error' });
-              return false;
-            }
-
-            this.addEvent({ ...data, games: gamesArray, chosen_game: selectedGame }, loadEvents);
-            parentAlert.dismiss();
-            return true;
-          },
-        },
-      ],
-    });
-
-    await alert.present();
-  }*/
   async openPreferredGameAlert(
     gamesArray: string[], 
     onConfirm: (selectedGame: string) => void
