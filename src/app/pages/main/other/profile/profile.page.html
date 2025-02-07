@@ -18,45 +18,48 @@
     </ion-avatar>
   </h3>
 
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        Zmiana awatara
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <!-- Input do wyboru pliku -->
+      <ion-item>
+        <input 
+          type="file" 
+          (change)="onFileSelected($event)" 
+          accept="image/*"
+          [disabled]="isUploading"
+          class="ion-margin-vertical">
+      </ion-item>
+
+      <!-- Podgląd wybranego zdjęcia -->
+      <ion-item *ngIf="previewUrl">
+        <img [src]="previewUrl" alt="Podgląd awatara" style="max-width: 200px; margin: 10px auto;">
+      </ion-item>
+
+      <!-- Komunikat o błędzie -->
+      <ion-item *ngIf="error" color="danger">
+        <ion-text color="danger">{{ error }}</ion-text>
+      </ion-item>
+
+      <!-- Przycisk do przesłania -->
+      <ion-button 
+        expand="block" 
+        (click)="uploadAvatar()" 
+        [disabled]="!selectedFile || isUploading"
+        class="ion-margin-vertical">
+        <ion-spinner *ngIf="isUploading"></ion-spinner>
+        <span *ngIf="!isUploading">Prześlij awatar</span>
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
   <ion-item>
-    Na tej stronie możesz edytować informcje o swoim koncie, dodawanie avatara, lista znajomych?
+    Adres email na który dokonałeś rejestracji konta:
   </ion-item>
 
-  <ion-content class="ion-padding">
-    <ion-card>
-      <ion-card-content>
-        <!-- Input do wyboru pliku -->
-        <ion-item>
-          <input 
-            type="file" 
-            (change)="onFileSelected($event)" 
-            accept="image/*"
-            [disabled]="isUploading"
-            class="ion-margin-vertical">
-        </ion-item>
-  
-        <!-- Podgląd wybranego zdjęcia -->
-        <ion-item *ngIf="previewUrl">
-          <img [src]="previewUrl" alt="Podgląd awatara" style="max-width: 200px; margin: 10px auto;">
-        </ion-item>
-  
-        <!-- Komunikat o błędzie -->
-        <ion-item *ngIf="error" color="danger">
-          <ion-text color="danger">{{ error }}</ion-text>
-        </ion-item>
-  
-        <!-- Przycisk do przesłania -->
-        <ion-button 
-          expand="block" 
-          (click)="uploadAvatar()" 
-          [disabled]="!selectedFile || isUploading"
-          class="ion-margin-vertical">
-          <ion-spinner *ngIf="isUploading"></ion-spinner>
-          <span *ngIf="!isUploading">Prześlij awatar</span>
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-  </ion-content>
-  
   
 </ion-content>
