@@ -16,6 +16,7 @@ export class ProfilePage implements OnInit {
   log_in: boolean = false;
   uzytkownik_id: string = '';
   avatar: string = '';
+  email: string ='';
 
   //Zmienne do avatara
   selectedFile: File | null = null;
@@ -36,7 +37,8 @@ export class ProfilePage implements OnInit {
       this.currentUser = user.uzytkownik;
       this.log_in = user.zalogowany;
       this.uzytkownik_id = user.uzytkownik_id;
-      this.avatar = user.avatar
+      this.avatar = user.avatar;
+      this.email = user.email;
     });
   }
 
