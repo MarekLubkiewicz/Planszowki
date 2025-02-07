@@ -75,7 +75,7 @@ export class ProfilePage implements OnInit {
       text: 'Proszę czekać',
       allowOutsideClick: false,
       didOpen: () => {
-        Swal.showLoading();
+        Swal.showLoading(null);
       }
     });
 

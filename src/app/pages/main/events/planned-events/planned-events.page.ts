@@ -6,6 +6,7 @@ import { Event, Players, Game } from 'src/app/models/events';
 import { AlertController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert.service';
 import { format, parse } from 'date-fns';
+import { EventService } from 'src/app/services/event.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -30,7 +31,7 @@ export class PlannedEventsPage implements OnInit {
     private autentykacjaService: AutentykacjaService,
     private databaseService: DatabaseService,
     private alertController: AlertController,
-    private alertService: AlertService,     
+    private eventService: EventService,
   ) { }
 
   ngOnInit() {
@@ -65,6 +66,10 @@ export class PlannedEventsPage implements OnInit {
     });
   }
 
+  openAddEvent() {
+    this.eventService.openAddEventAlert(() => this.loadMyEvents());
+  }
+
   deleteEvent(eventId: string) {
     Swal.fire({
       title: 'Czy na pewno chcesz usunąć?',
@@ -81,7 +86,7 @@ export class PlannedEventsPage implements OnInit {
           text: 'Proszę czekać',
           allowOutsideClick: false,
           didOpen: () => {
-            Swal.showLoading();
+            Swal.showLoading(null);
           }
         });
         const eventIdDoWyslania = { eventId };
