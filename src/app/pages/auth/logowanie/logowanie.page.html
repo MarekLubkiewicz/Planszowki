@@ -18,7 +18,12 @@
         </ion-item>
     
         <ion-item>
-          <ion-input label="Hasło" placeholder="podaj hasło" type="password" name="haslo" [(ngModel)]="haslo" required></ion-input>
+          <ion-input label="Hasło" placeholder="podaj hasło" [type]="showPassword ? 'text' : 'password'" name="haslo"
+            [(ngModel)]="haslo" required>
+          </ion-input>
+          <ion-button fill="clear" (click)="togglePasswordVisibility()">
+            <ion-icon [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
+          </ion-button>
         </ion-item>
         
         <ion-button type="submit" [disabled]="!registerForm.valid">Zaloguj</ion-button>

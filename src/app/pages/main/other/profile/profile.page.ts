@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { AvatarService } from 'src/app/services/avatar.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -58,40 +59,55 @@ export class ProfilePage implements OnInit {
     
     reader.readAsDataURL(file);
   }
+  
 
-  uploadAvatar(): void {
+  uploadAvatar() {
     if (!this.selectedFile) {
-      this.error = 'Nie wybrano pliku';
+      Swal.fire('Błąd', 'Nie wybrano pliku do przesłania.', 'error');
       return;
     }
 
     this.isUploading = true;
-    this.error = null;
 
-    this.avatarService.uploadAvatar(this.selectedFile, this.uzytkownik_id)
-      .subscribe({
-        next: (response) => {
-          console.log('Plik przesłany pomyślnie', response);
-          alert(response.komunikat)
-          this.isUploading = false;
-          // Odśwież dane użytkownika po udanym przesłaniu avatara
-          this.autentykacjaService.sprawdzSesje().subscribe(user => {
-            this.avatar = user.avatar;
-          });
-        },
-        error: (err) => {
-          console.error('Błąd podczas przesyłania', err);
-          if (err.error && err.error.blad) {
-            alert(err.error.blad);
-          } else if (err.message) {
-            alert(`Błąd: ${err.message}`);
-          } else {
-            alert(`Wystąpił błąd podczas przesyłania pliku. Kod błędu: ${err.status} ${err.statusText}`);
-          }
-          this.error = 'Wystąpił błąd podczas przesyłania pliku';
-          this.isUploading = false;
+    // Pokazanie animacji ładowania
+    Swal.fire({
+      title: 'Przesyłanie...',
+      text: 'Proszę czekać',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(null);
+      }
+    });
+
+    this.avatarService.uploadAvatar(this.selectedFile, this.uzytkownik_id).subscribe({
+      next: (response) => {
+        Swal.fire('Sukces!', response.komunikat, 'success');
+        this.isUploading = false;
+
+        // Odśwież dane użytkownika po udanym przesłaniu avatara
+        this.autentykacjaService.sprawdzSesje().subscribe(user => {
+          this.avatar = user.avatar;
+        });
+      },
+      error: (err) => {
+        console.error('Błąd podczas przesyłania', err);
+        let errorMessage = 'Wystąpił błąd podczas przesyłania pliku.';
+
+        if (err.error && err.error.blad) {
+          errorMessage = err.error.blad;
+        } else if (err.message) {
+          errorMessage = `Błąd: ${err.message}`;
+        } else {
+          errorMessage = `Kod błędu: ${err.status} ${err.statusText}`;
         }
-      });
+
+        Swal.fire('Błąd!', errorMessage, 'error');
+
+        this.error = errorMessage;
+        this.isUploading = false;
+      }
+    });
   }
+
 
 }

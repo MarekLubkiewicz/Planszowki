@@ -118,14 +118,13 @@
             
             <div style="position: relative; display: inline-block;">
               <ion-button *ngIf="event.id" color="primary" (click)="joinEvent(event.id, event.games)"
-                [disabled]="isEventOrganizer(event.owner) || isAlreadyJoined(event.players)">
+                [disabled]="isEventOrganizer(event.owner) || isAlreadyJoined(event.players) || isEventFull(event)">
                 Zapisz się
               </ion-button>
-              <div *ngIf="isEventOrganizer(event.owner) || isAlreadyJoined(event.players)" class="tooltip">
-                {{ getDisabledReason(event.owner, event.players || []) }}
+              <div *ngIf="isEventOrganizer(event.owner) || isAlreadyJoined(event.players) || isEventFull(event)" class="tooltip">
+                {{ getDisabledReason(event.owner, event.players || [], event.slots) }}
               </div>
             </div>
-
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -186,7 +185,7 @@
   </ion-modal>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button class="custom-fab" (click)="openAddEventAlert()">
+    <ion-fab-button class="custom-fab" (click)="openAddEvent()">
 
       <ion-icon name="create"></ion-icon>
 
