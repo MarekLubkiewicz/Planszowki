@@ -17,10 +17,10 @@ export class RejestracjaPage implements OnInit, ViewWillEnter {
   email: string = '';
   haslo: string = '';
   potwierdzenie: string = '';
-
   zalogowany = false;
   uzytkownik_id: number | null = null;
   uzytkownik: string | null = null;
+  showPassword: boolean = false;
 
 
   constructor(
@@ -97,6 +97,10 @@ export class RejestracjaPage implements OnInit, ViewWillEnter {
 
   logowanie() {
     this.router.navigate(['/logowanie']);
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
 }
