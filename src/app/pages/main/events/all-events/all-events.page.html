@@ -162,28 +162,6 @@
     </ng-template>
   </ion-modal>
 
-
-  <!-- Modal do filtrowania po dacie -->
-  <ion-modal [isOpen]="isDateFilterModalOpen" (willDismiss)="closeDateFilterModal()">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Filtruj po dacie</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="closeDateFilterModal()">Zamknij</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-datetime presentation="date" [firstDayOfWeek]="1" displayFormat="DD.MM.YYYY" placeholder="Wybierz datę"
-          [(ngModel)]=" filter.date" (ionChange)="applyFilters()">
-        </ion-datetime>
-        <ion-button (click)="applyDateFilter()">Zastosuj</ion-button>
-        <ion-button color="medium" (click)="resetDateFilter()">Wyczyść filtr</ion-button>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button class="custom-fab" (click)="openAddEvent()">
 
