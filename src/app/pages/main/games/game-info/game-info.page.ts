@@ -5,7 +5,8 @@ import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 import { GryService } from 'src/app/services/gry.service';
-import { IonicModule, ViewWillEnter } from '@ionic/angular';
+import { ViewWillEnter } from '@ionic/angular';
+import Swal from 'sweetalert2';
 
 interface Gra {
   Name: string;
@@ -79,14 +80,14 @@ export class GameInfoPage implements OnInit, OnDestroy {
     this.setupSearch();
   }
 
-
   private pobierzGry() {
     this.gryDane.pobierzWszystkieGry().subscribe({
       next: (dane: Gra[]) => {
         this.wszystkieGry = dane;
       },
-      error: (err) => {
-        console.error('Błąd podczas pobierania gier:', err);
+      error: (error) => {
+        Swal.fire('Błąd', `Błąd podczas pobierania wydarzeń: ${error}`, 'error')
+        console.error('Błąd podczas pobierania gier:', error);
       },
     });
   }
