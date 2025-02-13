@@ -1,0 +1,140 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Symulator rzutu kostkami</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-title>
+          Wybierz kości
+        </ion-title>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xs="6" size-md="4" size-xl="2">
+        <ion-card>
+          <ion-item>
+            <ion-card-title>
+              <ion-icon src='/assets/dices/K4.svg'></ion-icon>          
+              K4
+            </ion-card-title>
+          </ion-item>
+          <ion-item>
+            <ion-input label="Ilość" type="number" placeholder="0" min="0" max="10"
+              (ionInput)="updateDiceArray('K4', $event)"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col size-xs="6" size-md="4" size-xl="2">
+        <ion-card>
+          <ion-item>
+            <ion-card-title>
+              <ion-icon src="/assets/dices/dice.svg"></ion-icon> K6
+            </ion-card-title>
+          </ion-item>
+          <ion-item>
+            <ion-input label="Ilość" type="number" placeholder="0" min="0" max="20"
+              (ionInput)="updateDiceArrayK6($event)"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col size-xs="6" size-md="4" size-xl="2"> 
+        <ion-card>
+          <ion-item>
+             <ion-card-title>
+              <ion-icon src="/assets/dices/K8.svg"></ion-icon>  K8
+            </ion-card-title>
+          </ion-item>
+          <ion-item>
+            <ion-input label="Ilość" type="number" placeholder="0" min="0" max="10"
+              (ionInput)="updateDiceArray('K8', $event)"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col size-xs="6" size-md="4" size-xl="2">
+        <ion-card>
+          <ion-item>
+            <ion-card-title>
+              <ion-icon src='/assets/dices/K10.svg'></ion-icon>
+              K10
+            </ion-card-title>
+          </ion-item>
+          <ion-item>
+            <ion-input label="Ilość" type="number" placeholder="0" min="0" max="10"
+              (ionInput)="updateDiceArray('K10', $event)"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col size-xs="6" size-md="4" size-xl="2">
+        <ion-card>
+          <ion-item>
+            <ion-card-title>
+              <ion-icon src="/assets/dices/K12.svg"></ion-icon> K12
+            </ion-card-title>
+          </ion-item>
+          <ion-item>
+            <ion-input label="Ilość" type="number" placeholder="0" min="0" max="10"
+              (ionInput)="updateDiceArray('K12', $event)"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col size-xs="6" size-md="4" size-xl="2">
+        <ion-card>
+          <ion-item>
+            <ion-card-title>
+              <ion-icon src='/assets/dices/K20.svg'></ion-icon>
+              K20
+            </ion-card-title>
+          </ion-item>
+          <ion-item>
+            <ion-input label="Ilość" type="number" placeholder="0" min="0" max="10"
+              (ionInput)="updateDiceArray('K20', $event)"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col>
+          <ion-button (click)="rollAllDices()" [disabled]="isRolling">Rzuć kostkami</ion-button>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="dice-container">
+          <div *ngFor="let dice of diceArray" class="dice" [class.rolling]="isRolling"
+            [style.transform]="dice.rotationStyle">
+            <div class="face front"><img src="assets/dices/dice_1.png" alt="1"></div>
+            <div class="face back"><img src="assets/dices/dice_6.png" alt="6"></div>
+            <div class="face right"><img src="assets/dices/dice_3.png" alt="3"></div>
+            <div class="face left"><img src="assets/dices/dice_4.png" alt="4"></div>
+            <div class="face top"><img src="assets/dices/dice_5.png" alt="5"></div>
+            <div class="face bottom"><img src="assets/dices/dice_2.png" alt="2"></div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+
+
+  <!-- Wyświetlanie wyników dla każdej kostki -->
+
+    <ion-row>
+      <ion-col size="12">
+        <div class="dice-container">
+          <div *ngFor="let dice of allDiceArray" class="dice" [class.rolling]="isRolling">
+            <div [ngClass]="'dice-face ' + dice.type">
+              <span class="dice-number" *ngIf="!isRolling">{{ dice.value }}</span>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+
+
+
+  </ion-grid>
+
+
+</ion-content>

@@ -7,12 +7,23 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
 
-  <h3>Narzędzia do gier</h3>
-  <p>Timer</p>
-  <p>Kostki</p>
-  <p>Kary</p>
-  <p>Losowanie liczb lub kart</p>
-  <p>Inne?</p>
-</ion-content>
+    <ion-tab-button tab="dices">
+      <ion-icon aria-hidden="true" name="dice-outline"></ion-icon>
+      <ion-label>Kości</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="timer">
+      <ion-icon aria-hidden="true" name="stopwatch-outline"></ion-icon>
+      <ion-label>Timer</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="cards">
+      <ion-icon aria-hidden="true" name="albums-outline"></ion-icon>
+      <ion-label>Karty</ion-label>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+</ion-tabs>
