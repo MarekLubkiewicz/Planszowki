@@ -4,7 +4,6 @@ import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import { Event, Players, Game } from 'src/app/models/events';
 import { AlertController } from '@ionic/angular';
-import { AlertService } from 'src/app/services/alert.service';
 import { format, parse } from 'date-fns';
 import { EventService } from 'src/app/services/event.service';
 import Swal from 'sweetalert2';

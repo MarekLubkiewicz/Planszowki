@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database.service';
 import { Event, Game, Players } from 'src/app/models/events';
 import { format } from 'date-fns';
-import { AlertController } from '@ionic/angular';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { EventService } from 'src/app/services/event.service';
 import Swal from 'sweetalert2';
@@ -37,7 +36,6 @@ export class AllEventsPage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private databaseService: DatabaseService, 
-    private alertController: AlertController,
     private autentykacjaService: AutentykacjaService,
     private eventService: EventService,
     ) { }

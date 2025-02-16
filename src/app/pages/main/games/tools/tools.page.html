@@ -1,18 +1,20 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>{{title}}</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
 
-<ion-content [fullscreen]="true" class="ion-padding">
+    <ion-tab-button tab="dices">
+      <ion-icon aria-hidden="true" src="/assets/icon/kostkiIconB.svg"></ion-icon>
+      <ion-label>Kości</ion-label>
+    </ion-tab-button>
 
-  <h3>Narzędzia do gier</h3>
-  <p>Timer</p>
-  <p>Kostki</p>
-  <p>Kary</p>
-  <p>Losowanie liczb lub kart</p>
-  <p>Inne?</p>
-</ion-content>
+    <ion-tab-button tab="timer">
+      <ion-icon aria-hidden="true" name="stopwatch-outline"></ion-icon>
+      <ion-label>Timer</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="future">
+      <ion-icon aria-hidden="true" name="albums-outline"></ion-icon>
+      <ion-label>Future</ion-label>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+</ion-tabs>

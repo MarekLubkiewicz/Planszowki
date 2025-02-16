@@ -11,7 +11,7 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-<h3>Witamy w aplikacji Board Games / Planszówki (v.1.1)</h3><br>
+<h3>Witamy w aplikacji Board Games / Planszówki (v.1.2)</h3><br>
 
 <ion-card color="light">
   <ion-card-content>
@@ -29,7 +29,7 @@
             <ul style="list-style-type:none;">
               <li>Przemysław WACH</li>
               <li>Marek LUBKIEWICZ</li>
-              <li>Piotr ŚPIEWAK ???</li>
+              
             </ul>
           </ul>
         </ion-col>
@@ -175,6 +175,7 @@
     <ion-item slot="header" color="light">
       <ion-label>Moduł gier</ion-label>
     </ion-item>
+
     <div class="ion-padding" slot="content">
 
       <ion-item>
@@ -188,19 +189,50 @@
             <p>Baza umożliwia przeszukiwanie gier po tytule.</p>
             <ion-img src="assets/images/BazaGier1.png" alt="Baza gier wyszukiwanie" style="max-width: 600px;">
             </ion-img>
-            <ion-img src="assets/images/BazaGier3.png" alt="BAza gier przykład" style="max-width: 600px;">
+            <ion-img src="assets/images/BazaGier3.png" alt="Baza gier przykład" style="max-width: 600px;">
             </ion-img>
           </ion-col>
         </ion-row>
-
+        <ion-item></ion-item>
         <ion-row>
           <ion-col>
-            <p>Druga strona zawiera elementy ułatwiające rozgywkę.</p>
-            <p>Rzuty kostką</p>
-            <p>Timer</p>
-
+            <p>Druga strona zawiera elementy ułatwiające rozgywkę: symulator rzutów kośćmi oraz timer.</p>
+            <p>Przejście pomiędzy elementami odbywa się poprzez panel dolny.</p>
+            <ion-img src="assets/images/tools.png" alt="Zakładka dolna od narzędzi wspomagających rozgrywwkę" style="max-width: 300px;">
+            </ion-img>
           </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-item>
+            <ion-col>
+              
+              <p>Moduł kości umożliwia zasymulowanie rzutu wybranymi rodzajami kości do gry.</p>
+              <p>Gracz wybiera ilość kości każdego typu następnie po naciśnięciu przycisku następuje symulacja rzutu.</p>
+              <ion-img src="assets/images/kosci.png" alt="Moduł rzutu kośćmi" style="max-width: 600px;">
+              </ion-img>
+    
+            </ion-col>
+          </ion-item>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+            <p>Moduł timera służy do odliczania czasu przydzielonego dla poszczególnych graczy i/lub zliczania czasu zużytego na grę.</p>
+            <ion-img src="assets/images/Timer_1.png" alt="Moduł rzutu kośćmi" style="max-width: 600px;"></ion-img>
+            <p>Za pomocą przełączników określamy jaki czas ma być mierzony (czas na całą grę, czas na turę, tradycyjny stoper lub ich kombinacje).</p>
+            <p>Ustawiamy czas na rozgrywkę w minutach oraz czas na jedną turę w sekudnach.</p>
+            <ion-img src="assets/images/Timer_settings.png" alt="Moduł rzutu kośćmi ustawienia" style="max-width: 600px;"></ion-img>
+            <p>Wpisujemy nazwy/nicki graczy w kolejnościu ruchu.</p>
+            <p>Po wpisaniu nazw/nicków graczy przyciskiem START uruchamiamy odliczanie czasu.</p>
+            <p>Zmiany gracza dla którego odliczany jest czas dokonujemy za pomocą przycisku KOLEJNY GRACZ.</p>
+            <p>Gracz, którego runda jest aktywna, jest podświetlany kolorem zielonym.</p>
+            <ion-img src="assets/images/Timer2.png" alt="Moduł rzutu kośćmi - rozgrywka" style="max-width: 600px;"></ion-img>
+            <p>Jeżeli nie nastąpi przełączenie gracza przed upływem czasu na rundę, pojawi się komunikat o upłynięciu czasu.</p>
+            <p>Po jego zamknięciu przyciskiem OK, nastąpi przełączenie tury na kolejnego gracza.</p>
+            <ion-img src="assets/images/endTurn.png" alt="Alert - zakończenie czasu na rundę" style="max-width: 400px;"></ion-img>
+          </ion-col>
+        </ion-row>
+
+
 
       </ion-grid>
     </div>
