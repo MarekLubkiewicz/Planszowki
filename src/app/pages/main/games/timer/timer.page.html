@@ -69,7 +69,7 @@
     </ion-card>
 
     <ion-row>
-      <ion-col size="8">
+      <ion-col>
         <ion-card>
           <ion-card-header>
             <ion-card-title>
@@ -78,6 +78,21 @@
           </ion-card-header>
           <ion-card-content>
             <ion-grid>
+              <!-- Przyciski sterujące przebiegiem rozgrywki -->
+              <ion-row>
+                <ion-col size="3">
+                  <ion-button expand="block" (click)="startGame()" [disabled]="isGameRunning || isPaused"class="startButton">Start</ion-button>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-button expand="block" (click)="pauseGame()" [disabled]="!isGameRunning || isPaused"class="buttons">Pauza</ion-button>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-button expand="block" (click)="resumeGame()" [disabled]="!isPaused" class="buttons">Wznów</ion-button>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-button expand="block" (click)="resetGame()" color="danger" class="buttons">Reset</ion-button>
+                </ion-col>
+              </ion-row>
               <ion-row>
                 <ion-col size="12" size-md="8">
                   <!-- Formularz dodawania gracza -->
@@ -130,32 +145,7 @@
         </ion-card>
 
       </ion-col>
-      <!-- Przyciski sterujące przebiegiem rozgrywki -->
-      <ion-col size="4">
-        <ion-row>
-          <ion-col>
-            <ion-button expand="block" (click)="startGame()" [disabled]="isGameRunning || isPaused"
-              class="startButton">Start</ion-button>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-button expand="block" (click)="pauseGame()" [disabled]="!isGameRunning || isPaused"
-              class="buttons">Pauza</ion-button>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-button expand="block" (click)="resumeGame()" [disabled]="!isPaused" class="buttons">Wznów</ion-button>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-button expand="block" (click)="resetGame()" color="danger" class="buttons">Reset</ion-button>
-          </ion-col>
-        </ion-row>
-
-      </ion-col>
+      
     </ion-row>
   </ion-grid>
 
