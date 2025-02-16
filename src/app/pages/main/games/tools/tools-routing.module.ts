@@ -17,8 +17,8 @@ const routes: Routes = [
         loadChildren: () => import('../timer/timer.module').then( m => m.TimerPageModule)
       },
       {
-        path: 'cards',
-        loadChildren: () => import('../cards/cards.module').then( m => m.CardsPageModule)
+        path: 'future',
+        loadChildren: () => import('../future/future.module').then( m => m.FuturePageModule)
       },
       {
         path: '',
