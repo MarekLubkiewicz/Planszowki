@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TimerPlayer } from 'src/app/models/timer-player';
 import Swal from 'sweetalert2'
 
 @Component({
@@ -9,13 +10,7 @@ import Swal from 'sweetalert2'
 })
 export class TimerPage {
   newPlayerName: string = '';
-  players: { 
-    name: string; 
-    remainingTurnTime: number; 
-    remainingGameTime: number; 
-    stopwatchTime: number; 
-    isTurnActive: boolean 
-  }[] = [];
+  players: TimerPlayer[] = [];
   currentPlayerIndex: number | null = null;
   turnInterval: any;
   stopwatchInterval: any;
@@ -42,6 +37,7 @@ export class TimerPage {
         remainingTurnTime: this.initialTurnTime,
         remainingGameTime: this.initialGameTime,
         stopwatchTime: 0,
+        turnOverruns: 0,
         isTurnActive: false,
       });
       this.newPlayerName = '';
@@ -116,7 +112,14 @@ export class TimerPage {
       player.remainingGameTime = this.initialGameTime;
       player.stopwatchTime = 0;
       player.isTurnActive = false;
+      player.turnOverruns = 0;
     });
+  }
+
+  checkTurnTime(player: TimerPlayer) {
+    if (player.remainingTurnTime <= 0) {
+      player.turnOverruns = (player.turnOverruns || 0) + 1;
+    }
   }
 
   nextTurn() {
@@ -155,6 +158,7 @@ export class TimerPage {
 
       // Zakończenie tury, gdy czas tury się skończy
       if ((currentPlayer.remainingTurnTime === 0 || currentPlayer.remainingGameTime === 0) && !this.isAlertDisplayed) {
+          this.checkTurnTime(currentPlayer);
           this.isAlertDisplayed = true; // Ustawienie flagi, aby uniknąć wielu alertów
           clearInterval(this.turnInterval); // Zatrzymanie odliczania
           Swal.fire({

@@ -95,21 +95,10 @@ export class ProfilePage implements OnInit {
           this.avatar = user.avatar;
         });
       },
-      error: (err) => {
-        console.error('Błąd podczas przesyłania', err);
+      error: (error) => {
+        console.error('Błąd podczas przesyłania', error);
         let errorMessage = 'Wystąpił błąd podczas przesyłania pliku.';
-
-        if (err.error && err.error.blad) {
-          errorMessage = err.error.blad;
-        } else if (err.message) {
-          errorMessage = `Błąd: ${err.message}`;
-        } else {
-          errorMessage = `Kod błędu: ${err.status} ${err.statusText}`;
-        }
-
         Swal.fire('Błąd!', errorMessage, 'error');
-
-        this.error = errorMessage;
         this.isUploading = false;
       }
     });
@@ -122,26 +111,16 @@ export class ProfilePage implements OnInit {
       Swal.fire('Sukces!', response.komunikat, 'success');
       this.isUploading = false;
 
-      // Odśwież dane użytkownika po udanym przesłaniu avatara
+      // Odśwież dane użytkownika
       this.autentykacjaService.sprawdzSesje().subscribe(user => {
-        this.avatar = user.avatar;
+        this.ulubiona = user.ulubiona;
       });
     },
-    error: (err) => {
-      console.error('Błąd podczas przesyłania', err);
+    error: (error) => {
+      console.error('Błąd podczas przesyłania', error);
       let errorMessage = 'Wystąpił błąd podczas dodawania gry.';
 
-      if (err.error && err.error.blad) {
-        errorMessage = err.error.blad;
-      } else if (err.message) {
-        errorMessage = `Błąd: ${err.message}`;
-      } else {
-        errorMessage = `Kod błędu: ${err.status} ${err.statusText}`;
-      }
-
       Swal.fire('Błąd!', errorMessage, 'error');
-
-      this.error = errorMessage;
       this.isUploading = false;
     }
   });
@@ -154,26 +133,17 @@ usunGreZUlubionych(gra: String) {
       Swal.fire('Sukces!', response.komunikat, 'success');
       this.isUploading = false;
 
-      // Odśwież dane użytkownika po udanym przesłaniu avatara
+      // Odśwież dane użytkownika
       this.autentykacjaService.sprawdzSesje().subscribe(user => {
-        this.avatar = user.avatar;
+        this.ulubiona = user.ulubiona;
       });
     },
-    error: (err) => {
-      console.error('Błąd podczas przesyłania', err);
+    error: (error) => {
+      console.error('Błąd podczas przesyłania', error);
       let errorMessage = 'Wystąpił błąd podczas usuwania gry.';
-
-      if (err.error && err.error.blad) {
-        errorMessage = err.error.blad;
-      } else if (err.message) {
-        errorMessage = `Błąd: ${err.message}`;
-      } else {
-        errorMessage = `Kod błędu: ${err.status} ${err.statusText}`;
-      }
 
       Swal.fire('Błąd!', errorMessage, 'error');
 
-      this.error = errorMessage;
       this.isUploading = false;
     }
   });

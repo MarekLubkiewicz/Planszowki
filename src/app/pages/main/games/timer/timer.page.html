@@ -118,7 +118,9 @@
                     <ion-item *ngFor="let player of players; let i = index"
                       [class.active-player]="currentPlayerIndex === i">
                       <ion-label>
-                        <ion-title>{{ player.name }}</ion-title>
+                        <ion-title>{{ player.name }}
+                          <ion-badge color="danger" *ngIf="player.turnOverruns > 0">{{ player.turnOverruns }}</ion-badge>
+                        </ion-title>
 
                         <div *ngIf="countdownTurnEnabled">
                           Czas tury: {{ formatTime(player.remainingTurnTime) }}

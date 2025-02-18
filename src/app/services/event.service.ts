@@ -49,17 +49,19 @@ export class EventService {
 
             if (gamesArray.length === 1) {
             // Jeśli jest tylko jedna gra, przypisujemy ją automatycznie i pomijamy alert wyboru
-              await alert.dismiss();
+              
               this.addEvent({ ...data, games: gamesArray, chosen_game: gamesArray[0] }, loadEvents);
+              return true;
             } else {
               // Jeśli jest więcej gier, otwieramy alert wyboru preferowanej gry
-              //this.openPreferredGameAlert(data, gamesArray, alert, loadEvents);
-                await this.openPreferredGameAlert(gamesArray, (selectedGame) => {
+              await this.openPreferredGameAlert(gamesArray, async (selectedGame) => {
+              await alert.dismiss();  
               this.addEvent({ ...data, games: gamesArray, chosen_game: selectedGame }, loadEvents);
             });
-            }
             return false;
+            }
           },
+      
         },
       ],
     });
@@ -97,7 +99,6 @@ export class EventService {
         },
       ],
     });
-
     await alert.present();
   }
 
@@ -161,7 +162,7 @@ export class EventService {
 
     this.databaseService.addEvent(newEvent).subscribe({
       next: () => {
-        Swal.fire({ title: 'Brawo', text: `Zaplanowałeś nowe spotkanie: ${newEvent.name}`, icon: 'success' });
+        Swal.fire({ title: 'Brawo', text: `Zaplanowałeś nowe spotkanie: ${newEvent.name}`, icon: 'success' });      
         loadEvents();
       },
       error: () => {
