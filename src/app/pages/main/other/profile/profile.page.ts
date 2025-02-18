@@ -17,6 +17,9 @@ export class ProfilePage implements OnInit {
   uzytkownik_id: string = '';
   avatar: string = '';
   email: string ='';
+  ulubiona: string ='';
+  ulubione: string[] = [];
+  gra: string = '';
 
   //Zmienne do avatara
   selectedFile: File | null = null;
@@ -39,6 +42,7 @@ export class ProfilePage implements OnInit {
       this.uzytkownik_id = user.uzytkownik_id;
       this.avatar = user.avatar;
       this.email = user.email;
+      this.ulubione = user.ulubione;
     });
   }
 
@@ -110,6 +114,70 @@ export class ProfilePage implements OnInit {
       }
     });
   }
+
+  dodajGreDoUlubionych(ulubiona: String) {
+  const ulubionaGra = { 'ulubiona' : ulubiona };
+  this.avatarService.dodajUlubionaGre(ulubionaGra).subscribe({
+    next: (response) => {
+      Swal.fire('Sukces!', response.komunikat, 'success');
+      this.isUploading = false;
+
+      // Odśwież dane użytkownika po udanym przesłaniu avatara
+      this.autentykacjaService.sprawdzSesje().subscribe(user => {
+        this.avatar = user.avatar;
+      });
+    },
+    error: (err) => {
+      console.error('Błąd podczas przesyłania', err);
+      let errorMessage = 'Wystąpił błąd podczas dodawania gry.';
+
+      if (err.error && err.error.blad) {
+        errorMessage = err.error.blad;
+      } else if (err.message) {
+        errorMessage = `Błąd: ${err.message}`;
+      } else {
+        errorMessage = `Kod błędu: ${err.status} ${err.statusText}`;
+      }
+
+      Swal.fire('Błąd!', errorMessage, 'error');
+
+      this.error = errorMessage;
+      this.isUploading = false;
+    }
+  });
+}
+
+usunGreZUlubionych(gra: String) {
+  const ulubionaUsuwanie = { 'ulubionaDoUsuniecia' : gra };
+  this.avatarService.usunUlubionaGre(ulubionaUsuwanie).subscribe({
+    next: (response) => {
+      Swal.fire('Sukces!', response.komunikat, 'success');
+      this.isUploading = false;
+
+      // Odśwież dane użytkownika po udanym przesłaniu avatara
+      this.autentykacjaService.sprawdzSesje().subscribe(user => {
+        this.avatar = user.avatar;
+      });
+    },
+    error: (err) => {
+      console.error('Błąd podczas przesyłania', err);
+      let errorMessage = 'Wystąpił błąd podczas dodawania gry.';
+
+      if (err.error && err.error.blad) {
+        errorMessage = err.error.blad;
+      } else if (err.message) {
+        errorMessage = `Błąd: ${err.message}`;
+      } else {
+        errorMessage = `Kod błędu: ${err.status} ${err.statusText}`;
+      }
+
+      Swal.fire('Błąd!', errorMessage, 'error');
+
+      this.error = errorMessage;
+      this.isUploading = false;
+    }
+  });
+}
 
 
 }

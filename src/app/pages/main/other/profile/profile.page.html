@@ -18,6 +18,10 @@
     </ion-avatar>
   </h3>
 
+  <ion-item>
+    Adres email, na który dokonałeś rejestracji konta: <strong>{{ email }}</strong>.
+  </ion-item>
+
   <ion-card>
     <ion-card-header>
       <ion-card-title>
@@ -40,10 +44,10 @@
         <img [src]="previewUrl" alt="Podgląd awatara" style="max-width: 200px; margin: 10px auto;">
       </ion-item>
 
-      <!-- Komunikat o błędzie -->
+      <!-- Komunikat o błędzie
       <ion-item *ngIf="error" color="danger">
         <ion-text color="danger">{{ error }}</ion-text>
-      </ion-item>
+      </ion-item> -->
 
       <!-- Przycisk do przesłania -->
       <ion-button 
@@ -57,9 +61,46 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-item>
-    Adres email, na który dokonałeś rejestracji konta: <strong>{{ email }}</strong>.
-  </ion-item>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Dodaj grę do listy ulubionych</ion-card-title>
+    </ion-card-header>
 
+    <ion-card-content>
+    
+      <form (ngSubmit)="dodajGreDoUlubionych(ulubiona)" #registerForm="ngForm">
+        <ion-item>
+          <ion-input placeholder="Wpisz nazwę gry" name="ulubiona" [(ngModel)]="ulubiona" required></ion-input>
+        </ion-item>
+
+        <ion-button type="submit" [disabled]="!registerForm.valid">Dodaj</ion-button>
+      </form>
+   </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Twoje ulubione gry</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let gra of ulubione">
+          <form (ngSubmit)="usunGreZUlubionych(gra)" #registerForm="ngForm">
+            <ion-input
+              type="text"
+              name="gra"
+              [value]="gra"
+              readonly
+              required>
+            </ion-input>
+            <ion-button type="submit" [disabled]="!registerForm.valid">
+              Usuń z ulubionych
+            </ion-button>
+          </form>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
   
 </ion-content>

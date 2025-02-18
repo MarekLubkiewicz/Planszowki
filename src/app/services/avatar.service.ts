@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class AvatarService {
 
-  //private apiUrl = 'http://localhost:5000';
+  //private apiUrl = 'http://127.0.0.1:5000';
   private apiUrl = 'https://www.vanilladice.pl/bg-test';
 
   constructor(private http: HttpClient) { }
@@ -21,6 +21,14 @@ export class AvatarService {
    
     return this.http.post(`${this.apiUrl}/dodaj-avatar`,formData, { withCredentials: true });
 
+  }
+
+  dodajUlubionaGre(ulubionaGra: { 'ulubiona': String }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/dodaj-do-ulubionych`, ulubionaGra,  { withCredentials: true });
+  }
+
+  usunUlubionaGre(ulubionaUsuwanie: { 'ulubionaDoUsuniecia': String }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/usun-z-ulubionych`, ulubionaUsuwanie,  { withCredentials: true });
   }
 
 }
