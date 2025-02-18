@@ -161,7 +161,7 @@ usunGreZUlubionych(gra: String) {
     },
     error: (err) => {
       console.error('Błąd podczas przesyłania', err);
-      let errorMessage = 'Wystąpił błąd podczas dodawania gry.';
+      let errorMessage = 'Wystąpił błąd podczas usuwania gry.';
 
       if (err.error && err.error.blad) {
         errorMessage = err.error.blad;
