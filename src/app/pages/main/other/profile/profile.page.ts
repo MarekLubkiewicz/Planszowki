@@ -17,6 +17,9 @@ export class ProfilePage implements OnInit {
   uzytkownik_id: string = '';
   avatar: string = '';
   email: string ='';
+  ulubiona: string ='';
+  ulubione: string[] = [];
+  gra: string = '';
 
   //Zmienne do avatara
   selectedFile: File | null = null;
@@ -39,6 +42,7 @@ export class ProfilePage implements OnInit {
       this.uzytkownik_id = user.uzytkownik_id;
       this.avatar = user.avatar;
       this.email = user.email;
+      this.ulubione = user.ulubione;
     });
   }
 
@@ -91,25 +95,59 @@ export class ProfilePage implements OnInit {
           this.avatar = user.avatar;
         });
       },
-      error: (err) => {
-        console.error('Błąd podczas przesyłania', err);
+      error: (error) => {
+        console.error('Błąd podczas przesyłania', error);
         let errorMessage = 'Wystąpił błąd podczas przesyłania pliku.';
-
-        if (err.error && err.error.blad) {
-          errorMessage = err.error.blad;
-        } else if (err.message) {
-          errorMessage = `Błąd: ${err.message}`;
-        } else {
-          errorMessage = `Kod błędu: ${err.status} ${err.statusText}`;
-        }
-
         Swal.fire('Błąd!', errorMessage, 'error');
-
-        this.error = errorMessage;
         this.isUploading = false;
       }
     });
   }
+
+  dodajGreDoUlubionych(ulubiona: String) {
+  const ulubionaGra = { 'ulubiona' : ulubiona };
+  this.avatarService.dodajUlubionaGre(ulubionaGra).subscribe({
+    next: (response) => {
+      Swal.fire('Sukces!', response.komunikat, 'success');
+      this.isUploading = false;
+
+      // Odśwież dane użytkownika
+      this.autentykacjaService.sprawdzSesje().subscribe(user => {
+        this.ulubiona = user.ulubiona;
+      });
+    },
+    error: (error) => {
+      console.error('Błąd podczas przesyłania', error);
+      let errorMessage = 'Wystąpił błąd podczas dodawania gry.';
+
+      Swal.fire('Błąd!', errorMessage, 'error');
+      this.isUploading = false;
+    }
+  });
+}
+
+usunGreZUlubionych(gra: String) {
+  const ulubionaUsuwanie = { 'ulubionaDoUsuniecia' : gra };
+  this.avatarService.usunUlubionaGre(ulubionaUsuwanie).subscribe({
+    next: (response) => {
+      Swal.fire('Sukces!', response.komunikat, 'success');
+      this.isUploading = false;
+
+      // Odśwież dane użytkownika
+      this.autentykacjaService.sprawdzSesje().subscribe(user => {
+        this.ulubiona = user.ulubiona;
+      });
+    },
+    error: (error) => {
+      console.error('Błąd podczas przesyłania', error);
+      let errorMessage = 'Wystąpił błąd podczas usuwania gry.';
+
+      Swal.fire('Błąd!', errorMessage, 'error');
+
+      this.isUploading = false;
+    }
+  });
+}
 
 
 }

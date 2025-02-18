@@ -18,12 +18,24 @@
           <ion-grid>
             <ion-row>
               <ion-col size="12" size-md="4">
-                <ion-searchbar placeholder="Wpisz nazwę" [(ngModel)]="filter.name" (ionInput)="applyFilters()" [debounce]="1000"> </ion-searchbar>
+                <ion-searchbar placeholder="Wpisz nazwę spotkania" [(ngModel)]="filter.name" (ionInput)="applyFilters()" [debounce]="1000"> </ion-searchbar>
               </ion-col>
               <ion-col ion-col size="12" size-md="4">
                 <ion-searchbar placeholder="Wpisz miejsce" [(ngModel)]="filter.place" (ionInput)="applyFilters()" [debounce]="1000"></ion-searchbar>
               </ion-col>
-              <ion-col ion-col size="12" size-md="4">
+              <ion-col size="12" size-md="4">
+                <ion-searchbar placeholder="Wpisz nazwę gry" [(ngModel)]="filter.game" (ionInput)="applyFilters()" [debounce]="1000">
+                </ion-searchbar>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" size-md="4">
+                <ion-item>
+                  <ion-label>Filtruj wydarzenia z ulubionymi grami</ion-label>
+                  <ion-checkbox [(ngModel)]="filter.favorites" (ionChange)="applyFilters()"></ion-checkbox>
+                </ion-item>
+              </ion-col>            
+              <ion-col ion-col size="12" size-md="8" style="display: flex; justify-content: space-evenly;">
                 <ion-button (click)="openDateFilterModal()">Filtruj po dacie</ion-button>
                 <ion-button color="medium" (click)="resetAllFilters()">Wyczyść filtry</ion-button>
               </ion-col>

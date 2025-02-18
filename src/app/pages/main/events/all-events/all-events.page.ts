@@ -23,6 +23,8 @@ export class AllEventsPage implements OnInit {
     place:'',
     name: '',
     date: '',
+    game: '',
+    favorites: false,
   }
   isLoading = false;
   isModalOpen = false; // Kontroluje stan modalu wyświetlającego zapisanych graczy
@@ -30,6 +32,7 @@ export class AllEventsPage implements OnInit {
   isDateFilterModalOpen = false; // Kontroluje stan modalu filtrowania po dacie
   log_in = false;
   currentUser: string = '';
+  ulubione: string[] = [];
   avatar: string = '';
   defaultAvatar = 'https://ionicframework.com/docs/img/demos/avatar.svg';
 
@@ -42,12 +45,13 @@ export class AllEventsPage implements OnInit {
 
   ngOnInit() {
     this.title = this.activatedRoute.snapshot.queryParamMap.get('title') || 'Wszystkie spotkania';
-    this.loadEvents();
     this.autentykacjaService.user$.subscribe(user => {
       this.currentUser = user.uzytkownik;
       this.log_in = user.zalogowany;
       this.avatar = user.avatar;
+      this.ulubione = user.ulubione;
     });
+    this.loadEvents();
   }
 
   loadEvents() {
@@ -68,6 +72,7 @@ export class AllEventsPage implements OnInit {
         this.events = []; // Wyczyść listę w przypadku błędu
       },
     });
+    console.log(this.ulubione);
   }
 
   applyFilters() {
@@ -77,8 +82,12 @@ export class AllEventsPage implements OnInit {
       const matchesName = 
         this.filter.name === '' || event.name.toLowerCase().includes(this.filter.name.toLowerCase());
       const matchesDate =
-        !this.filter.date || format(new Date(this.filter.date), 'dd.MM.yyyy') === event.date;;
-      return matchesPlace&&matchesName&&matchesDate;
+        !this.filter.date || format(new Date(this.filter.date), 'dd.MM.yyyy') === event.date;
+      const matchesGames =
+        this.filter.game === '' || event.games.some(game => game.game.toLowerCase().includes(this.filter.game.toLowerCase()));
+      const matchesFavorites =
+        !this.filter.favorites || event.games.some(game => this.ulubione.some(ulubioneGame => ulubioneGame.toLowerCase() === game.game.toLowerCase()));
+      return matchesPlace&&matchesName&&matchesDate&&matchesGames&&matchesFavorites;
     });
   }
   
@@ -117,7 +126,7 @@ export class AllEventsPage implements OnInit {
   }
 
   resetAllFilters() {
-    this.filter = {date: '', place: '', name:'',}; // Wyzerowanie wszystkich filtrów
+    this.filter = {date: '', place: '', name:'', game: '', favorites: false}; // Wyzerowanie wszystkich filtrów
     this.applyFilters();
   }
 
