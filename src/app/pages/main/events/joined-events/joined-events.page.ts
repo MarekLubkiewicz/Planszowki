@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AutentykacjaService } from 'src/app/services/autentykacja.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import { Event, Players } from 'src/app/models/events';
-import { AlertService } from 'src/app/services/alert.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -29,7 +28,6 @@ export class JoinedEventsPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private autentykacjaService: AutentykacjaService,
     private databaseService: DatabaseService,
-    private alertService: AlertService,
   ) { }
 
   ngOnInit() {
@@ -59,11 +57,7 @@ export class JoinedEventsPage implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.alertService.showAlert(
-          'Błąd',
-          `Błąd podczas pobierania wydarzeń: ${error}`,
-          'alert-error'
-        );
+        Swal.fire('Błąd', `Błąd podczas pobierania wydarzeń: ${error}`, 'error');
         this.isLoading = false;
         this.eventsJoin = []; // Wyczyść listę w przypadku błędu
       },

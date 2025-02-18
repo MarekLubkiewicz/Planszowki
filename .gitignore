@@ -53,3 +53,9 @@ src/variables.scss.local
 .angular-cli.json
 /karma.conf.js
 /test.ts
+
+
+# Firebase
+.firebase/
+.firebaserc
+firebase.json

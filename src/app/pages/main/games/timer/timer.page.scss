@@ -1,0 +1,30 @@
+.nextTurnButton {
+    --padding-top: 20px;
+    --padding-bottom: 20px;
+    --background: darkgreen;
+    color: azure;
+}
+
+.startButton {
+    --padding-top: 15px;
+    --padding-bottom: 15px;
+    --background: darkgreen;
+    color: azure;
+}
+
+.buttons {
+    --padding-top: 15px;
+    --padding-bottom: 15px;
+}
+
+.active-player {
+    --background: #98FB98;
+    font-weight: bold;
+    border: 2px solid #006400;
+    color: black;
+}
+
+.timeValue {
+    font-size: large;
+    text-align: center;
+}

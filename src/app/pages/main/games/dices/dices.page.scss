@@ -1,0 +1,111 @@
+.dice-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 25px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.dice {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1s ease-out;
+}
+
+.face {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.dice-face {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: black;
+}
+
+/* Obrazki dla różnych kostek */
+.dice-face.K4 {
+    background: url('/assets/dices/K4.png') no-repeat center;
+    background-size: contain;
+    align-items: end;
+    padding: 8px;
+}
+
+.dice-face.K8 {
+    background: url('/assets/dices/K8.png') no-repeat center;
+    background-size: contain;
+}
+
+.dice-face.K10 {
+    background: url('/assets/dices/K10.png') no-repeat center;
+    background-size: contain;
+    font-size: 28px;
+}
+
+.dice-face.K12 {
+    background: url('/assets/dices/K12.png') no-repeat center;
+    background-size: contain;
+}
+
+.dice-face.K20 {
+    background: url('/assets/dices/K20.png') no-repeat center;
+    background-size: contain;
+    font-size: 20px;
+}
+
+
+.front {
+    transform: translateZ(50px);
+}
+
+.back {
+    transform: rotateY(180deg) translateZ(50px);
+}
+
+.right {
+    transform: rotateY(90deg) translateZ(50px);
+}
+
+.left {
+    transform: rotateY(-90deg) translateZ(50px);
+}
+
+.top {
+    transform: rotateX(90deg) translateZ(50px);
+}
+
+.bottom {
+    transform: rotateX(-90deg) translateZ(50px);
+}
+
+.rolling {
+    animation: spin 1s ease-in-out;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotateZ(0deg) rotateX(0deg) rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateZ(720deg) rotateX(720deg) rotateY(720deg);
+    }
+}
