@@ -72,10 +72,20 @@ export class AllEventsPage implements OnInit {
         this.events = []; // Wyczyść listę w przypadku błędu
       },
     });
-    console.log(this.ulubione);
   }
 
   applyFilters() {
+    if (this.filter.favorites && (!this.ulubione || this.ulubione.length === 0)) {
+    Swal.fire({
+      title: 'Brak ulubionych gier',
+      text: 'Nie dodałeś jeszcze żadnych ulubionych gier. Dodaj gry, aby móc filtrować po ulubionych.',
+      icon: 'info',
+      confirmButtonText: 'OK'
+    }).then(() => {
+      this.filter.favorites = false; // Automatyczne odznaczenie checkboxa
+    });
+    return; // Zatrzymujemy dalsze filtrowanie
+  }
     this.filteredEvents = this.events.filter((event) => {
       const matchesPlace = 
         this.filter.place === '' || event.place.toLowerCase().includes(this.filter.place.toLowerCase());
