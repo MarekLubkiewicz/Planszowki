@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { TimerPlayer } from 'src/app/models/timer-player';
 import Swal from 'sweetalert2'
 
@@ -8,7 +8,7 @@ import Swal from 'sweetalert2'
   styleUrls: ['./timer.page.scss'],
   standalone: false,
 })
-export class TimerPage {
+export class TimerPage implements OnDestroy{
   newPlayerName: string = '';
   players: TimerPlayer[] = [];
   currentPlayerIndex: number | null = null;
@@ -183,5 +183,11 @@ export class TimerPage {
       }, 1000);
     }
   }
+
+  ngOnDestroy(): void {
+      clearInterval(this.turnInterval);
+      clearInterval(this.stopwatchInterval);
+  }
+
 }
 
