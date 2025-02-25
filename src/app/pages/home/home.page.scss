@@ -8,3 +8,17 @@
 .divider {
   padding: 15px;
 }
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .button-container ion-button {
+    width: 40%; /* Możesz dostosować do własnych preferencji */
+  }
+}
