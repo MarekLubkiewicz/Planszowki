@@ -45,6 +45,15 @@ export class EventService {
               Swal.fire({ title: 'Błąd', text: 'Wszystkie wymagane pola muszą być wypełnione!', icon: 'error' });
               return false;
             }
+
+            const now = new Date();
+            const eventDateTime = new Date(`${data.date}T${data.time}`);
+
+            if (eventDateTime < now) {
+              Swal.fire({ title: 'Błąd', text: 'Nie możesz dodać wydarzenia w przeszłości!', icon: 'error' });
+              return false;
+            }
+
             const gamesArray: string[] = data.games.split(',').map((game: string) => game.trim());
 
             if (gamesArray.length === 1) {
