@@ -30,6 +30,7 @@
     "@ionic/angular": "^8.0.0",
     "@sweetalert2/ngx-sweetalert2": "^13.0.0",
     "date-fns": "^2.30.0",
+    "esbuild": "^0.25.0",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.15.10",
@@ -37,12 +38,13 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^19.0.0",
+    "@angular-devkit/build-angular": "^19.1.8",
     "@angular-eslint/builder": "^19.0.0",
     "@angular-eslint/eslint-plugin": "^19.0.0",
     "@angular-eslint/eslint-plugin-template": "^19.0.0",
     "@angular-eslint/schematics": "^19.0.0",
     "@angular-eslint/template-parser": "^19.0.0",
+    "@angular/build": "^19.1.8",
     "@angular/cli": "^19.0.0",
     "@angular/compiler-cli": "^19.0.0",
     "@angular/language-service": "^19.0.0",
